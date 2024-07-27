@@ -1,0 +1,25 @@
+services:
+  xpense:
+    build: ./
+    container_name: Xpense
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./src:/usr/src/app/src
+      - ./libs:/usr/src/app/libs
+    env_file:
+      - .env
+    command: npm run start
+    depends_on:
+      - xpense-mongo
+    dns:
+      - 8.8.8.8 # Google DNS
+      - 8.8.4.4 # Google DNS
+
+  xpense-mongo:
+    image: mongo:latest
+    container_name: xpense-mongo
+    attach: false
+    restart: always
+    ports:
+      - '27017:27017'
