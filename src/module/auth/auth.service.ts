@@ -4,9 +4,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Schema } from 'mongoose';
 import { JwtPayload } from '@app/common/shared/jwt-payload';
 import { compareHash, hashData } from '@app/common/utils/hasher';
-import { RefreshToken } from 'src/models/refresh-token.model';
-import { RestPassworToken } from 'src/models/rest-password-token.model';
-import { User } from 'src/models/user.model';
+import { RefreshToken } from '@app/common/models/refresh-token.model';
+import { RestPassworToken } from '@app/common/models/rest-password-token.model';
+import { User } from '@app/common/models/user.model';
 import { v4 } from 'uuid';
 
 @Injectable()
