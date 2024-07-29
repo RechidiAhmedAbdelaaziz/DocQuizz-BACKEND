@@ -1,10 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "src",
+  "sourceRoot": "apps/expense-tracking/src",
   "compilerOptions": {
     "deleteOutDir": true,
-    "webpack": true
+    "webpack": true,
+    "tsConfigPath": "apps/expense-tracking/tsconfig.app.json"
   },
   "projects": {
     "common": {
@@ -15,6 +16,26 @@
       "compilerOptions": {
         "tsConfigPath": "libs/common/tsconfig.lib.json"
       }
+    },
+    "expense-tracking": {
+      "type": "application",
+      "root": "apps/expense-tracking",
+      "entryFile": "main",
+      "sourceRoot": "apps/expense-tracking/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/expense-tracking/tsconfig.app.json"
+      }
+    },
+    "admin": {
+      "type": "application",
+      "root": "apps/admin",
+      "entryFile": "main",
+      "sourceRoot": "apps/admin/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/admin/tsconfig.app.json"
+      }
     }
-  }
+  },
+  "monorepo": true,
+  "root": "apps/expense-tracking"
 }
