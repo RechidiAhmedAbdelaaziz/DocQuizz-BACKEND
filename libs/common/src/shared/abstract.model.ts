@@ -1,8 +1,8 @@
 import { Schema as DSchema } from "@nestjs/mongoose";
-import { Document, Schema } from "mongoose";
+import { Document, Types } from "mongoose";
 
 
 @DSchema({
     timestamps: true
 })
-export class AbstractSchema extends Document<Schema.Types.ObjectId> { }
+export class AbstractSchema extends Document<Types.ObjectId> { }

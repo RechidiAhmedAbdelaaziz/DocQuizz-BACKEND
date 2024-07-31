@@ -12,7 +12,7 @@ const jwtModule = JwtModule.register({
 
 @Module({
   imports: [
-    DatabaseModule.forRoot('DocQuizz'),
+    DatabaseModule.forRoot(process.env.DB_NAME),
     jwtModule,
     AuthModule,
   ],

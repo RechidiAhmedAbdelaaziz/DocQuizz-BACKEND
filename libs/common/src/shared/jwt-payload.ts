@@ -1,3 +1,3 @@
-import { Schema } from "mongoose";
+import { Types } from "mongoose";
 
-export type JwtPayload = { id: Schema.Types.ObjectId, email: string }
+export type JwtPayload = { id: Types.ObjectId, email: string }

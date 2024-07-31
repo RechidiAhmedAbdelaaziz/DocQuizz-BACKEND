@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
-import { AdminController } from './admin.controller';
-import { AdminService } from './admin.service';
+import { QuizzModule } from './module/quizz/quizz.module';
+import { AcademicFieldModule } from './module/academic-field/academic-field.module';
+import { DatabaseModule } from '@app/common';
+import { CoursesModule } from './module/courses/courses.module';
 
 @Module({
-  imports: [],
-  controllers: [AdminController],
-  providers: [AdminService],
+  imports: [QuizzModule, AcademicFieldModule, DatabaseModule.forRoot(process.env.DB_NAME), CoursesModule],
+  controllers: [],
+  providers: [],
 })
-export class AdminModule {}
+export class AdminModule { }

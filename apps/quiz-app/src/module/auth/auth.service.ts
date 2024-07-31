@@ -1,7 +1,7 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Schema } from 'mongoose';
+import { Model, Schema, Types } from 'mongoose';
 import { JwtPayload } from '@app/common/shared/jwt-payload';
 import { compareHash, hashData } from '@app/common/utils/hasher';
 import { RefreshToken } from '@app/common/models/refresh-token.model';
@@ -136,7 +136,7 @@ export class AuthService {
         return { accessToken, refreshToken: newRefreshToken }
     }
 
-    async findById(id: Schema.Types.ObjectId) { //TODO remove this after implementing userService
+    async findById(id: Types.ObjectId) { //TODO remove this after implementing userService
         return await this.userModel.findById(id)
     }
 }
