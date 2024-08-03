@@ -1,0 +1,8 @@
+dist
+apps
+.*ignore
+.prettierrc
+README.md
+nest-cli.json
+.eslintrc.js
+node_modules
