@@ -13,6 +13,8 @@ services:
     dns:
       - 8.8.8.8 # Google DNS
       - 8.8.4.4 # Google DNS
+    env_file:
+      - .env
 
   admin-panel:
     build: ./
