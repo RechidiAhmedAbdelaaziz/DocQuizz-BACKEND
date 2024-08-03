@@ -20,7 +20,6 @@ import { OAuthModule } from './module/o-auth/o-auth.module';
     ExamModule,
     OAuthModule,
   ],
-  controllers: [],
-  providers: [],
+
 })
 export class AppModule { }
