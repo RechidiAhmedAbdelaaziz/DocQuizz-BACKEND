@@ -22,5 +22,6 @@ import { RefreshToken, RestPassworToken, User } from '@app/common/models';
   ],
   controllers: [AuthController],
   providers: [AuthService],
+  exports: [AuthService]
 })
 export class AuthModule { }

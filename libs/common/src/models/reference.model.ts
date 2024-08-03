@@ -9,10 +9,8 @@ import { AbstractSchema } from "@app/common/shared/abstract.model";
 export class Reference extends AbstractSchema {
 
     @Prop()
-    name: string
+    title: string
 
-    @Prop()
-    years : number[]
 }
 
 

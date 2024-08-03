@@ -1,5 +1,6 @@
-import { Schema as DSchema, Prop, raw, SchemaFactory } from "@nestjs/mongoose";
+import { Schema as DSchema, Prop } from "@nestjs/mongoose";
 import { AbstractSchema } from "@app/common/shared/abstract.model";
+import { UserRoles } from "../shared";
 
 
 @DSchema()
@@ -14,16 +15,13 @@ export class User extends AbstractSchema {
     @Prop({ select: false })
     password: string
 
-    @Prop()
-    balnce: number
+    @Prop({ default: UserRoles.user })
+    role: UserRoles
 
-    @Prop()
-    income: number
+    @Prop({ default: false })
+    isPro: boolean
 
-    @Prop()
-    expense: number
-
-    @Prop({ type: [raw({ name: String, icon: String, color: String })] })
-    categories: { name: string, icon: string, color: string }[]
+    @Prop({ default: 0 })
+    exams: number
 }
 

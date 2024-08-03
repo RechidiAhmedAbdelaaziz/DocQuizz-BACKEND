@@ -10,7 +10,7 @@ import { AcademicField } from "./academic-field.model";
 
 
 @DSchema()
-export class Test extends AbstractSchema {
+export class Exam extends AbstractSchema {
 
 
     @Prop()
@@ -19,16 +19,13 @@ export class Test extends AbstractSchema {
     @Prop({ type: Schema.Types.ObjectId, ref: User.name })
     user: User
 
-    @Prop({ type: Schema.Types.ObjectId, ref: AcademicField.name })
-    field: AcademicField
-
     @Prop([{ type: Schema.Types.ObjectId, ref: Quizz.name }])
     questions: Quizz[]
 
-    @Prop()
+    @Prop({default: 0})
     answers: number
 
-    @Prop()
+    @Prop({default: 0})
     correctAnswers: number
 
     @Prop([{ type: Schema.Types.ObjectId, ref: Quizz.name }])

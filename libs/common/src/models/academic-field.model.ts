@@ -7,7 +7,7 @@ import { Schema } from "mongoose";
 
 
 @DSchema()
-export class AcademicField extends AbstractSchema {
+export class AcademicField extends AbstractSchema{
 
     @Prop()
     year: number
@@ -21,10 +21,7 @@ export class AcademicField extends AbstractSchema {
     @Prop()
     icon: string
 
-    @Prop([{ type: Schema.Types.ObjectId, ref: Course.name }])
-    courses: Course[]
-
-    @Prop()
+    @Prop({ default: 0 })
     quizzez: number
 
 }

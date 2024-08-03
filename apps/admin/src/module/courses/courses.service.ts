@@ -1,7 +1,7 @@
 import { AcademicField, Course } from '@app/common/models';
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Schema } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
 @Injectable()
 export class CoursesService {
@@ -11,12 +11,12 @@ export class CoursesService {
 
     createCourse = async (field: AcademicField, title: string) => {
 
-        const course = await this.courseModel.create({ title });
+        const course = new this.courseModel();
 
-        field.courses.push(course);
-        await field.save();
+        course.title = title;
+        course.academicField = field;
 
-        return course
+        return await course.save()
     }
 
     updateCourse = async (course: Course, title?: string) => {
@@ -24,14 +24,11 @@ export class CoursesService {
         return await course.save();
     }
 
-    async deleteCourse(field: AcademicField, course: Course) {
+    async deleteCourse(course: Course) {
         await course.deleteOne();
-        console.log(field.courses[0]._id.equals(course._id))
-        field.courses = field.courses.filter(c => !c._id.equals(course._id));
-        await field.save();
     }
 
-    async getCourseById(id: Schema.Types.ObjectId) {
+    async getCourseById(id: Types.ObjectId) {
         const course = await this.courseModel.findById(id)
         if (!course) throw new HttpException('Course not found', 404)
         return course

@@ -1,20 +1,24 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from './module/auth/auth.module';
 import { DatabaseModule } from '@app/common';
-import { JwtModule } from '@nestjs/jwt';
-
-const jwtModule = JwtModule.register({
-  global: true,
-  secret: process.env.JWT_SECRET,
-  signOptions: { expiresIn: '5h' },
-})
+import { JwtAuthModule } from '@app/common/module/jwt-auth/jwt-auth.module';
+import { AcademicFieldModule } from './module/academic-field/academic-field.module';
+import { CourseModule } from './module/course/course.module';
+import { QuizzModule } from './module/quizz/quizz.module';
+import { ExamModule } from './module/exam/exam.module';
+import { OAuthModule } from './module/o-auth/o-auth.module';
 
 
 @Module({
   imports: [
     DatabaseModule.forRoot(process.env.DB_NAME),
-    jwtModule,
+    JwtAuthModule.register(),
     AuthModule,
+    AcademicFieldModule,
+    CourseModule,
+    QuizzModule,
+    ExamModule,
+    OAuthModule,
   ],
   controllers: [],
   providers: [],

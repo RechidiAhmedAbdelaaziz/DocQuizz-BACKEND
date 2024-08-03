@@ -1,6 +1,5 @@
-import { Type } from "class-transformer";
-import { IsBoolean, IsEnum, IsMongoId, IsNumber, IsOptional, IsString } from "class-validator";
-import { Schema } from "mongoose";
+import { IsEnum, IsMongoId, IsNumber, IsOptional, IsString } from "class-validator";
+import { Types } from "mongoose";
 
 
 export class CreateQuizzBody {
@@ -13,6 +12,7 @@ export class CreateQuizzBody {
     @IsString({ each: true })
     incorrectAnswers: string[]
 
+    @IsOptional()
     @IsString()
     explanation: string
 
@@ -20,14 +20,18 @@ export class CreateQuizzBody {
     difficulty: "Easy" | "Medium" | "Hard"
 
     @IsMongoId()
-    fieldId: Schema.Types.ObjectId
+    fieldId: Types.ObjectId
 
     @IsMongoId()
-    courseId: Schema.Types.ObjectId
+    courseId: Types.ObjectId
 
     @IsMongoId()
-    referenceId: Schema.Types.ObjectId
+    referenceId: Types.ObjectId
     @IsNumber()
     year: number
+
+    @IsOptional()
+    @IsString({ each: true })
+    notes: string[]
 }
 

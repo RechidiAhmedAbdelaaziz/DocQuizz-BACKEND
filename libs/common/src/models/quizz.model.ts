@@ -25,7 +25,7 @@ export class Quizz extends AbstractSchema {
     explanation?: string
 
     @Prop()
-    difficulty: "Very Easy" | "Easy" | "Medium" | "Hard" | "Very Hard"
+    difficulty:  "Easy" | "Medium" | "Hard" 
 
     @Prop({ type: Schema.Types.ObjectId, ref: AcademicField.name })
     field: AcademicField

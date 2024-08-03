@@ -3,10 +3,9 @@ import { AcademicFieldService } from './academic-field.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateFieldBody } from './dto/create-field.dto';
 import { CloudinaryService } from '@app/common/module/cloudinary/cloudinary.service';
-import { Schema } from 'mongoose';
+import { Types } from 'mongoose';
 import { ParseMonogoIdPipe } from '@app/common';
 import { UpdateFieldBody } from './dto/update-field.dto';
-import { ListFieldsQuery } from './dto/list-fields.dto';
 
 @Controller('academic-field')
 export class AcademicFieldController {
@@ -39,7 +38,7 @@ export class AcademicFieldController {
   @Patch(':fieldId') //* FIELDS | Update  {{host}}/academic-field/:fieldId
   @UseInterceptors(FileInterceptor('icon'))
   async updateAcademicField(
-    @Param('fieldId', ParseMonogoIdPipe) fieldId: Schema.Types.ObjectId,
+    @Param('fieldId', ParseMonogoIdPipe) fieldId: Types.ObjectId,
     @Body() data: UpdateFieldBody,
     @UploadedFile() icon?: Express.Multer.File,
   ) {
@@ -61,17 +60,10 @@ export class AcademicFieldController {
     );
   }
 
-  @Get() //* FIELDS | Get All  {{host}}/academic-field
-  async getAcademicFields(
-    @Query() query: ListFieldsQuery
-  ) {
-    const { name, years, limit, page } = query;
-    return await this.academicFieldService.getAcademicFields({ name, years }, { limit, page });
-  }
 
   @Delete(':fieldId') //* FIELDS | Delete  {{host}}/academic-field/:fieldId
   async deleteAcademicField(
-    @Param('fieldId', ParseMonogoIdPipe) fieldId: Schema.Types.ObjectId
+    @Param('fieldId', ParseMonogoIdPipe) fieldId: Types.ObjectId
   ) {
     const field = await this.academicFieldService.getAcademicFieldById(fieldId);
     return await this.academicFieldService.deleteAcademicField(field);

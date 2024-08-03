@@ -12,5 +12,6 @@ import { AcademicFieldModule } from '../academic-field/academic-field.module';
   ],
   controllers: [CoursesController],
   providers: [CoursesService],
+  exports : [CoursesService]
 })
 export class CoursesModule {}

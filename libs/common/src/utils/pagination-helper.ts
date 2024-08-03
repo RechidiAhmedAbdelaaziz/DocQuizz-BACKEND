@@ -19,12 +19,12 @@ export class Pagination<T> {
         return {
             page,
             limit,
-            generate: async (list: any[]) => this.generate(list, { page, limit })
+            generate: async (list: T[]) => this.generate(list, { page, limit })
         }
 
     }
 
-    private async generate(list: any[], options: { page: number, limit: number }) {
+    private async generate<T>(list: T[], options: { page: number, limit: number }) {
 
         const { page, limit } = options;
 

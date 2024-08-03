@@ -1,24 +1,37 @@
 services:
-  xpense:
+  docquizz:
     build: ./
-    container_name: Xpense
+    container_name: DocQuizz
     ports:
       - "3000:3000"
     volumes:
-      - ./src:/usr/src/app/src
+      - ./apps/quiz-app/src:/usr/src/app/src
       - ./libs:/usr/src/app/libs
-    env_file:
-      - .env
     command: npm run start
     depends_on:
-      - xpense-mongo
+      - docquizz-mongo
     dns:
       - 8.8.8.8 # Google DNS
       - 8.8.4.4 # Google DNS
 
-  xpense-mongo:
+  admin-panel:
+    build: ./
+    container_name: AdminPanel
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./apps/admin/src:/usr/src/app/src
+      - ./libs:/usr/src/app/libs
+    command: npm run start
+    depends_on:
+      - docquizz-mongo
+    dns:
+      - 8.8.8.8 # Google DNS
+      - 8.8.4.4 # Google DNS
+
+  docquizz-mongo:
     image: mongo:latest
-    container_name: xpense-mongo
+    container_name: docquizz-mongo
     attach: false
     restart: always
     ports:

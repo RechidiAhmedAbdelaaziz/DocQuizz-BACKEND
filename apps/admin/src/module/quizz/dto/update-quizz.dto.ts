@@ -1,6 +1,5 @@
-import { Type } from "class-transformer";
-import { IsBoolean, IsEnum, IsMongoId, IsOptional, IsString } from "class-validator";
-import { Schema } from "mongoose";
+import { IsEnum, IsMongoId, IsNumber, IsOptional, IsString } from "class-validator";
+import { Types } from "mongoose";
 
 
 export class UpdateQuizzBody {
@@ -8,32 +7,41 @@ export class UpdateQuizzBody {
     @IsString()
     question: string
 
-    @Type(() => AnswerDTO)
-    answers: {
-        answer: string,
-        isCorrect: boolean,
-        explication?: string
-    }[]
+    @IsOptional()
+    @IsString({ each: true })
+    correctAnswers: string[]
 
     @IsOptional()
-    @IsEnum(["Very Easy", "Easy", "Medium", "Hard", "Very Hard"], { message: 'Invalid difficulty' })
-    difficulty: "Very Easy" | "Easy" | "Medium" | "Hard" | "Very Hard"
+    @IsString({ each: true })
+    incorrectAnswers: string[]
+
+    @IsOptional()
+    @IsString()
+    explanation: string
+
+    @IsOptional()
+    @IsEnum(["Easy", "Medium", "Hard"], { message: 'Invalid difficulty' })
+    difficulty: "Easy" | "Medium" | "Hard"
 
     @IsOptional()
     @IsMongoId()
-    fieldId: Schema.Types.ObjectId
-}
-
-
-class AnswerDTO {
-    @IsString()
-    answer: string
-
-
-    @IsBoolean()
-    isCorrect: boolean
+    fieldId: Types.ObjectId
 
     @IsOptional()
-    @IsString()
-    explication?: string
+    @IsMongoId()
+    courseId: Types.ObjectId
+
+    @IsOptional()
+    @IsMongoId()
+    referenceId: Types.ObjectId
+
+    @IsOptional()
+    @IsNumber()
+    year: number
+
+    @IsOptional()
+    @IsString({ each: true })
+    notes: string[]
 }
+
+
