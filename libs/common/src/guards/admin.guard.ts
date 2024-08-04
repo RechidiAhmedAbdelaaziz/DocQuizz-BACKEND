@@ -15,7 +15,7 @@ export class AdminGuard extends HttpAuthGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest<Request>()
 
-    if (request.user.role !== UserRoles.admin) throw new HttpException('Unauthorized', 401)
+    if (request.user.role !== UserRoles.ADMIN) throw new HttpException('Unauthorized', 401)
 
     return true;
   }

@@ -6,10 +6,14 @@ import { CurrentUser, HttpAuthGuard, JwtPayload } from '@app/common';
 import { RefreshTokenQuery } from './dtos/refresh-token.dto';
 import { ForgetPasswordBody } from './dtos/forget-password.dto';
 import { RestPasswordBody } from './dtos/rest-password.dto';
+import { UserService } from '../user/user.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) { }
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService
+  ) { }
 
   @Post('register') //*  USER | Register  {{host}}/auth/register
   async register(
@@ -41,7 +45,7 @@ export class AuthController {
     const { refreshToken } = query
 
 
-    const user = await this.authService.findById(userId) //TODO use userService instead
+    const user = await this.userService.getUserById(userId) 
     const tokens = await this.authService.refreshToken({ user, refreshToken })
 
     return tokens
