@@ -136,7 +136,5 @@ export class AuthService {
         return { accessToken, refreshToken: newRefreshToken }
     }
 
-    async findById(id: Types.ObjectId) { //TODO remove this after implementing userService
-        return await this.userModel.findById(id)
-    }
+
 }
