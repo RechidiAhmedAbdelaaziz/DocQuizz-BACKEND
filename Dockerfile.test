@@ -15,8 +15,8 @@ COPY . .
 
 # Copy the content of the 'src' and 'libs' directories
 # If these directories are huge or change frequently, consider a different strategy
-# COPY ./apps/quiz-app/src /usr/src/app/src
 COPY ./libs /usr/src/app/libs
+COPY ./apps/quiz-app/src /usr/src/app/src
 
 # Expose port 3000 to the outside world
 EXPOSE 3000
