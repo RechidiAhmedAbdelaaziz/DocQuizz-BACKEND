@@ -45,7 +45,7 @@ export class AuthController {
     const { refreshToken } = query
 
 
-    const user = await this.userService.getUserById(userId) 
+    const user = await this.userService.getUserById(userId)
     const tokens = await this.authService.refreshToken({ user, refreshToken })
 
     return tokens

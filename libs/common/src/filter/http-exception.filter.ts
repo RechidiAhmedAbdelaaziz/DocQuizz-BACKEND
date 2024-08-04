@@ -16,9 +16,10 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const response = ctx.getResponse<Response>();
     const status = exception.getStatus();
     const error = exception.getResponse();
+    const cause = exception.cause
 
 
-    const message =
+    const message = cause ? cause['message'] :
       isString(error) ?
         error :
         isArray(error['message']) ? error['message'][0] : error['message'];
@@ -27,7 +28,7 @@ export class HttpExceptionFilter implements ExceptionFilter {
       sucess: false,
       status,
       message,
-      stack: exception.stack
+      stack: exception.stack,
     }
 
     if (process.env.NODE_ENV === 'development') {
