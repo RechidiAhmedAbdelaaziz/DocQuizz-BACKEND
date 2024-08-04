@@ -23,6 +23,7 @@ RUN rm -rf /usr/src/app/apps
 # Expose port 3000 to the outside world
 EXPOSE 3000
 
+
 #add NODE_ENV 
 ENV NODE_ENV=production
 
