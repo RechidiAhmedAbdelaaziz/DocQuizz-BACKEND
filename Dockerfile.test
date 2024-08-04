@@ -18,10 +18,13 @@ COPY ./apps/quiz-app/src /usr/src/app/src
 COPY ./libs /usr/src/app/libs
 
 # Delete the './apps' directory to clean up the image
-RUN rm -rf ./apps
+RUN rm -rf /usr/src/app/apps
 
 # Expose port 3000 to the outside world
 EXPOSE 3000
+
+#add NODE_ENV 
+ENV NODE_ENV=production
 
 # Command to run the application
 CMD ["npm", "run", "start"]
