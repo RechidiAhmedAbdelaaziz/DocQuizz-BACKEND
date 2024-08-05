@@ -1,21 +1,30 @@
 import { Module } from '@nestjs/common';
-import { AdminGuard, DatabaseModule } from '@app/common';
+import { AdminGuard, DatabaseModule, HttpExceptionFilter } from '@app/common';
 import { JwtAuthModule } from '@app/common/module/jwt-auth/jwt-auth.module';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ExamAdminModule } from './module/exam-admin/exam-admin.module';
+import { ResponseInterceptor } from '@app/common/interceptors/response.interceptor';
 
 @Module({
   imports: [
     DatabaseModule.forRoot(process.env.DB_NAME),
     JwtAuthModule.register(),
     ExamAdminModule,
-    ],
+  ],
   controllers: [],
   providers: [
     {
       provide: APP_GUARD,
       useClass: AdminGuard,
     },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseInterceptor
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    }
   ],
 })
 export class AdminModule { }

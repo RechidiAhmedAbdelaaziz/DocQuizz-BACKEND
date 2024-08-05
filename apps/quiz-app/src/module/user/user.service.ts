@@ -49,8 +49,6 @@ export class UserService {
     ) => {
         const { oldPassword, newPassword } = info;
 
-        console.log(hashData(oldPassword), ' | ', user.password)
-
         if (!compareHash(oldPassword, user.password)) throw new HttpException('Old password is not correct', 400)
         user.password = hashData(newPassword);
 

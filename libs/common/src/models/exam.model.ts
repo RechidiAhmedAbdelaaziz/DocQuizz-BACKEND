@@ -12,13 +12,16 @@ import { AcademicField } from "./academic-field.model";
 @DSchema()
 export class Exam extends AbstractSchema {
 
-    @Prop()
+    @Prop({ unique: true })
     title: string
 
     @Prop()
     time: number
 
     @Prop()
+    year: number
+
+    @Prop({ default: 0 })
     quizez: number
 }
 

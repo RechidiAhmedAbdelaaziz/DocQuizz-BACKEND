@@ -15,7 +15,7 @@ export class OAuthController {
   @Redirect()
   async googleAuth() {
     const url = this.oAuthService.generateAuthUrl()
-    console.log(url)
+
     return {
       url
     }
