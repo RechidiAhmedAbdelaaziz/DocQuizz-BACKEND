@@ -18,6 +18,8 @@ export class Exam extends AbstractSchema {
     @Prop()
     time: number
 
+    @Prop()
+    quizez: number
 }
 
 

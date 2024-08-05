@@ -1,6 +1,6 @@
 import { IsName } from "@app/common";
 import { Type } from "class-transformer";
-import { IsBoolean, IsEmail, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
+import { IsEmail, IsOptional, IsString, ValidateNested } from "class-validator";
 
 export class UpdateUserBody {
     @IsOptional()
@@ -10,14 +10,6 @@ export class UpdateUserBody {
     @IsOptional()
     @IsEmail()
     email?: string;
-
-    @IsOptional()
-    @IsBoolean()
-    createQuiz?: boolean;
-
-    @IsOptional()
-    @IsBoolean()
-    createPlaylist?: boolean;
 
     @IsOptional()
     @ValidateNested()
