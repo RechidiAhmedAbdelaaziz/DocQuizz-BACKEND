@@ -22,7 +22,7 @@ export class AuthController {
     const user = await this.authService.register(details)
     const tokens = await this.authService.generateTokens(user)
 
-    return { user, tokens }
+    return { data: user, tokens }
   }
 
   @Post('login') //*  USER | Login  {{host}}/auth/login
@@ -32,10 +32,9 @@ export class AuthController {
     const user = await this.authService.login(data)
     const tokens = await this.authService.generateTokens(user)
 
-    return { user, tokens }
+    return { data: user, tokens }
   }
 
-  @UseGuards(HttpAuthGuard)
   @Get('refresh-token') //*  USER | Refresh Token  {{host}}/auth/refresh-token
   async refreshToken(
     @CurrentUser() userPayload: JwtPayload,

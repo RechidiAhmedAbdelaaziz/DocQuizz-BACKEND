@@ -7,6 +7,7 @@ import { UserModule } from './module/user/user.module';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ExamModule } from './module/exam/exam.module';
 import { ResponseInterceptor } from '@app/common/interceptors/response.interceptor';
+import { ExamResultModule } from './module/exam-result/exam-result.module';
 
 
 @Module({
@@ -17,6 +18,7 @@ import { ResponseInterceptor } from '@app/common/interceptors/response.intercept
     OAuthModule,
     UserModule,
     ExamModule,
+    ExamResultModule,
   ],
   providers: [
     {

@@ -10,5 +10,6 @@ import { Exam } from '@app/common/models';
   ],
   controllers: [ExamController],
   providers: [ExamService],
+  exports: [ExamService]
 })
 export class ExamModule { }

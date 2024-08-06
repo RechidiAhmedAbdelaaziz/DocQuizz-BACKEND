@@ -1,11 +1,14 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler, HttpException, HttpStatus } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { PaginationParamsDTO } from '../utils/pagination-helper';
 
 interface Response {
   tokens?: { refreshToken: string, accessToken: string }
   message?: string
   user?: any
+  pagination?: { page?: number; length?: number; next?: number; prev?: number }
+  data?: any[]
 }
 
 @Injectable()
@@ -18,16 +21,15 @@ export class ResponseInterceptor implements NestInterceptor {
 
 
 
-  responseHandler(data: Response, context: ExecutionContext) {
+  responseHandler(response: Response, context: ExecutionContext) {
     const res = context.switchToHttp().getResponse();
     const statusCode = res.statusCode;
 
+    console.log(response)
 
-    const { tokens, message, user } = data;
-    data.tokens = undefined;
-    data.message = undefined;
-
-
+    const { tokens, message, user, pagination, data } = response;
+    response.tokens = undefined;
+    response.message = undefined;
 
 
 
@@ -36,7 +38,8 @@ export class ResponseInterceptor implements NestInterceptor {
       statusCode,
       message,
       tokens,
-      data: user || data
+      pagination,
+      data: data || response
     }
   }
 }

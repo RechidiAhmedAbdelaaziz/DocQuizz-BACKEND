@@ -100,7 +100,7 @@ export class AuthService {
 
 
     async generateTokens(user: User) {
-        const payload: JwtPayload = { role: user.role, id: user._id }
+        const payload: JwtPayload = { role: user.role, id: user._id, isPro: user.isPro }
 
         const accessToken = this.jwtService.sign(payload)
         const refreshToken = v4()
@@ -124,7 +124,7 @@ export class AuthService {
             { user, token: refreshToken, expires: { $gt: new Date() } })
         if (!token) throw new HttpException('Invalid token', 400)
 
-        const payload: JwtPayload = { role: user.role, id: user._id }
+        const payload: JwtPayload = { role: user.role, id: user._id, isPro: user.isPro }
         const accessToken = this.jwtService.sign(payload)
         const newRefreshToken = v4()
         const expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7)
