@@ -1,5 +1,4 @@
 dist
-apps
 .*ignore
 .prettierrc
 README.md
