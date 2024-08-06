@@ -7,6 +7,7 @@ interface ErrorObject {
   status: number
   message: string
   stack?: string
+  cause?: unknown
 }
 
 @Catch(HttpException)
@@ -27,7 +28,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
       sucess: false,
       status,
       message,
-      stack: exception.stack
+      stack: exception.stack,
+      cause: exception.cause
     }
 
     if (process.env.NODE_ENV === 'development') {
@@ -42,12 +44,13 @@ export class HttpExceptionFilter implements ExceptionFilter {
 
 
 const throwDevlopmentError = (res: Response, error: ErrorObject) => {
-  const { sucess, status, message, stack } = error;
+  const { sucess, status, message, stack, cause } = error;
   res.status(status).json({
     sucess,
     status,
     message,
-    stack
+    cause,
+    stack,
   })
 }
 

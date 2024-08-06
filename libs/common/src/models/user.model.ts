@@ -6,7 +6,7 @@ import { UserRoles } from "../shared";
 @DSchema()
 export class User extends AbstractSchema {
 
-    @Prop({ default: UserRoles.USER, select: false })
+    @Prop({ default: UserRoles.USER })
     role: UserRoles;
 
     @Prop({ default: false })
