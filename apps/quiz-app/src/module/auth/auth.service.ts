@@ -8,6 +8,7 @@ import { RefreshToken } from '@app/common/models/refresh-token.model';
 import { RestPassworToken } from '@app/common/models/rest-password-token.model';
 import { User } from '@app/common/models/user.model';
 import { v4 } from 'uuid';
+import * as OTP from 'otp-generator'
 
 @Injectable()
 export class AuthService {
@@ -57,32 +58,32 @@ export class AuthService {
         const user = await this.userModel.findOne({ email })
         if (!user) throw new HttpException('Email not found', 404)
 
-        const token = v4()
+        const otp = OTP.generate(6)
         const expires = new Date(Date.now() + 1000 * 60 * 60)
 
         await this.restPasswordTokenModel.findOneAndUpdate(
             { user },
-            { token, expires },
+            { otp, expires },
             { upsert: true, new: true }
         )
 
-        return token
+        return otp
     }
 
 
     resetPassword = async (data: {
         email: string,
-        token: string,
+        otp: string,
         password: string,
     }) => {
 
-        const { email, token, password } = data
+        const { email, otp, password } = data
 
         const user = await this.userModel.findOne({ email })
         if (!user) throw new HttpException('User not found', 404)
 
         const restPasswordToken = await this.restPasswordTokenModel.findOne(
-            { user, token, expires: { $gt: new Date() } }
+            { user, otp, expires: { $gt: new Date() } }
         )
         if (!restPasswordToken) throw new HttpException('Invalid token', 400)
 

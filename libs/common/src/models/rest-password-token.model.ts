@@ -13,7 +13,7 @@ export class RestPassworToken extends AbstractSchema {
     user: User
 
     @Prop()
-    token: string
+    otp: string
 
     @Prop({ type: Date, index: { expireAfterSeconds: 2 } })
     expires: Date

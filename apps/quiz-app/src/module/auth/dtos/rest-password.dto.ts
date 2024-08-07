@@ -5,7 +5,7 @@ export class RestPasswordBody {
     email: string
 
     @IsString()
-    token: string
+    otp: string
 
     @IsStrongPassword({}, { message: 'Invalid password' })
     password: string

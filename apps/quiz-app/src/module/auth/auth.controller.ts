@@ -54,7 +54,8 @@ export class AuthController {
   ) {
     const { email } = data
 
-    await this.authService.forgetPassword(email)
+    const otp = await this.authService.forgetPassword(email)
+    console.log({ email, otp })
     return { message: 'Email sent' }
   }
 
@@ -62,9 +63,9 @@ export class AuthController {
   async resetPassword(
     @Body() data: RestPasswordBody
   ) {
-    const { email, token, password } = data
+    const { email, otp, password } = data
 
-    await this.authService.resetPassword({ email, token, password })
+    await this.authService.resetPassword({ email, otp, password })
     return { message: 'Password reset' }
   }
 
