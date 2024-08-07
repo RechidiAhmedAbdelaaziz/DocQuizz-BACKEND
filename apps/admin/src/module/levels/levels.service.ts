@@ -9,20 +9,7 @@ export class LevelsService {
         @InjectModel(Level.name) private readonly levelModel: Model<Level>
     ) { }
 
-    //TODO transform them to user app
-    // getLevels = async () => {
-    //     return await this.levelModel.find()
-    // }
 
-    // getMajors = (level: Level) => {
-    //     const majors = level.major.map(major => major.name)
-    //     return majors
-    // }
-
-    // getCourses = (level: Level, majorIndex: number) => {
-    //     const courses = level.major[majorIndex].courses
-    //     return courses
-    // }
 
     createLevel = async (name: string) => {
         const level = new this.levelModel()
