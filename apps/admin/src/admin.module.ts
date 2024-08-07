@@ -4,12 +4,14 @@ import { JwtAuthModule } from '@app/common/module/jwt-auth/jwt-auth.module';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ExamAdminModule } from './module/exam-admin/exam-admin.module';
 import { ResponseInterceptor } from '@app/common/interceptors/response.interceptor';
+import { LevelsModule } from './module/levels/levels.module';
 
 @Module({
   imports: [
     DatabaseModule.forRoot(process.env.DB_NAME),
     JwtAuthModule.register(),
     ExamAdminModule,
+    LevelsModule,
   ],
   controllers: [],
   providers: [

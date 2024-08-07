@@ -37,15 +37,13 @@ export class AuthController {
 
   @Get('refresh-token') //*  USER | Refresh Token  {{host}}/auth/refresh-token
   async refreshToken(
-    @CurrentUser() userPayload: JwtPayload,
     @Query() query: RefreshTokenQuery
   ) {
-    const { id: userId } = userPayload
     const { refreshToken } = query
 
 
-    const user = await this.userService.getUserById(userId)
-    const tokens = await this.authService.refreshToken({ user, refreshToken })
+    const user = await this.authService.checkRefreshToken({ refreshToken })
+    const tokens = await this.authService.generateTokens(user)
 
     return tokens
   }

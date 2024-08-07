@@ -106,34 +106,24 @@ export class AuthService {
         const refreshToken = v4()
         const expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7)
 
-        await this.refreshTokenModel.findOneAndUpdate(
-            { user },
-            { token: refreshToken, expires },
-            { upsert: true, new: true })
+        await this.refreshTokenModel.create(
+            { token: refreshToken, expires, user },
+        )
 
         return { accessToken, refreshToken }
     }
 
-    async refreshToken(data: {
-        user: User,
+    async checkRefreshToken(data: {
         refreshToken: string
     }) {
-        const { user, refreshToken } = data
+        const { refreshToken } = data
 
         const token = await this.refreshTokenModel.findOne(
-            { user, token: refreshToken, expires: { $gt: new Date() } })
+            { token: refreshToken, expires: { $gt: new Date() } }).populate('user')
         if (!token) throw new HttpException('Invalid token', 400)
 
-        const payload: JwtPayload = { role: user.role, id: user._id, isPro: user.isPro }
-        const accessToken = this.jwtService.sign(payload)
-        const newRefreshToken = v4()
-        const expires = new Date(Date.now() + 1000 * 60 * 60 * 24 * 7)
 
-        token.token = newRefreshToken
-        token.expires = expires
-        await token.save()
-
-        return { accessToken, refreshToken: newRefreshToken }
+        return token.user
     }
 
 
