@@ -1,7 +1,8 @@
-import { Body, Controller, Get, Post, Query, Redirect, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Redirect, Res, UseGuards } from '@nestjs/common';
 import { OAuthService } from './o-auth.service';
 import { GoogleAuthQuery } from './dto/google-signup.dto';
 import { AuthService } from '../auth/auth.service';
+import { Response } from 'express';
 
 @Controller('o-auth')
 export class OAuthController {
@@ -13,12 +14,9 @@ export class OAuthController {
 
   @Get('google') //* GOOGLE | Auth ~ {{host}}/o-auth/google
   @Redirect()
-  async googleAuth() {
+  async googleAuth(@Res() res: Response) {
     const url = this.oAuthService.generateAuthUrl()
-
-    return {
-      url
-    }
+    res.redirect(url)
   }
 
 
