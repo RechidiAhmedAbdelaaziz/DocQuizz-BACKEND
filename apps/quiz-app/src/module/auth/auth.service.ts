@@ -58,7 +58,7 @@ export class AuthService {
         const user = await this.userModel.findOne({ email })
         if (!user) throw new HttpException('Email not found', 404)
 
-        const otp = OTP.generate(6)
+        const otp = OTP.generate(6, { lowerCaseAlphabets: false, specialChars: false, upperCaseAlphabets: false })
         const expires = new Date(Date.now() + 1000 * 60 * 60)
 
         await this.restPasswordTokenModel.findOneAndUpdate(
@@ -85,7 +85,7 @@ export class AuthService {
         const restPasswordToken = await this.restPasswordTokenModel.findOne(
             { user, otp, expires: { $gt: new Date() } }
         )
-        if (!restPasswordToken) throw new HttpException('Invalid token', 400)
+        if (!restPasswordToken) throw new HttpException('Invalid OTP', 400)
 
 
         const cryptPassword = hashData(password)
@@ -95,6 +95,18 @@ export class AuthService {
         await restPasswordToken.deleteOne()
 
         return user
+    }
+
+    async checkOTP(args: { email: string, otp: string }) {
+        const { email, otp } = args
+
+        const user = await this.userModel.findOne({ email })
+        if (!user) throw new HttpException('User not found', 404)
+
+        const restPasswordToken = await this.restPasswordTokenModel.findOne(
+            { user, otp, expires: { $gt: new Date() } }
+        )
+        if (!restPasswordToken) throw new HttpException('Invalid OTP', 400)
     }
 
 
