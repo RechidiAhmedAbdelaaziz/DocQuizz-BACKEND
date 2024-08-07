@@ -1,4 +1,5 @@
-import { IsString, IsMongoId, IsEnum, IsOptional, ArrayNotEmpty } from "class-validator";
+import { Type } from "class-transformer";
+import { IsString, IsMongoId, IsEnum, IsOptional, ArrayNotEmpty, ValidateNested } from "class-validator";
 import { Types } from "mongoose";
 
 export class UpdateQuestionBody {
@@ -26,10 +27,22 @@ export class UpdateQuestionBody {
     source?: Types.ObjectId
 
     @IsOptional()
-    @IsString()
-    course: string
+    @ValidateNested()
+    @Type(() => FieldDto)
+    field: FieldDto
 
     @IsOptional()
     @IsString()
     explanation?: string
+}
+
+class FieldDto {
+    @IsString()
+    level: string
+
+    @IsString()
+    major: string
+
+    @IsString()
+    course: string
 }

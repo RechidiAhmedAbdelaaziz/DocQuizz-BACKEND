@@ -9,6 +9,7 @@ import { ExamModule } from './module/exam/exam.module';
 import { ResponseInterceptor } from '@app/common/interceptors/response.interceptor';
 import { ExamResultModule } from './module/exam-result/exam-result.module';
 import { LevelsModule } from './module/levels/levels.module';
+import { QuestionModule } from './module/question/question.module';
 
 
 @Module({
@@ -21,6 +22,7 @@ import { LevelsModule } from './module/levels/levels.module';
     ExamModule,
     ExamResultModule,
     LevelsModule,
+    QuestionModule,
   ],
   providers: [
     {
