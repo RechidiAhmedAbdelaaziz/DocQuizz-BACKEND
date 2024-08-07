@@ -29,12 +29,18 @@ export class Question extends AbstractSchema {
     source?: Exam
 
     @Prop()
-    course: string
+    field: Field
 
     @Prop()
     explanation?: string
 
 }
 
+
+class Field {
+    level: string
+    major: string
+    course: string
+}
 
 

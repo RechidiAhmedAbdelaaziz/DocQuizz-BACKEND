@@ -6,6 +6,10 @@ export interface QuestionDetails {
     wrongAnswers: string[],
     difficulty: "easy" | "medium" | "hard",
     source?: Exam,
-    course: string,
+    field: {
+        level: string,
+        major: string,
+        course: string
+    },
     explanation?: string
 }

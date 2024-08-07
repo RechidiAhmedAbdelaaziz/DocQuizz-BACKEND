@@ -15,7 +15,7 @@ export class QuestionController {
 
   @Post() //* QUESTION | Create ~ {{host}}/question
   async createQuestion(@Body() body: CreateQuestionBody) {
-    const { questionText, correctAnswers, wrongAnswers, difficulty, source, course, explanation } = body
+    const { questionText, correctAnswers, wrongAnswers, difficulty, source, field, explanation } = body
 
     await this.questionService.checkQuestionExists(questionText)
 
@@ -27,7 +27,7 @@ export class QuestionController {
       wrongAnswers,
       difficulty,
       source: exam,
-      course,
+      field,
       explanation
     })
   }
@@ -37,7 +37,7 @@ export class QuestionController {
     @Body() body: UpdateQuestionBody,
     @Param('questionId', ParseMonogoIdPipe) questionId: Types.ObjectId,
   ) {
-    const { questionText, correctAnswers, wrongAnswers, difficulty, source, course, explanation } = body
+    const { questionText, correctAnswers, wrongAnswers, difficulty, source, field, explanation } = body
 
     const question = await this.questionService.getQuestionById(questionId)
     const exam = source ? await this.examService.getExamById(source) : undefined
@@ -48,7 +48,7 @@ export class QuestionController {
       wrongAnswers,
       difficulty,
       source: exam,
-      course,
+      field,
       explanation
     })
   }
