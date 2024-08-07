@@ -25,7 +25,6 @@ export class ResponseInterceptor implements NestInterceptor {
     const res = context.switchToHttp().getResponse();
     const statusCode = res.statusCode;
 
-    console.log(response)
 
     const { tokens, message, user, pagination, data } = response;
     response.tokens = undefined;
