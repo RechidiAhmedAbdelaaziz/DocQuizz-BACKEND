@@ -7,6 +7,7 @@ import { RefreshTokenQuery } from './dtos/refresh-token.dto';
 import { ForgetPasswordBody } from './dtos/forget-password.dto';
 import { RestPasswordBody } from './dtos/rest-password.dto';
 import { UserService } from '../user/user.service';
+import { VerifyOtpBody } from './dtos/verify-otp.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -59,7 +60,17 @@ export class AuthController {
     return { message: 'Email sent' }
   }
 
-  @Post('reset-password') //*  USER | Reset Password  {{host}}/auth/reset-password
+  @Post('verify-otp') //*  OTP | Verify  {{host}}/auth/verify-otp
+  async verifyOTP(
+    @Body() data: VerifyOtpBody
+  ) {
+    const { email, otp } = data
+
+    await this.authService.checkOTP({ email, otp })
+    return { message: 'OTP verified' }
+  }
+
+  @Post('reset-password') //*  PASSWORD | Reset   {{host}}/auth/reset-password
   async resetPassword(
     @Body() data: RestPasswordBody
   ) {
