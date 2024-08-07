@@ -5,6 +5,7 @@ import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ExamAdminModule } from './module/exam-admin/exam-admin.module';
 import { ResponseInterceptor } from '@app/common/interceptors/response.interceptor';
 import { LevelsModule } from './module/levels/levels.module';
+import { QuestionModule } from './module/question/question.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { LevelsModule } from './module/levels/levels.module';
     JwtAuthModule.register(),
     ExamAdminModule,
     LevelsModule,
+    QuestionModule,
   ],
   controllers: [],
   providers: [

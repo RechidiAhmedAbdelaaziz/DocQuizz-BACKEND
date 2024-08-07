@@ -60,7 +60,7 @@ export class ExamAdminService {
         if (exam) throw new HttpException('Exam already exists', 400);
     }
 
-    async getById(id: Types.ObjectId) {
+    async getExamById(id: Types.ObjectId) {
         const exam = await this.examModel.findById(id);
         if (!exam) throw new HttpException('Exam not found', 404);
         return exam;

@@ -30,7 +30,7 @@ export class ExamAdminController {
   ) {
     const { time, major, year, city } = body;
 
-    const exam = await this.examAdminService.getById(id);
+    const exam = await this.examAdminService.getExamById(id);
     const updatedExam = await this.examAdminService.updateExam(exam, { time, major, year, city });
 
     return updatedExam;
