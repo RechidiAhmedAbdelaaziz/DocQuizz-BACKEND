@@ -10,5 +10,6 @@ import { Exam } from '@app/common/models';
   ],
   controllers: [ExamAdminController],
   providers: [ExamAdminService],
+  exports: [ExamAdminService]
 })
-export class ExamAdminModule {}
+export class ExamAdminModule { }
