@@ -29,7 +29,7 @@ export class ExamResultController {
     return await this.examResultService.createResult({ user, exam });
   }
 
-  @Get() //* EXAM | Get taken ~ {{host}}/exam-result
+  @Get() //* EXAM | Get taken ~ {{host}}/exam-result 
   async getResults(
     @CurrentUser() userId: Types.ObjectId,
     @Query() query: ListResultQuery

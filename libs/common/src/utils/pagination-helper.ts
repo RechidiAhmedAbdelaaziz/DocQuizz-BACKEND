@@ -45,7 +45,7 @@ export class Pagination<T> {
     }
 }
 
-export class PaginationParamsDTO {
+export class PaginationQuery {
     @IsOptional()
     @IsNumber()
     page?: number;

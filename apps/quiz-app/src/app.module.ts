@@ -10,6 +10,7 @@ import { ResponseInterceptor } from '@app/common/interceptors/response.intercept
 import { ExamResultModule } from './module/exam-result/exam-result.module';
 import { LevelsModule } from './module/levels/levels.module';
 import { QuestionModule } from './module/question/question.module';
+import { PlaylistModule } from './module/playlist/playlist.module';
 
 
 @Module({
@@ -23,6 +24,7 @@ import { QuestionModule } from './module/question/question.module';
     ExamResultModule,
     LevelsModule,
     QuestionModule,
+    PlaylistModule,
   ],
   providers: [
     {
