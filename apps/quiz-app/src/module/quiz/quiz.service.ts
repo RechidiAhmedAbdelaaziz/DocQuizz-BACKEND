@@ -95,6 +95,7 @@ export class QuizService {
         return await quiz.save()
     }
 
+
     deleteQuiz = async (quiz: Quiz) => {
         await quiz.deleteOne()
     }
@@ -104,12 +105,25 @@ export class QuizService {
         quizId: Types.ObjectId,
         options?: {
             withQuestions?: boolean
+            populateOptions?: {
+                page?: number,
+                limit?: number
+            }
         }
     ) {
-        const { withQuestions } = options || {}
+        const { withQuestions, populateOptions } = options || {}
+        const page = populateOptions?.page || 1
+        const limit = populateOptions?.limit || 15
 
         const query = this.quizModel.findOne({ _id: quizId, user })
         if (withQuestions) query.select('+questions')
+        if (populateOptions) query
+            .select({
+                questions: { $slice: [(page - 1) * limit, limit] }
+            })
+            .populate({
+                path: 'questions.question',
+            })
 
         const quiz = await query.exec()
         if (!quiz) throw new HttpException('Quiz not found', 404)

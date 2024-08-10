@@ -1,12 +1,18 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { ExamService } from './exam.service';
 import { ListExamQuery } from './dto/list-exams.dto';
-import { ProGuard } from '@app/common';
+import { ParseMonogoIdPipe, ProGuard } from '@app/common';
+import { QuestionService } from '../question/question.service';
+import { Types } from 'mongoose';
+import { PaginationQuery } from '@app/common/utils/pagination-helper';
 
 @Controller('exam')
 @UseGuards(ProGuard)
 export class ExamController {
-  constructor(private readonly examService: ExamService) { }
+  constructor(
+    private readonly examService: ExamService,
+    private readonly questionService: QuestionService
+  ) { }
 
   @Get() //*  EXAM | Get all ~ {{host}}/exam
   async getExams(
@@ -15,5 +21,17 @@ export class ExamController {
     const { keys: keywords, limit, page } = query;
 
     return await this.examService.getExams({ keywords }, { limit, page });
+  }
+
+  @Get(":examId") //* EXAM | Get Questions ~ {{host}}/exam/:examId?page=1&limit=10
+  async getExamQuestions(
+    @Query() query: PaginationQuery,
+    @Param("examId", ParseMonogoIdPipe) examId: Types.ObjectId
+  ) {
+    const { limit, page } = query;
+
+    const exam = await this.examService.getExamById(examId);
+
+    return await this.questionService.getExamQuestions(exam, { limit, page });
   }
 }
