@@ -1,10 +1,11 @@
-import { Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ExamResultService } from './exam-result.service';
 import { ExamService } from '../exam/exam.service';
 import { UserService } from '../user/user.service';
 import { CurrentUser, HttpAuthGuard, ParseMonogoIdPipe } from '@app/common';
 import { Types } from 'mongoose';
 import { ListResultQuery } from './dto/list-result.dto';
+import { UpdateResultBody } from './dto/update-result.dto';
 
 @UseGuards(HttpAuthGuard)
 @Controller('exam-result')
@@ -41,6 +42,19 @@ export class ExamResultController {
     return await this.examResultService.getResults(user, { keywords }, { page, limit });
   }
 
-  //TODO When answer question 
+  @Patch(':examId') //* EXAM | Submit ~ {{host}}/exam-result/:examId
+  async submitExam(
+    @CurrentUser() userId: Types.ObjectId,
+    @Param('examId', ParseMonogoIdPipe) examId: Types.ObjectId,
+    @Body() body: UpdateResultBody
+  ) {
+    const { answerd, correct } = body
+
+    const exam = await this.examService.getExamById(examId);
+    const user = await this.userService.getUserById(userId);
+    const result = await this.examResultService.getResult(user, exam);
+
+    return await this.examResultService.updateResult(result, { answerd, correct });
+  }
 
 }

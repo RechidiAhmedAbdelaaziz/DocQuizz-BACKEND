@@ -7,15 +7,11 @@ import { Schema } from "mongoose";
 import { Exam } from "./exam.model";
 
 
-@DSchema()
 class Field {
-    @Prop()
     level: string
 
-    @Prop()
     major: string
 
-    @Prop()
     course: string
 }
 

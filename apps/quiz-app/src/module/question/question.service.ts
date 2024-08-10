@@ -4,6 +4,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, Types } from 'mongoose';
 import { QuestionFilter } from './interface/question-filter';
+import { min } from 'class-validator';
 
 @Injectable()
 export class QuestionService {
@@ -14,7 +15,7 @@ export class QuestionService {
 
     getQuestions = async (
         filter: FilterQuery<Question>,
-        pagination: { page?: number, limit?: number },
+        pagination: { page?: number, limit?: number, min?: number },
     ) => {
         const { generate, limit, page } = new Pagination(this.questionModel, { filter, ...pagination }).getOptions();
 
@@ -22,6 +23,8 @@ export class QuestionService {
             .find(filter)
             .skip((page - 1) * limit)
             .limit(limit)
+
+        if (pagination.min && questions.length < pagination.min) throw new HttpException(`There are less than ${pagination.min} questions that match the filter`, 400);
 
         return await generate(questions);
     }
