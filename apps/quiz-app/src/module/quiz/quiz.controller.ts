@@ -7,6 +7,8 @@ import { Types } from 'mongoose';
 import { CreateQuizBody } from './dto/create-quiz.dto';
 import { ListQuizQuery } from './dto/list-quiz.dto';
 import { UpdateQuizBody } from './dto/update-quiz.dto';
+import { query } from 'express';
+import { PaginationQuery } from '@app/common/utils/pagination-helper';
 
 @Controller('quiz')
 @UseGuards(HttpAuthGuard)
@@ -41,6 +43,20 @@ export class QuizController {
 
     const user = await this.userService.getUserById(userId)
     return await this.quizService.getQuizes(user, { page, limit, keywords })
+  }
+
+  @Get(":quizId") //* QUIZ | Get Questions ~ {{host}}/quiz/:quizId?page=1&limit=10
+  async getQuizQuestions(
+    @Query() query: PaginationQuery,
+    @CurrentUser() userId: Types.ObjectId,
+    @Param("quizId", ParseMonogoIdPipe) quizId: Types.ObjectId
+  ) {
+    const { page, limit } = query
+
+    const user = await this.userService.getUserById(userId)
+    const quiz = await this.quizService.getQuizById(user, quizId, { populateOptions: { limit, page } })
+
+    return quiz.questions
   }
 
   @Patch(":quizId") //* QUIZ | Update ~ {{host}}/quiz/:quizId

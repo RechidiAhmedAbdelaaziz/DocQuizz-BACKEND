@@ -18,7 +18,10 @@ export class ExamResult extends AbstractSchema {
     exam: Exam
 
     @Prop({
-        default: { answerd: 0, correct: 0 },
+        type: raw({
+            answerd: { type: Number, default: 0 },
+            correct: { type: Number, default: 0 }
+        }),
         _id: false
     })
     result: {
