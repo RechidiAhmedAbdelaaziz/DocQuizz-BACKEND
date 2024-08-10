@@ -11,6 +11,7 @@ import { ExamResultModule } from './module/exam-result/exam-result.module';
 import { LevelsModule } from './module/levels/levels.module';
 import { QuestionModule } from './module/question/question.module';
 import { PlaylistModule } from './module/playlist/playlist.module';
+import { QuizModule } from './module/quiz/quiz.module';
 
 
 @Module({
@@ -25,6 +26,7 @@ import { PlaylistModule } from './module/playlist/playlist.module';
     LevelsModule,
     QuestionModule,
     PlaylistModule,
+    QuizModule,
   ],
   providers: [
     {

@@ -58,9 +58,32 @@ export class ExamResultService {
         return await generate(results);
     }
 
+    updateResult = async (
+        result: ExamResult,
+        updates: {
+            answerd?: number,
+            correct?: number
+        }
+    ) => {
+        const { answerd, correct } = updates || {}
+
+        if (answerd) result.result.answerd = answerd
+        if (correct) result.result.correct = correct
+
+        result.markModified('result');
+
+        return await result.save();
+    }
+
     async checkResultExists(user: User, exam: Exam) {
         const result = await this.examResultModel.findOne({ user, exam });
         if (result) throw new HttpException('You have already taken this exam', 400);
+    }
+
+    async getResult(user: User, exam: Exam) {
+        const result = await this.examResultModel.findOne({ user, exam });
+        if (!result) throw new HttpException('You have not taken this exam yet', 400);
+        return result;
     }
 
 
