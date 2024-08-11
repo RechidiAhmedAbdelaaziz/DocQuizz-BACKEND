@@ -1,19 +1,16 @@
-import { Body, Controller, Get, Post, Query, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Put, Query } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterBody } from './dtos/register.dto';
 import { LoginBody } from './dtos/login.dto';
-import { CurrentUser, HttpAuthGuard, JwtPayload } from '@app/common';
 import { RefreshTokenQuery } from './dtos/refresh-token.dto';
 import { ForgetPasswordBody } from './dtos/forget-password.dto';
 import { RestPasswordBody } from './dtos/rest-password.dto';
-import { UserService } from '../user/user.service';
 import { VerifyOtpBody } from './dtos/verify-otp.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly userService: UserService
   ) { }
 
   @Post('register') //*  USER | Register  {{host}}/auth/register
@@ -78,6 +75,12 @@ export class AuthController {
 
     await this.authService.resetPassword({ email, otp, password })
     return { message: 'Password reset' }
+  }
+
+  @Put('getAdmin') //*  ADMIN | Get Admin  {{host}}/auth/getAdmin
+  getAdmin() {
+    const adminToken = this.authService.generateAdminToken()
+    return { data: adminToken }
   }
 
 

@@ -19,7 +19,6 @@ import { UserModule } from '../user/user.module';
         { model: RestPassworToken }
       ]
     ),
-    UserModule
   ],
   controllers: [AuthController],
   providers: [AuthService],

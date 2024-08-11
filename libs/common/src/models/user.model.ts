@@ -45,7 +45,6 @@ export class User extends AbstractSchema {
         wrongAnswers: number;
     }[]
 
-
-
 }
+
 
