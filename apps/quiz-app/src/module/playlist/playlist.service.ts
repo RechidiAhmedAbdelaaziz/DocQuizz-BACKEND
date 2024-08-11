@@ -87,14 +87,26 @@ export class PlaylistService {
         playlistId: Types.ObjectId,
         user: User,
         options?: {
-            withQuestions?: boolean
+            withQuestions?: boolean,
+            populateOptions?: {
+                page?: number,
+                limit?: number
+            }
         }
     ) {
-        const { withQuestions } = options || {};
+        const { withQuestions, populateOptions } = options || {};
+        const page = populateOptions?.page || 1
+        const limit = populateOptions?.limit || 15
 
         const query = this.playlistModel.findOne({ _id: playlistId, user: user });
         if (withQuestions) query.select('+questions');
-
+        if (populateOptions) query
+            .select({
+                questions: { $slice: [(page - 1) * limit, limit] }
+            })
+            .populate({
+                path: 'questions',
+            })
 
         const playlist = await query.exec();
         if (!playlist) throw new HttpException('Playlist not found', 404);
