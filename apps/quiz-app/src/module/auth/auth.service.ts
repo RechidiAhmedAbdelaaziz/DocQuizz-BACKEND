@@ -9,6 +9,7 @@ import { RestPassworToken } from '@app/common/models/rest-password-token.model';
 import { User } from '@app/common/models/user.model';
 import { v4 } from 'uuid';
 import * as OTP from 'otp-generator'
+import { UserRoles } from '@app/common';
 
 @Injectable()
 export class AuthService {
@@ -70,7 +71,6 @@ export class AuthService {
         return otp
     }
 
-
     resetPassword = async (data: {
         email: string,
         otp: string,
@@ -109,9 +109,6 @@ export class AuthService {
         if (!restPasswordToken) throw new HttpException('Invalid OTP', 400)
     }
 
-
-
-
     async generateTokens(user: User) {
         const payload: JwtPayload = { role: user.role, id: user._id, isPro: user.isPro }
 
@@ -137,6 +134,11 @@ export class AuthService {
 
 
         return token.user
+    }
+
+    generateAdminToken() {
+        const payload: JwtPayload = { role: UserRoles.ADMIN, id: new Types.ObjectId(), isPro: true }
+        return this.jwtService.sign(payload)
     }
 
 
