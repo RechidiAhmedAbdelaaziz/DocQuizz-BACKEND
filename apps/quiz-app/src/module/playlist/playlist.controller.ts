@@ -7,6 +7,7 @@ import { UserService } from '../user/user.service';
 import { CreatePalyListBody } from './dto/create-playlist.dto';
 import { UpdatePlaylistBody } from './dto/update-playlist.dto';
 import { QuestionService } from '../question/question.service';
+import { PaginationQuery } from '@app/common/utils/pagination-helper';
 
 @Controller('playlist')
 @UseGuards(HttpAuthGuard)
@@ -27,6 +28,18 @@ export class PlaylistController {
     const user = await this.userService.getUserById(userId);
 
     return await this.playlistService.getPlaylists(user, { keywords }, { page, limit });
+  }
+
+  @Get(':playlistId') //* PLAYLIST | Get Questions ~ {{host}}/playlist/:playlistId?page=1&limit=10
+  async getPlaylistQuestions(
+    @CurrentUser() userId: Types.ObjectId,
+    @Param('playlistId', ParseMonogoIdPipe) playlistId: Types.ObjectId,
+    @Query() query: PaginationQuery
+  ) {
+    const { page, limit } = query;
+    const user = await this.userService.getUserById(userId);
+
+    return await this.playlistService.getPlaylistById(playlistId, user, { populateOptions: { page, limit } });
   }
 
   @Post() //* PLAYLIST | Create ~ {{host}}/playlist
