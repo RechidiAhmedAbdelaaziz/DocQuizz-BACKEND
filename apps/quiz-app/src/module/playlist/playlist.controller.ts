@@ -39,7 +39,9 @@ export class PlaylistController {
     const { page, limit } = query;
     const user = await this.userService.getUserById(userId);
 
-    return await this.playlistService.getPlaylistById(playlistId, user, { populateOptions: { page, limit } });
+    const playlist = await this.playlistService.getPlaylistById(playlistId, user, { populateOptions: { page, limit } });
+
+    return playlist.questions
   }
 
   @Post() //* PLAYLIST | Create ~ {{host}}/playlist
