@@ -66,5 +66,9 @@ export class NotesService {
         return await note.save()
     }
 
+    getNotedQuestions = async (user: User) => {
+        const notedQuestions = await this.noteModel.find({ user }).select('question')
+        return notedQuestions.map(n => n.question._id)
+    }
 
 }

@@ -9,6 +9,7 @@ import { ListQuizQuery } from './dto/list-quiz.dto';
 import { UpdateQuizBody } from './dto/update-quiz.dto';
 import { query } from 'express';
 import { PaginationQuery } from '@app/common/utils/pagination-helper';
+import { NotesService } from '../notes/notes.service';
 
 @Controller('quiz')
 @UseGuards(HttpAuthGuard)
@@ -17,6 +18,7 @@ export class QuizController {
     private readonly quizService: QuizService,
     private readonly questionService: QuestionService,
     private readonly userService: UserService,
+    private readonly notesService: NotesService
   ) { }
 
   @Post() //* QUIZ | Create ~ {{host}}/quiz
@@ -26,9 +28,22 @@ export class QuizController {
   ) {
     const { title, fields, difficulties, types, alreadyAnsweredFalse, withExplanation, withNotes } = body
 
-    const questionFilter = this.questionService.generateFilterQuery({ fields, difficulties, types, alreadyAnsweredFalse, withExplanation, withNotes })
+    const ids = []
 
     const user = await this.userService.getUserById(userId)
+
+    if (alreadyAnsweredFalse) {
+      const answeredQuestions = await this.quizService.getAlreadyAnswerWrongQuestions(user)
+      ids.push(answeredQuestions)
+    }
+    if (withNotes) {
+      const notes = await this.notesService.getNotedQuestions(user)
+      ids.push(notes)
+    }
+
+    const questionFilter = this.questionService.generateFilterQuery({ fields, difficulties, types, withExplanation, ids })
+
+
     const { data: questions } = await this.questionService.getQuestions(questionFilter, { limit: 500, min: 1 })
 
     return await this.quizService.createQuiz(user, { title, questions })

@@ -58,16 +58,16 @@ export class QuestionService {
     }
 
     generateFilterQuery(filters: QuestionFilter): FilterQuery<Question> {
-        const { fields, difficulties, types, source, alreadyAnsweredFalse, withExplanation, withNotes } = filters;
+        const { fields, difficulties, types, source, withExplanation, ids } = filters;
 
         const filter: FilterQuery<Question> = {};
 
+        if (ids && ids.length > 0) filter._id = { $in: ids };
         if (fields) filter.field = { $in: fields };
         if (difficulties) filter.difficulty = { $in: difficulties };
         if (types) filter.type = { $in: types };
         if (source) filter.source = source;
         if (withExplanation) filter.explanation = { $exists: true };
-        //TODO implement alreadyAnsweredFalse and withNotes filters
 
         return filter;
     }

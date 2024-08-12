@@ -100,6 +100,22 @@ export class QuizService {
         await quiz.deleteOne()
     }
 
+    async getAlreadyAnswerWrongQuestions(user: User) {
+        const filter: FilterQuery<Quiz> = {
+            user,
+            isCompleted: true,
+            'questions.isCorrect': false
+        }
+
+        const quizes = await this.quizModel
+            .find(filter).select('questions')
+
+        const questionsStatus = quizes.map(quiz => quiz.questions)
+        const questions = questionsStatus.map(questions => questions.map(q => q.question._id))
+
+        return questions.flat()
+    }
+
     async getQuizById(
         user: User,
         quizId: Types.ObjectId,
