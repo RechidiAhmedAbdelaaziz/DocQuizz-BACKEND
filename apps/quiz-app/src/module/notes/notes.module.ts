@@ -16,5 +16,6 @@ import { UserModule } from '../user/user.module';
   ],
   controllers: [NotesController],
   providers: [NotesService],
+  exports: [NotesService]
 })
 export class NotesModule { }

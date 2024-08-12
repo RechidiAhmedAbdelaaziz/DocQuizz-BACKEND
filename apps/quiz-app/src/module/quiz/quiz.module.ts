@@ -5,11 +5,12 @@ import { DatabaseModule } from '@app/common';
 import { Quiz } from '@app/common/models/quiz.model';
 import { QuestionModule } from '../question/question.module';
 import { UserModule } from '../user/user.module';
+import { NotesModule } from '../notes/notes.module';
 
 @Module({
   imports: [
     DatabaseModule.forFeature([{ model: Quiz }]),
-    QuestionModule, UserModule
+    QuestionModule, UserModule, NotesModule
   ],
   controllers: [QuizController],
   providers: [QuizService],
