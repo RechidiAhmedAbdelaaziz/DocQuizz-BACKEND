@@ -29,6 +29,8 @@ services:
     command: npm run start
     depends_on:
       - docquizz-mongo
+    env_file:
+      - .env
     dns:
       - 8.8.8.8 # Google DNS
       - 8.8.4.4 # Google DNS
