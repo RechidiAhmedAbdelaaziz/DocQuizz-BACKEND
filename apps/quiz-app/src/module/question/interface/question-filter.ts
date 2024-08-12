@@ -1,4 +1,5 @@
 import { Exam } from "@app/common/models";
+import { Types } from "mongoose";
 
 export interface QuestionFilter {
     fields?: {
@@ -9,8 +10,7 @@ export interface QuestionFilter {
     difficulties?: ("easy" | "medium" | "hard")[],
     types?: ("QCM" | "QCU")[],
     source?: Exam,
-    alreadyAnsweredFalse?: boolean,
     withExplanation?: boolean,
-    withNotes?: boolean
+    ids? : Types.ObjectId[],
 }
 
