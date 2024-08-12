@@ -14,7 +14,7 @@ export class ExamAdminController {
     @Body() body: CreateExamBody
   ) {
     const { time, city, major, year } = body;
-    const title = `Exam ${major} | ${city} | ${year}`;
+    const title = `Exam: ${major} | ${year} | ${city}`;
 
     await this.examAdminService.checkByName(title);
 
