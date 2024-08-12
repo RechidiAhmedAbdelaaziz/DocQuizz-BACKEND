@@ -6,7 +6,7 @@ import { AbstractSchema } from "@app/common/shared/abstract.model";
 @DSchema()
 export class Exam extends AbstractSchema {
 
-    @Prop({ unique: true })
+    @Prop()
     title: string
 
     @Prop()

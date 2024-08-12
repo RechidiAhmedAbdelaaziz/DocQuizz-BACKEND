@@ -19,7 +19,7 @@ export class ExamAdminService {
 
         const createdExam = new this.examModel();
 
-        createdExam.title = `Exam: ${major} | ${city} | ${year}`;
+        createdExam.title = `Exam: ${major} | ${year} | ${city}`;
         createdExam.time = time;
         createdExam.year = year;
 
@@ -46,7 +46,7 @@ export class ExamAdminService {
 
 
 
-        exam.title = `Exam: ${major} | ${city} | ${year}`;
+        exam.title = `Exam: ${major} | ${year} | ${city}`;
         exam.year = year;
         if (time) exam.time = time;
         if (addQuiz) exam.quizez += 1;
