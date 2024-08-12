@@ -1,13 +1,14 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { ExamService } from './exam.service';
 import { ListExamQuery } from './dto/list-exams.dto';
-import { ParseMonogoIdPipe, ProGuard } from '@app/common';
+import { HttpAuthGuard, ParseMonogoIdPipe, ProGuard } from '@app/common';
 import { QuestionService } from '../question/question.service';
 import { Types } from 'mongoose';
 import { PaginationQuery } from '@app/common/utils/pagination-helper';
 
 @Controller('exam')
-@UseGuards(ProGuard)
+// @UseGuards(ProGuard) //TODO after implemnt payment
+@UseGuards(HttpAuthGuard)
 export class ExamController {
   constructor(
     private readonly examService: ExamService,
