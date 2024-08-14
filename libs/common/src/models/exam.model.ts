@@ -16,7 +16,7 @@ export class Exam extends AbstractSchema {
     year: number
 
     @Prop({ default: 0 })
-    quizez: number
+    question: number
 }
 
 

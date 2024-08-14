@@ -60,9 +60,16 @@ export class QuestionService {
         if (question) throw new HttpException('Question already exists', 400)
     }
 
-    async getQuestionById(id: Types.ObjectId) {
-        const question = await this.questionModel.findById(id)
+    async getQuestionById(id: Types.ObjectId, options?: { withExam: boolean }) {
+        const { withExam } = options || { withExam: false }
+
+        const query = this.questionModel.findById(id)
+
+        if (withExam) query.populate('source')
+
+        const question = await query.exec()
         if (!question) throw new HttpException('Question not found', 404)
+
         return question
     }
 }

@@ -21,6 +21,8 @@ export class QuestionController {
 
     const exam = source ? await this.examService.getExamById(source) : undefined
 
+    if (exam) await this.examService.updateExam(exam, { addQuiz: true })
+
     return await this.questionService.createQuestion({
       questionText,
       correctAnswers,
@@ -57,9 +59,10 @@ export class QuestionController {
   async deleteQuestion(
     @Param('questionId', ParseMonogoIdPipe) questionId: Types.ObjectId
   ) {
-    const question = await this.questionService.getQuestionById(questionId)
+    const question = await this.questionService.getQuestionById(questionId, { withExam: true })
 
     await this.questionService.deleteQuestionById(question)
+    await this.examService.updateExam(question.source, { deleteQuiz: true })
 
     return { message: 'Question deleted successfully' }
   }
