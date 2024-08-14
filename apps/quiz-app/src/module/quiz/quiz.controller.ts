@@ -85,6 +85,15 @@ export class QuizController {
     const user = await this.userService.getUserById(userId)
     const quiz = await this.quizService.getQuizById(user, quizId, { withQuestions: true })
 
+    if (questionAnswer) {
+      const question = await this.questionService.getQuestionById(questionAnswer.questionId)
+
+      await this.userService.updateAnalyse(user, {
+        major: question.field.major,
+        isCorrectAnswers: questionAnswer.isCorrect
+      })
+    }
+
     return await this.quizService.updateQuiz(quiz, { title, isCompleted, time, questionAnswer })
   }
 

@@ -7,8 +7,8 @@ import { Types } from 'mongoose';
 import { ListResultQuery } from './dto/list-result.dto';
 import { UpdateResultBody } from './dto/update-result.dto';
 
-@UseGuards(HttpAuthGuard)
 @Controller('exam-result')
+@UseGuards(HttpAuthGuard)
 export class ExamResultController {
   constructor(
     private readonly examResultService: ExamResultService,

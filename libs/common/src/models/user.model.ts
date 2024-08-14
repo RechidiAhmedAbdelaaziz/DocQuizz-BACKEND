@@ -36,8 +36,9 @@ export class User extends AbstractSchema {
     playlists: number;
 
     @Prop({
-        type: raw([{ major: String, correctAnswers: Number, wrongAnswers: Number }]),
-        select: false
+        type: [{ major: String, correctAnswers: Number, wrongAnswers: Number }],
+        select: false,
+        _id: false,
     })
     analyse: {
         major: string;

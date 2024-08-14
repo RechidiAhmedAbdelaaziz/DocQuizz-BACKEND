@@ -7,13 +7,6 @@ import { Schema } from "mongoose";
 import { Exam } from "./exam.model";
 
 
-class Field {
-    level: string
-
-    major: string
-
-    course: string
-}
 
 @DSchema({ timestamps: true })
 export class Question extends AbstractSchema {
@@ -36,8 +29,21 @@ export class Question extends AbstractSchema {
     @Prop({ type: Schema.Types.ObjectId, ref: Exam.name })
     source?: Exam
 
-    @Prop()
-    field: Field
+    @Prop({
+        type: {
+            level: String,
+            major: String,
+            course: String
+        },
+        _id: false
+    })
+    field: {
+        level: string
+
+        major: string
+
+        course: string
+    }
 
     @Prop()
     explanation?: string
