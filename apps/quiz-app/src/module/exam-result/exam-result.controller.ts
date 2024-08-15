@@ -25,9 +25,9 @@ export class ExamResultController {
     const exam = await this.examService.getExamById(examId);
     const user = await this.userService.getUserById(userId);
 
-    await this.examResultService.checkResultExists(user, exam);
+    const result = await this.examResultService.checkResultExists(user, exam) || await this.examResultService.createResult({ user, exam })
 
-    return await this.examResultService.createResult({ user, exam });
+    return result
   }
 
   @Get() //* EXAM | Get taken ~ {{host}}/exam-result 

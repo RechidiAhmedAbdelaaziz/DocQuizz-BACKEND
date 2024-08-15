@@ -76,8 +76,7 @@ export class ExamResultService {
     }
 
     async checkResultExists(user: User, exam: Exam) {
-        const result = await this.examResultModel.findOne({ user, exam });
-        if (result) throw new HttpException('You have already taken this exam', 400);
+        return await this.examResultModel.findOne({ user, exam });
     }
 
     async getResult(user: User, exam: Exam) {
