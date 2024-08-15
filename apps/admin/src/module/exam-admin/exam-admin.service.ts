@@ -49,8 +49,8 @@ export class ExamAdminService {
         exam.title = `Exam: ${major} | ${year} | ${city}`;
         exam.year = year;
         if (time) exam.time = time;
-        if (addQuiz) exam.quizez += 1;
-        if (deleteQuiz) exam.quizez -= 1;
+        if (addQuiz) exam.questions += 1;
+        if (deleteQuiz) exam.questions -= 1;
 
         return await exam.save();
     }
