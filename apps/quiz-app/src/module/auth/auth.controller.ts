@@ -43,7 +43,7 @@ export class AuthController {
     const user = await this.authService.checkRefreshToken({ refreshToken })
     const tokens = await this.authService.generateTokens(user)
 
-    return tokens
+    return {tokens}
   }
 
   @Post('forget-password') //*  USER | Forget Password  {{host}}/auth/forget-password
