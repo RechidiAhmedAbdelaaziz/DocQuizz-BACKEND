@@ -45,13 +45,13 @@ export class LevelsController {
   async addCourse(
     @Body() body: AddCourseBody
   ) {
-    const { name, major, level } = body
+    const { name: title, major, level, isFree } = body
 
     const levelDoc = await this.levelsService.getLevel(level)
     const majorIndex = this.levelsService.getMajorIndex(levelDoc, major)
 
-    this.levelsService.checkCourseExists(levelDoc, majorIndex, name)
+    this.levelsService.checkCourseExists(levelDoc, majorIndex, title)
 
-    return await this.levelsService.addCourse(levelDoc, majorIndex, name)
+    return await this.levelsService.addCourse(levelDoc, majorIndex, { title, isFree })
   }
 }

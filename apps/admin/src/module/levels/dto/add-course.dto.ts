@@ -1,4 +1,4 @@
-import { IsString } from "class-validator"
+import { IsBoolean, IsString } from "class-validator"
 
 export class AddCourseBody {
     @IsString()
@@ -9,4 +9,7 @@ export class AddCourseBody {
 
     @IsString()
     name: string
+
+    @IsBoolean()
+    isFree : boolean
 }
