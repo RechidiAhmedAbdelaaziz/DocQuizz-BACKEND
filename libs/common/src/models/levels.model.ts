@@ -10,7 +10,11 @@ export class Level extends AbstractSchema {
     name: string
 
     @Prop({
-        type: [{ name: String, icon: String, courses: [String] }],
+        type: [{
+            name: String,
+            icon: String,
+            courses: { type: [{ title: String, isFree: Boolean }], _id: false }
+        }],
         select: false,
         _id: false
     })
