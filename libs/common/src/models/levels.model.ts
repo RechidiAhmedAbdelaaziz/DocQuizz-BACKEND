@@ -17,7 +17,10 @@ export class Level extends AbstractSchema {
     major: {
         name: string
         icon: string
-        courses: string[]
+        courses: {
+            title: string,
+            isFree: boolean,
+        }[]
     }[]
 
 }

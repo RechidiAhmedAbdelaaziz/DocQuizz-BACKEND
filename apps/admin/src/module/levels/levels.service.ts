@@ -30,7 +30,7 @@ export class LevelsService {
     }
 
     addCourse = async (
-        level: Level, majorIndex: number, course: string
+        level: Level, majorIndex: number, course: { title: string, isFree: boolean }
     ) => {
         console.log(level.major[majorIndex])
 
@@ -68,7 +68,7 @@ export class LevelsService {
     }
 
     checkCourseExists(level: Level, majorIndex: number, course: string) {
-        const courseExists = level.major[majorIndex].courses.includes(course)
+        const courseExists = level.major[majorIndex].courses.find(c => c.title === course)
         if (courseExists) throw new HttpException('Course already exists', 400)
     }
 
