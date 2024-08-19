@@ -80,7 +80,7 @@ export class QuizController {
     @Body() body: UpdateQuizBody,
     @Param("quizId", ParseMonogoIdPipe) quizId: Types.ObjectId
   ) {
-    const { title, isCompleted, time, questionAnswer } = body
+    const { title, isCompleted, time, questionAnswer, lastAnsweredIndex } = body
 
     const user = await this.userService.getUserById(userId)
     const quiz = await this.quizService.getQuizById(user, quizId, { withQuestions: true })
@@ -94,7 +94,7 @@ export class QuizController {
       })
     }
 
-    return await this.quizService.updateQuiz(quiz, { title, isCompleted, time, questionAnswer })
+    return await this.quizService.updateQuiz(quiz, { title, isCompleted, questionAnswer, lastAnsweredIndex })
   }
 
   @Delete(":quizId") //* QUIZ | Delete ~ {{host}}/quiz/:quizId

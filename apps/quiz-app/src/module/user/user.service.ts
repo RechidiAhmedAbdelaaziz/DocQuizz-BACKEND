@@ -63,6 +63,8 @@ export class UserService {
         }) => {
         const { major, isCorrectAnswers } = analyse;
 
+        if(!user.analyse) user.analyse = [];
+
         const index = user.analyse.findIndex(a => a.major === major);
         if (index !== -1) {
             if (isCorrectAnswers) user.analyse[index].correctAnswers++;
@@ -74,6 +76,8 @@ export class UserService {
                 wrongAnswers: isCorrectAnswers ? 0 : 1
             })
         }
+
+        user.markModified('analyse');
 
         await user.save();
     }

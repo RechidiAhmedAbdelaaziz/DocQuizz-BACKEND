@@ -20,7 +20,7 @@ export class QuizService {
         const quiz = new this.quizModel()
 
         quiz.title = title
-        quiz.questions = questions.map(question => ({ question }))
+        quiz.questions = questions.map(question => ({ question, result: undefined }))
         quiz.totalQuestions = questions.length
         quiz.user = user
 
@@ -55,38 +55,33 @@ export class QuizService {
         title?: string,
         questionAnswer?: {
             questionId: Types.ObjectId,
-            isCorrect: boolean
+            choices: string[],
+            isCorrect: boolean,
+            time: number
         },
-        time?: number,
-        isCompleted?: boolean
+        isCompleted?: boolean,
+        lastAnsweredIndex?: number,
+
     }) => {
-        const { title, questionAnswer, time, isCompleted } = updates
+        const { title, questionAnswer, lastAnsweredIndex, isCompleted } = updates
 
         if (title) quiz.title = title
-        if (time) quiz.result.time = time
-        if (isCompleted) quiz.isCompleted = isCompleted
-
+        if (lastAnsweredIndex) quiz.lastAnsweredIndex = lastAnsweredIndex
+        if (isCompleted) {
+            quiz.isCompleted = isCompleted
+            quiz.lastAnsweredIndex = quiz.totalQuestions
+        }
 
         if (questionAnswer) {
-            const { questionId, isCorrect } = questionAnswer
+            const { questionId, isCorrect, choices, time } = questionAnswer
             const questionStatus = this.getQuestionStatusInQuiz(quiz, questionId)
 
-            const { isCorrect: currentIsCorrect } = questionStatus
+            questionStatus.result = { isCorrect, choices, time }
 
-            if (currentIsCorrect === undefined) { // if the question is not answered yet
-                questionStatus.isCorrect = isCorrect
-                quiz.result.answered += 1
-                if (isCorrect) {
-                    quiz.result.correct += 1
-                }
-            }
-            else { // if the question is answered before
-                if (currentIsCorrect !== isCorrect) {
-                    questionStatus.isCorrect = isCorrect
-                    isCorrect ? quiz.result.correct += 1 : quiz.result.correct -= 1
-                }
-
-            }
+            quiz.result.answered = quiz.questions.filter(q => q.result).length
+            quiz.result.time = quiz.questions.reduce((acc, q) => acc + (q.result?.time || 0), 0)
+            quiz.result.correct = quiz.questions.filter(q => q.result?.isCorrect).length
+            quiz.result.correctTime = quiz.questions.reduce((acc, q) => acc + (q.result?.isCorrect ? q.result.time : 0), 0)
 
             quiz.markModified('questions')
             quiz.markModified('result')
@@ -94,7 +89,6 @@ export class QuizService {
 
         return await quiz.save()
     }
-
 
     deleteQuiz = async (quiz: Quiz) => {
         await quiz.deleteOne()
@@ -104,7 +98,7 @@ export class QuizService {
         const filter: FilterQuery<Quiz> = {
             user,
             isCompleted: true,
-            'questions.isCorrect': false
+            'questions.result.isCorrect': false
         }
 
         const quizes = await this.quizModel

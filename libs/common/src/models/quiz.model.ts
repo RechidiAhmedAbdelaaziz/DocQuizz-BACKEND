@@ -5,18 +5,6 @@ import { AbstractSchema } from "../shared";
 import { User } from "./user.model";
 
 
-
-class Result {
-    time: number
-    answered: number
-    correct: number
-}
-
-class QuestionStatus {
-    question: Question
-    isCorrect?: boolean
-}
-
 @DSchema()
 export class Quiz extends AbstractSchema {
 
@@ -29,19 +17,42 @@ export class Quiz extends AbstractSchema {
     @Prop({ type: Schema.Types.ObjectId, ref: User.name, select: false })
     user: User
 
-    @Prop({ default: { time: 0, answered: 0, correct: 0 } })
-    result: Result
+    @Prop({
+        type: raw({ time: Number, answered: Number, correct: Number, correctTime: Number }),
+        default: { time: 0, answered: 0, correct: 0, correctTime: 0 },
+        _id: false
+    })
+    result: {
+        time: number
+        answered: number
+        correct: number
+        correctTime: number
+    }
 
     @Prop({ default: false })
     isCompleted: boolean
 
     @Prop({
-        type: [raw({ question: { type: Schema.Types.ObjectId, ref: Question.name }, isCorrect: Boolean })],
-        default: [],
+        type: [raw({
+            question: { type: Schema.Types.ObjectId, ref: Question.name },
+            result: raw({ time: Number, choices: [String], isCorrect: Boolean }),
+        })],
         select: false,
         _id: false
     })
-    questions: QuestionStatus[]
+    questions: {
+        question: Question,
+        result?: {
+            time: number,
+            choices: String[],
+            isCorrect: boolean
+        }
+    }[]
+
+    // last quiestion has been answered index
+    @Prop({ default: 0 })
+    lastAnsweredIndex: number
+
 
 }
 

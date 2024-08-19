@@ -8,6 +8,12 @@ class QuestionAnswer {
 
     @IsBoolean()
     isCorrect: boolean
+
+    @IsNumber()
+    time: number
+
+    @IsString({ each: true })
+    choices: string[]
 }
 
 export class UpdateQuizBody {
@@ -27,6 +33,10 @@ export class UpdateQuizBody {
     @ValidateNested()
     @Type(() => QuestionAnswer)
     questionAnswer?: QuestionAnswer
+
+    @IsNumber()
+    @IsOptional()
+    lastAnsweredIndex?: number
 }
 
 // {"title":"string","isCompleted":true,"time":1,"questionAnswer":{"questionId":"string","isCorrect":true}}
