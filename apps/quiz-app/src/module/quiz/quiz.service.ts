@@ -98,7 +98,7 @@ export class QuizService {
         const filter: FilterQuery<Quiz> = {
             user,
             isCompleted: true,
-            'questions.isCorrect': false
+            'questions.result.isCorrect': false
         }
 
         const quizes = await this.quizModel
