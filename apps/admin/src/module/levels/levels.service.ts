@@ -26,7 +26,9 @@ export class LevelsService {
 
         level.major.push({ name, icon, courses: [] })
 
-        return await level.save()
+        await level.save()
+
+        return { name, icon }
     }
 
     addCourse = async (
@@ -40,7 +42,9 @@ export class LevelsService {
 
         level.markModified('major')
 
-        return await level.save()
+        await level.save()
+
+        return course
     }
 
     async checkLevelExists(name: string) {
