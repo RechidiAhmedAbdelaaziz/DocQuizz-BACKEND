@@ -15,10 +15,14 @@ export class LevelsService {
 
     getMajors = (level: Level) => {
 
-        const majors = level.major.map(major => major)
+        const majors = level.major.map(major => { return { name: major.name, icon: major.icon } })
         return majors
     }
 
+    getCourses = (level: Level, majorIndex: number) => {
+        const courses = level.major[majorIndex].courses
+        return courses
+    }
 
     async getLevel(name: string) {
         const level = await this.levelModel.findOne({ name }).select("+major")

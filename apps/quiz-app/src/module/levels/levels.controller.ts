@@ -26,16 +26,16 @@ export class LevelsController {
     return this.levelsService.getMajors(levelEntity);
   }
 
-  // @Get('courses')  //* COURSES | Get by level and major ~ {{host}}/levels/courses?level=...&major=...
-  // async getCourses(
-  //   @Query() query: ListCoursesQuery
-  // ) {
-  //   const { level, major } = query;
+  @Get('courses')  //* COURSES | Get by level and major ~ {{host}}/levels/courses?level=...&major=...
+  async getCourses(
+    @Query() query: ListCoursesQuery
+  ) {
+    const { level, major } = query;
 
-  //   const levelEntity = await this.levelsService.getLevel(level);
+    const levelEntity = await this.levelsService.getLevel(level);
 
-  //   const majorIndex = this.levelsService.getMajorIndex(levelEntity, major);
+    const majorIndex = this.levelsService.getMajorIndex(levelEntity, major);
 
-  //   return this.levelsService.getCourses(levelEntity, majorIndex);
-  // }
+    return this.levelsService.getCourses(levelEntity, majorIndex);
+  }
 }
