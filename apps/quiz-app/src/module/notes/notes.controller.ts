@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { NotesService } from './notes.service';
 import { Types } from 'mongoose';
 import { CurrentUser, HttpAuthGuard, ParseMonogoIdPipe } from '@app/common';
@@ -67,4 +67,18 @@ export class NotesController {
 
 
   }
+
+  @Delete(':noteId') //* NOTE | Get By Id ~ {{host}}/notes/:noteId
+  async getNoteById(
+    @Param('noteId', ParseMonogoIdPipe) noteId: Types.ObjectId,
+    @CurrentUser() userId: Types.ObjectId
+  ) {
+    const user = await this.userService.getUserById(userId)
+
+    await this.notesService.getNoteById(noteId, user)
+
+    return { message: 'Note found' }
+  }
+
+
 }

@@ -71,4 +71,8 @@ export class NotesService {
         return notedQuestions.map(n => n.question._id)
     }
 
+    deleteNote = async (noteId: Types.ObjectId, user: User) => {
+        await this.noteModel.findOneAndDelete({ _id: noteId, user })
+    }
+
 }
