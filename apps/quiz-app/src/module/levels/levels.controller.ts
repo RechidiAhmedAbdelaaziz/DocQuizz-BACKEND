@@ -1,7 +1,6 @@
 import { Controller, Get, Query, UseGuards } from '@nestjs/common';
 import { LevelsService } from './levels.service';
 import { HttpAuthGuard } from '@app/common';
-import { query } from 'express';
 import { ListMajorQuery } from './dto/list-major.dto';
 import { ListCoursesQuery } from './dto/list-courses.dto';
 

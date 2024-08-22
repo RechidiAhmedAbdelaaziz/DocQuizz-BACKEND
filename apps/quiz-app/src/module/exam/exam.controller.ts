@@ -33,6 +33,8 @@ export class ExamController {
 
     const exam = await this.examService.getExamById(examId);
 
-    return await this.questionService.getExamQuestions(exam, { limit, page });
+    const questions = await this.questionService.getExamQuestions(exam, { limit, page });
+
+    return { exam, questions }
   }
 }
