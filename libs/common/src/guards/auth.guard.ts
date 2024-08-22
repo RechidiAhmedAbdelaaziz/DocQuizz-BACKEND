@@ -27,7 +27,7 @@ export class HttpAuthGuard implements CanActivate {
       request.user = payload;
     }
     catch (e) {
-      throw new HttpException('Token verification failed', 500, { cause: e })
+      throw new HttpException('Token verification failed',401, { cause: e })
     }
 
 
