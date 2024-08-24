@@ -4,7 +4,7 @@ import { ListExamQuery } from './dto/list-exams.dto';
 import { HttpAuthGuard, ParseMonogoIdPipe, ProGuard } from '@app/common';
 import { QuestionService } from '../question/question.service';
 import { Types } from 'mongoose';
-import { PaginationQuery } from '@app/common/utils/pagination-helper';
+import { PaginationQuery } from '@app/common/utils/pagination';
 
 @Controller('exam')
 // @UseGuards(ProGuard) //TODO after implemnt payment

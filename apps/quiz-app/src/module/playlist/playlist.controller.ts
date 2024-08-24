@@ -7,7 +7,7 @@ import { UserService } from '../user/user.service';
 import { CreatePalyListBody } from './dto/create-playlist.dto';
 import { UpdatePlaylistBody } from './dto/update-playlist.dto';
 import { QuestionService } from '../question/question.service';
-import { PaginationQuery } from '@app/common/utils/pagination-helper';
+import { PaginationQuery } from '@app/common/utils/pagination';
 
 @Controller('playlist')
 @UseGuards(HttpAuthGuard)

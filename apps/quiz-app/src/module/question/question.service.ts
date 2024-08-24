@@ -1,5 +1,5 @@
 import { Exam, Question } from '@app/common/models';
-import { Pagination } from '@app/common/utils/pagination-helper';
+import { Pagination } from '@app/common/utils/pagination';
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, Types } from 'mongoose';
