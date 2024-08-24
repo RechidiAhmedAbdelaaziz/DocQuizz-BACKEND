@@ -1,6 +1,8 @@
 import { IsNumber, IsNumberString, IsOptional } from "class-validator";
 import { FilterQuery, Model } from "mongoose";
 
+
+
 export class Pagination<T> {
     constructor(
         private readonly model: Model<T>,
@@ -19,17 +21,18 @@ export class Pagination<T> {
         return {
             page,
             limit,
-            generate: async (list: T[]) => this.generate(list, { page, limit })
+            generate: async (list: T[]) => {
+                const total = await this.model.countDocuments(this.options.filter || {});
+                return this.generate(list, { page, limit, total });
+            }
         }
 
     }
 
-    private async generate<T>(list: T[], options: { page: number, limit: number }) {
+    private async generate<T>(list: T[], options: { page: number, limit: number, total: number }) {
 
-        const { page, limit } = options;
+        const { page, limit, total } = options;
 
-
-        const total = await this.model.countDocuments(this.options.filter);
 
         const currentPage = Math.min(page, Math.ceil(total / limit));
 

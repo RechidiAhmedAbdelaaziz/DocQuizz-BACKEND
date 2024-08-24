@@ -8,7 +8,7 @@ import { CreateQuizBody } from './dto/create-quiz.dto';
 import { ListQuizQuery } from './dto/list-quiz.dto';
 import { UpdateQuizBody } from './dto/update-quiz.dto';
 import { query } from 'express';
-import { PaginationQuery } from '@app/common/utils/pagination-helper';
+import { PaginationQuery } from '@app/common/utils/pagination';
 import { NotesService } from '../notes/notes.service';
 
 @Controller('quiz')
@@ -71,7 +71,22 @@ export class QuizController {
     const user = await this.userService.getUserById(userId)
     const quiz = await this.quizService.getQuizById(user, quizId, { populateOptions: { limit, page } })
 
-    return quiz.questions
+    const total = quiz.totalQuestions;
+    const currentPage = Math.min(page, Math.ceil(total / limit || 15));
+    const { questions: list, ...quizData } = quiz.toJSON()
+
+    return {
+      pagination: {
+        page: currentPage || 0,
+        length: list.length,
+        next: total > currentPage * limit ? currentPage + 1 : undefined,
+        prev: currentPage > 1 ? currentPage - 1 : undefined,
+      },
+      data: {
+        quiz: quizData,
+        questions: list
+      }
+    }
   }
 
   @Patch(":quizId") //* QUIZ | Update ~ {{host}}/quiz/:quizId

@@ -1,7 +1,7 @@
 import { Injectable, NestInterceptor, ExecutionContext, CallHandler, HttpException, HttpStatus } from '@nestjs/common';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { PaginationQuery } from '../utils/pagination-helper';
+import { PaginationQuery } from '../utils/pagination';
 
 interface Response {
   tokens?: { refreshToken: string, accessToken: string }
