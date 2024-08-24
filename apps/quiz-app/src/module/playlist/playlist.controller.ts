@@ -8,6 +8,7 @@ import { CreatePalyListBody } from './dto/create-playlist.dto';
 import { UpdatePlaylistBody } from './dto/update-playlist.dto';
 import { QuestionService } from '../question/question.service';
 import { PaginationQuery } from '@app/common/utils/pagination';
+import { NestedPagination } from '@app/common/utils/nested-pagination';
 
 @Controller('playlist')
 @UseGuards(HttpAuthGuard)
@@ -39,9 +40,21 @@ export class PlaylistController {
     const { page, limit } = query;
     const user = await this.userService.getUserById(userId);
 
-    const playlist = await this.playlistService.getPlaylistById(playlistId, user, { populateOptions: { page, limit } });
+    const { questions, ...playlistData } =
+      (
+        await this.playlistService.getPlaylistById(
+          playlistId, user, { populateOptions: { page, limit } })
+      ).toJSON()
 
-    return playlist.questions
+    const { data, pagination } = new NestedPagination(questions, { page, limit, total: playlistData.totalQuestions }).generate();
+
+    return {
+      pagination,
+      data: {
+        playlist: playlistData,
+        questions: data
+      }
+    }
   }
 
   @Post() //* PLAYLIST | Create ~ {{host}}/playlist
