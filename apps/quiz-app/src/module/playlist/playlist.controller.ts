@@ -52,7 +52,7 @@ export class PlaylistController {
       pagination,
       data: {
         playlist: playlistData,
-        questions: data
+        data
       }
     }
   }

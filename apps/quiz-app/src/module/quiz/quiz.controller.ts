@@ -113,7 +113,7 @@ export class QuizController {
       },
       data: {
         quiz: quizData,
-        questions: list
+        data: list
       }
     }
   }
