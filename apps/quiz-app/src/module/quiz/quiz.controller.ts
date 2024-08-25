@@ -10,6 +10,7 @@ import { UpdateQuizBody } from './dto/update-quiz.dto';
 import { query } from 'express';
 import { PaginationQuery } from '@app/common/utils/pagination';
 import { NotesService } from '../notes/notes.service';
+import { QuestionsNumberBody } from './dto/question-number.dto';
 
 @Controller('quiz')
 @UseGuards(HttpAuthGuard)
@@ -58,6 +59,34 @@ export class QuizController {
 
     const user = await this.userService.getUserById(userId)
     return await this.quizService.getQuizes(user, { page, limit, keywords })
+  }
+
+  @Get('number') //* QUIZ | Question number ~ {{host}}/quiz/number
+  async getQuizNumber(
+    @CurrentUser() userId: Types.ObjectId,
+    @Body() body: QuestionsNumberBody,
+  ) {
+    const { fields, difficulties, types, alreadyAnsweredFalse, withExplanation, withNotes } = body
+
+    const ids = []
+
+    const user = await this.userService.getUserById(userId)
+
+    if (alreadyAnsweredFalse) {
+      const answeredQuestions = await this.quizService.getAlreadyAnswerWrongQuestions(user)
+      ids.push(answeredQuestions)
+    }
+    if (withNotes) {
+      const notes = await this.notesService.getNotedQuestions(user)
+      ids.push(notes)
+    }
+
+    const questionFilter = this.questionService.generateFilterQuery({ fields, difficulties, types, withExplanation, ids })
+
+    const data = await this.questionService.getQuestionsNumber(questionFilter);
+
+    console.log(data)
+    return data > 0 ? { data } : { message: "No questions found" }
   }
 
   @Get(":quizId") //* QUIZ | Get Questions ~ {{host}}/quiz/:quizId?page=1&limit=10

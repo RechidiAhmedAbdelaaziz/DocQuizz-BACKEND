@@ -8,7 +8,7 @@ interface Response {
   message?: string
   user?: any
   pagination?: { page?: number; length?: number; next?: number; prev?: number }
-  data?: any[]
+  data?: any
 }
 
 @Injectable()

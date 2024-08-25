@@ -14,7 +14,7 @@ export class QuestionService {
 
     getQuestions = async (
         filter: FilterQuery<Question>,
-        pagination: { page?: number, limit?: number, min?: number },
+        pagination: { page?: number, limit?: number, min?: number, keywords?: string },
     ) => {
         const { generate, limit, page } = new Pagination(this.questionModel, { filter, ...pagination }).getOptions();
 
@@ -58,7 +58,7 @@ export class QuestionService {
     }
 
     generateFilterQuery(filters: QuestionFilter): FilterQuery<Question> {
-        const { fields, difficulties, types, source, withExplanation, ids } = filters;
+        const { fields, difficulties, types, source, withExplanation, ids, keywords } = filters;
 
         const filter: FilterQuery<Question> = {};
 
@@ -68,6 +68,12 @@ export class QuestionService {
         if (types) filter.type = { $in: types };
         if (source) filter.source = source;
         if (withExplanation) filter.explanation = { $exists: true };
+        if (keywords) {
+            const keywordsArray = keywords.split(' ');
+            filter.$and = keywordsArray.map(keyword => ({
+                questionText: { $regex: keyword, $options: 'i' }
+            }));
+        }
 
         return filter;
     }

@@ -10,6 +10,25 @@ export class QuestionService {
         @InjectModel(Question.name) private readonly questionModel: Model<Question>,
     ) { }
 
+    getAllQuestions = async (
+        fitler : {
+            field?: {
+                level?: string,
+                major?: string,
+                course?: string
+            },
+            difficulty?: "easy" | "medium" | "hard",
+            type?: "QCM" | "QCU",
+            source?: Types.ObjectId
+        },
+        pagination: {
+            page?: number,
+            limit?: number,
+        }
+
+
+    ) => { }
+
     createQuestion = async (
         details: QuestionDetails
     ) => {
@@ -72,4 +91,6 @@ export class QuestionService {
 
         return question
     }
+
+
 }

@@ -12,5 +12,6 @@ export interface QuestionFilter {
     source?: Exam,
     withExplanation?: boolean,
     ids? : Types.ObjectId[],
+    keywords ?: string,
 }
 
