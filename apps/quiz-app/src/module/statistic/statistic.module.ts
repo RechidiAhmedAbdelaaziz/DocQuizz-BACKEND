@@ -10,5 +10,7 @@ import { Statistic } from '@app/common/models';
   ],
   controllers: [StatisticController],
   providers: [StatisticService],
+  exports: [StatisticService],
+  
 })
 export class StatisticModule { }
