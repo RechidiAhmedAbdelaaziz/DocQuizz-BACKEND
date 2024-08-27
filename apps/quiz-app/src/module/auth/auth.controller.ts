@@ -6,11 +6,13 @@ import { RefreshTokenQuery } from './dtos/refresh-token.dto';
 import { ForgetPasswordBody } from './dtos/forget-password.dto';
 import { RestPasswordBody } from './dtos/rest-password.dto';
 import { VerifyOtpBody } from './dtos/verify-otp.dto';
+import { StatisticService } from '../statistic/statistic.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
+    private readonly statisticService: StatisticService
   ) { }
 
   @Post('register') //*  USER | Register  {{host}}/auth/register
@@ -18,6 +20,9 @@ export class AuthController {
     @Body() details: RegisterBody
   ) {
     const user = await this.authService.register(details)
+
+    await this.statisticService.updateStatistic({ newUser: 1 })
+
     const tokens = await this.authService.generateTokens(user)
 
     return { data: user, tokens }
@@ -43,7 +48,7 @@ export class AuthController {
     const user = await this.authService.checkRefreshToken({ refreshToken })
     const tokens = await this.authService.generateTokens(user)
 
-    return {tokens}
+    return { tokens }
   }
 
   @Post('forget-password') //*  USER | Forget Password  {{host}}/auth/forget-password

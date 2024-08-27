@@ -4,10 +4,14 @@ import { CreateExamBody } from './dto/create-exam.dto';
 import { ParseMonogoIdPipe } from '@app/common';
 import { Types } from 'mongoose';
 import { UpdateExamBody } from './dto/update-exam.dto';
+import { StatisticService } from '../statistic/statistic.service';
 
 @Controller('exam-admin')
 export class ExamAdminController {
-  constructor(private readonly examAdminService: ExamAdminService) { }
+  constructor(private readonly examAdminService: ExamAdminService,
+    private readonly statisticService: StatisticService
+
+  ) { }
 
   @Post() //* EXAM | Create ~ {{host}}/exam-admin
   async createExam(
@@ -19,6 +23,8 @@ export class ExamAdminController {
     await this.examAdminService.checkByName(title);
 
     const exam = await this.examAdminService.createExam({ time, city, major, year });
+
+    await this.statisticService.updateStatistic({ newExam: 1 });
 
     return exam;
   }

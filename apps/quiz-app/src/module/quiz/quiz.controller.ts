@@ -7,7 +7,6 @@ import { Types } from 'mongoose';
 import { CreateQuizBody } from './dto/create-quiz.dto';
 import { ListQuizQuery } from './dto/list-quiz.dto';
 import { UpdateQuizBody } from './dto/update-quiz.dto';
-import { query } from 'express';
 import { PaginationQuery } from '@app/common/utils/pagination';
 import { NotesService } from '../notes/notes.service';
 import { QuestionsNumberBody } from './dto/question-number.dto';
@@ -83,10 +82,9 @@ export class QuizController {
 
     const questionFilter = this.questionService.generateFilterQuery({ fields, difficulties, types, withExplanation, ids })
 
-    const data = await this.questionService.getQuestionsNumber(questionFilter);
+    const questions = await this.questionService.getQuestionsNumber(questionFilter);
 
-    console.log(data)
-    return data > 0 ? { data } : { message: "No questions found" }
+    return { questions }
   }
 
   @Get(":quizId") //* QUIZ | Get Questions ~ {{host}}/quiz/:quizId?page=1&limit=10

@@ -3,12 +3,14 @@ import { OAuthService } from './o-auth.service';
 import { GoogleAuthQuery } from './dto/google-signup.dto';
 import { AuthService } from '../auth/auth.service';
 import { Response } from 'express';
+import { StatisticService } from '../statistic/statistic.service';
 
 @Controller('o-auth')
 export class OAuthController {
   constructor(
     private readonly oAuthService: OAuthService,
-    private readonly authService: AuthService
+    private readonly authService: AuthService,
+    private readonly statisticService: StatisticService
 
   ) { }
 
@@ -31,6 +33,8 @@ export class OAuthController {
         password: process.env.GOOGLE_USERS_PASSWORD
       })
 
+      
+
       const tokens = await this.authService.generateTokens(user)
 
       return { tokens, user }
@@ -44,6 +48,8 @@ export class OAuthController {
         password: process.env.GOOGLE_USERS_PASSWORD,
         name
       })
+
+      await this.statisticService.updateStatistic({ newUser: 1 })
 
       const tokens = await this.authService.generateTokens(user)
 
