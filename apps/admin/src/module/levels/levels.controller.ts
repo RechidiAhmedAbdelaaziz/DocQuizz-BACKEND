@@ -5,12 +5,14 @@ import { AddMajorBody } from './dto/add-major.dto';
 import { AddCourseBody } from './dto/add-course.dto';
 import { CloudinaryService } from '@app/common/module/cloudinary/cloudinary.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { StatisticService } from '../statistic/statistic.service';
 
 @Controller('levels')
 export class LevelsController {
   constructor(
     private readonly levelsService: LevelsService,
-    private readonly cloudinary: CloudinaryService
+    private readonly cloudinary: CloudinaryService,
+    private readonly statisticService: StatisticService
   ) { }
 
   @Post() //* LEVEL | Create ~ {{host}}/levels
@@ -38,7 +40,12 @@ export class LevelsController {
       await this.cloudinary.uploadImage(icon, `levels/${level}/${name}`)
       : undefined
 
-    return await this.levelsService.addMajor(levelDoc, { name, iconUrl })
+
+    const major = await this.levelsService.addMajor(levelDoc, { name, iconUrl })
+
+    await this.statisticService.updateStatistic({ newMajor: 1 })
+
+    return major
   }
 
   @Post('course') //* COURSE | Add  ~ {{host}}/levels/course

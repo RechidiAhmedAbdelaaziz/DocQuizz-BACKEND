@@ -9,7 +9,7 @@ import { Exam } from '@app/common/models';
     DatabaseModule.forFeature([{ model: Exam }])
   ],
   controllers: [ExamAdminController],
-  providers: [ExamAdminService],
+  providers: [ExamAdminService ],
   exports: [ExamAdminService]
 })
 export class ExamAdminModule { }

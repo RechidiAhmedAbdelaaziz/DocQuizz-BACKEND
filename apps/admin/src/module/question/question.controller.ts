@@ -5,12 +5,14 @@ import { ExamAdminService } from '../exam-admin/exam-admin.service';
 import { ParseMonogoIdPipe } from '@app/common';
 import { Types } from 'mongoose';
 import { UpdateQuestionBody } from './dto/update-question.dto';
+import { StatisticService } from '../statistic/statistic.service';
 
 @Controller('question')
 export class QuestionController {
   constructor(
     private readonly questionService: QuestionService,
-    private readonly examService: ExamAdminService
+    private readonly examService: ExamAdminService,
+    private readonly statisticService: StatisticService
   ) { }
 
   @Post() //* QUESTION | Create ~ {{host}}/question
@@ -23,7 +25,7 @@ export class QuestionController {
 
     if (exam) await this.examService.updateExam(exam, { addQuiz: true })
 
-    return await this.questionService.createQuestion({
+    const question = await this.questionService.createQuestion({
       questionText,
       correctAnswers,
       wrongAnswers,
@@ -32,6 +34,10 @@ export class QuestionController {
       field,
       explanation
     })
+
+    await this.statisticService.updateStatistic({ newQuestion: 1 })
+
+    return question
   }
 
   @Post(':questionId') //* QUESTION | Update ~ {{host}}/question/:questionId
@@ -62,7 +68,10 @@ export class QuestionController {
     const question = await this.questionService.getQuestionById(questionId, { withExam: true })
 
     await this.questionService.deleteQuestionById(question)
-    await this.examService.updateExam(question.source, { deleteQuiz: true })
+    if (question.source) await this.examService.updateExam(question.source, { deleteQuiz: true })
+
+    await this.statisticService.updateStatistic({ newQuestion: -1 })
+
 
     return { message: 'Question deleted successfully' }
   }
