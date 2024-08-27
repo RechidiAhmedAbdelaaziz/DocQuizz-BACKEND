@@ -20,6 +20,7 @@ export class QuestionService {
 
         const questions = await this.questionModel
             .find(filter)
+            .populate('source')
             .skip((page - 1) * limit)
             .limit(limit)
 
