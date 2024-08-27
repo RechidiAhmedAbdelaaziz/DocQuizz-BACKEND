@@ -13,6 +13,7 @@ import { QuestionModule } from './module/question/question.module';
 import { PlaylistModule } from './module/playlist/playlist.module';
 import { QuizModule } from './module/quiz/quiz.module';
 import { NotesModule } from './module/notes/notes.module';
+import { StatisticModule } from './module/statistic/statistic.module';
 
 
 @Module({
@@ -29,6 +30,7 @@ import { NotesModule } from './module/notes/notes.module';
     PlaylistModule,
     QuizModule,
     NotesModule,
+    StatisticModule,
   ],
   providers: [
     {
