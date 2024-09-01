@@ -58,7 +58,7 @@ export class AuthController {
     const { email } = data
 
     const otp = await this.authService.forgetPassword(email)
-    console.log({ email, otp })
+
     return { message: 'Email sent' }
   }
 

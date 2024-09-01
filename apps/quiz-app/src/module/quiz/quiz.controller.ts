@@ -66,7 +66,7 @@ export class QuizController {
     @Query() queries: QuestionsNumberQuery,
   ) {
 
-    console.log(queries);
+
 
     const { fields, difficulties, types, alreadyAnsweredFalse, withExplanation, withNotes } = queries
 

@@ -141,7 +141,7 @@ export class QuizService {
     }
 
     private getQuestionStatusInQuiz = (quiz: Quiz, questionId: Types.ObjectId) => {
-        console.log(quiz.questions)
+
         const questionStatus = quiz.questions.find(q => q.question._id.equals(questionId))
         if (!questionStatus) throw new HttpException('Question not found', 404)
         return questionStatus

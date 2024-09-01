@@ -34,11 +34,11 @@ export class LevelsService {
     addCourse = async (
         level: Level, majorIndex: number, course: { title: string, isFree: boolean }
     ) => {
-        console.log(level.major[majorIndex])
+
 
         level.major[majorIndex].courses.push(course)
 
-        console.log(level.major[0].courses)
+
 
         level.markModified('major')
 
