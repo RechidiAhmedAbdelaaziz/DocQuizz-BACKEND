@@ -13,7 +13,7 @@ class Field {
     course: string
 }
 
-export class QuestionsNumberBody {
+export class QuestionsNumberQuery {
 
 
     @ValidateNested({ each: true })
