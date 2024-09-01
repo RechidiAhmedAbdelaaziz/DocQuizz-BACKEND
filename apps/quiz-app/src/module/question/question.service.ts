@@ -68,7 +68,7 @@ export class QuestionService {
         if (difficulties) filter.difficulty = { $in: difficulties };
         if (types) filter.type = { $in: types };
         if (source) filter.source = source;
-        if (withExplanation) filter.explanation = { $exists: true };
+        if (withExplanation) filter.explanation = { $exists: true, $ne: '' };
         if (keywords) {
             const keywordsArray = keywords.split(' ');
             filter.$and = keywordsArray.map(keyword => ({
