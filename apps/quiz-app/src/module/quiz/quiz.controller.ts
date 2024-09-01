@@ -63,11 +63,12 @@ export class QuizController {
   @Get('number') //* QUIZ | Question number ~ {{host}}/quiz/number
   async getQuizNumber(
     @CurrentUser() userId: Types.ObjectId,
-    @Query() body: QuestionsNumberQuery,
+    @Query() queries: QuestionsNumberQuery,
   ) {
 
+    console.log(queries);
 
-    const { fields, difficulties, types, alreadyAnsweredFalse, withExplanation, withNotes } = body
+    const { fields, difficulties, types, alreadyAnsweredFalse, withExplanation, withNotes } = queries
 
     const ids = []
 
