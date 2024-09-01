@@ -14,7 +14,7 @@ class Field {
     course: string;
 }
 
-export class ListQuestionsBody {
+export class ListQuestionsQuery extends PaginationQuery {
     @IsOptional()
     @IsEnum(['QCM', 'QCU'], { each: true })
     types?: ('QCM' | 'QCU')[];
@@ -36,11 +36,9 @@ export class ListQuestionsBody {
     @IsBoolean()
     withExplanation?: boolean;
 
-}
-
-
-export class ListQuestionsQuery extends PaginationQuery {
     @IsOptional()
     @IsString()
     keywords?: string;
 }
+
+

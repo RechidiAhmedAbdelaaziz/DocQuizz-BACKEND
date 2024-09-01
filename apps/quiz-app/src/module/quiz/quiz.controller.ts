@@ -9,7 +9,7 @@ import { ListQuizQuery } from './dto/list-quiz.dto';
 import { UpdateQuizBody } from './dto/update-quiz.dto';
 import { PaginationQuery } from '@app/common/utils/pagination';
 import { NotesService } from '../notes/notes.service';
-import { QuestionsNumberBody } from './dto/question-number.dto';
+import { QuestionsNumberQuery } from './dto/question-number.dto';
 
 @Controller('quiz')
 @UseGuards(HttpAuthGuard)
@@ -63,9 +63,12 @@ export class QuizController {
   @Get('number') //* QUIZ | Question number ~ {{host}}/quiz/number
   async getQuizNumber(
     @CurrentUser() userId: Types.ObjectId,
-    @Body() body: QuestionsNumberBody,
+    @Query() queries: QuestionsNumberQuery,
   ) {
-    const { fields, difficulties, types, alreadyAnsweredFalse, withExplanation, withNotes } = body
+
+    console.log(queries);
+
+    const { fields, difficulties, types, alreadyAnsweredFalse, withExplanation, withNotes } = queries
 
     const ids = []
 
