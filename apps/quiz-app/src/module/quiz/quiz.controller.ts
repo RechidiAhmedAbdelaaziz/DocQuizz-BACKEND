@@ -70,17 +70,17 @@ export class QuizController {
 
     const { fields, difficulties, types, alreadyAnsweredFalse, withExplanation, withNotes } = queries
 
-    const ids = []
+    const ids: Types.ObjectId[] = []
 
     const user = await this.userService.getUserById(userId)
 
     if (alreadyAnsweredFalse) {
       const answeredQuestions = await this.quizService.getAlreadyAnswerWrongQuestions(user)
-      ids.push(answeredQuestions)
+      ids.push(...answeredQuestions)
     }
     if (withNotes) {
       const notes = await this.notesService.getNotedQuestions(user)
-      ids.push(notes)
+      ids.push(...notes)
     }
 
     const questionFilter = this.questionService.generateFilterQuery({ fields, difficulties, types, withExplanation, ids })
