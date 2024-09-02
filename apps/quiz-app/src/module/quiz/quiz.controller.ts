@@ -41,7 +41,7 @@ export class QuizController {
       ids.push(notes)
     }
 
-    const questionFilter = this.questionService.generateFilterQuery({ fields, difficulties, types, withExplanation, ids })
+    const questionFilter = this.questionService.generateFilterQuery({ fields, difficulties, types, withExplanation, ids : removeUniquesAndMakeRestUnique(ids) })
 
 
     const { data: questions } = await this.questionService.getQuestions(questionFilter, { limit: 500, min: 1 })
@@ -83,7 +83,7 @@ export class QuizController {
       ids.push(...notes)
     }
 
-    const questionFilter = this.questionService.generateFilterQuery({ fields, difficulties, types, withExplanation, ids })
+    const questionFilter = this.questionService.generateFilterQuery({ fields, difficulties, types, withExplanation, ids: removeUniquesAndMakeRestUnique(ids) })
 
     const questions = await this.questionService.getQuestionsNumber(questionFilter);
 
@@ -155,4 +155,23 @@ export class QuizController {
     return { message: "Quiz deleted successfully" }
   }
 
+}
+
+
+function removeUniquesAndMakeRestUnique<T>(arr: T[]): T[] {
+  // Create a map to store the frequency of each element
+  const frequencyMap = new Map<T, number>();
+
+  // Calculate the frequency of each element in the array
+  arr.forEach((item) => {
+    frequencyMap.set(item, (frequencyMap.get(item) || 0) + 1);
+  });
+
+  // Filter the array to keep only elements with duplicates
+  const filteredArr = arr.filter((item) => frequencyMap.get(item)! > 1);
+
+  // Remove duplicates from the filtered array
+  const uniqueArr = [...new Set(filteredArr)];
+
+  return uniqueArr;
 }
