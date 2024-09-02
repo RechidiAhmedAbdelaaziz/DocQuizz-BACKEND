@@ -63,7 +63,7 @@ export class QuestionService {
 
         const filter: FilterQuery<Question> = {};
 
-        if (ids && ids.length > 0) filter._id = { $in: ids };
+        if (ids) filter._id = { $in: ids };
         if (fields) filter.field = { $in: fields };
         if (difficulties) filter.difficulty = { $in: difficulties };
         if (types) filter.type = { $in: types };

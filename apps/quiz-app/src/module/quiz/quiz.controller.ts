@@ -29,19 +29,22 @@ export class QuizController {
     const { title, fields, difficulties, types, alreadyAnsweredFalse, withExplanation, withNotes } = body
 
     const ids = []
+    let sendIds: boolean = false
 
     const user = await this.userService.getUserById(userId)
 
     if (alreadyAnsweredFalse) {
       const answeredQuestions = await this.quizService.getAlreadyAnswerWrongQuestions(user)
-      ids.push(answeredQuestions)
+      ids.push(...answeredQuestions); sendIds = true
+
     }
     if (withNotes) {
       const notes = await this.notesService.getNotedQuestions(user)
-      ids.push(notes)
+      ids.push(...notes); sendIds = true
+
     }
 
-    const questionFilter = this.questionService.generateFilterQuery({ fields, difficulties, types, withExplanation, ids })
+    const questionFilter = this.questionService.generateFilterQuery({ fields, difficulties, types, withExplanation, ids: sendIds ? ids : undefined })
 
 
     const { data: questions } = await this.questionService.getQuestions(questionFilter, { limit: 500, min: 1 })
@@ -71,19 +74,23 @@ export class QuizController {
     const { fields, difficulties, types, alreadyAnsweredFalse, withExplanation, withNotes } = queries
 
     const ids: Types.ObjectId[] = []
+    let sendIds: boolean = false;
 
     const user = await this.userService.getUserById(userId)
 
     if (alreadyAnsweredFalse) {
       const answeredQuestions = await this.quizService.getAlreadyAnswerWrongQuestions(user)
       ids.push(...answeredQuestions)
+      sendIds = true
     }
     if (withNotes) {
       const notes = await this.notesService.getNotedQuestions(user)
       ids.push(...notes)
+      sendIds = true
+
     }
 
-    const questionFilter = this.questionService.generateFilterQuery({ fields, difficulties, types, withExplanation, ids })
+    const questionFilter = this.questionService.generateFilterQuery({ fields, difficulties, types, withExplanation, ids: sendIds ? ids : undefined })
 
     const questions = await this.questionService.getQuestionsNumber(questionFilter);
 
