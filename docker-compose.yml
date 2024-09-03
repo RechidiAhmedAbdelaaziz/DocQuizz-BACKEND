@@ -9,8 +9,6 @@ services:
       - ./apps/quiz-app/src:/usr/src/app/src
       - ./libs:/usr/src/app/libs
     command: npm run start
-    depends_on:
-      - docquizz-mongo
     dns:
       - 8.8.8.8 # Google DNS
       - 8.8.4.4 # Google DNS
@@ -22,23 +20,13 @@ services:
     build: ./
     container_name: AdminPanel
     ports:
-      - "3001:3001"
+      - "3001:3000"
     volumes:
       - ./apps/admin/src:/usr/src/app/src
       - ./libs:/usr/src/app/libs
     command: npm run start
-    depends_on:
-      - docquizz-mongo
     env_file:
       - .env
     dns:
       - 8.8.8.8 # Google DNS
       - 8.8.4.4 # Google DNS
-
-  docquizz-mongo:
-    image: mongo:latest
-    container_name: docquizz-mongo
-    attach: false
-    restart: always
-    ports:
-      - '27017:27017'
