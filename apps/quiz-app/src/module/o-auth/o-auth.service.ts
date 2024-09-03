@@ -40,7 +40,7 @@ export class OAuthService {
 
 
 
-    private async getDataFromGoogle(code: string) {
+    async getDataFromGoogle(code: string) {
         const { tokens } = await this.gooleAuthClient.getToken(code)
         this.gooleAuthClient.setCredentials(tokens)
         const oauth2 = google.oauth2({ version: 'v2', auth: this.gooleAuthClient })

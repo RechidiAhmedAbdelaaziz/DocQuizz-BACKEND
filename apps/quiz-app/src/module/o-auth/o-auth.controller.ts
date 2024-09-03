@@ -24,8 +24,8 @@ export class OAuthController {
 
   @Get('google/callback') //* GOOGLE | Auth ~ {{host}}/o-auth/google/callback
   async googleCallback(@Query() query: GoogleAuthQuery) {
+    const details = await this.oAuthService.getDataFromGoogle(query.code)
     try {
-      const details = await this.oAuthService.loginWithGoogle(query.code)
       const { email } = details
 
       const user = await this.authService.login({
@@ -33,15 +33,14 @@ export class OAuthController {
         password: process.env.GOOGLE_USERS_PASSWORD
       })
 
-      
+
 
       const tokens = await this.authService.generateTokens(user)
 
       return { tokens, user }
     }
     catch (error) {
-      const dtails = await this.oAuthService.signUpWithGoogle(query.code)
-      const { email, name } = dtails
+      const { email, name } = details
 
       const user = await this.authService.register({
         email,
