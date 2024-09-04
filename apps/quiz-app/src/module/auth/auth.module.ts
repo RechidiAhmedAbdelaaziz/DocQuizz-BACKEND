@@ -4,6 +4,7 @@ import { AuthController } from './auth.controller';
 import { DatabaseModule } from '@app/common';
 import { RefreshToken, RestPassworToken, User } from '@app/common/models';
 import { StatisticModule } from '../statistic/statistic.module';
+import { MailerModule } from '@app/common/module/mailer/mailer.module';
 
 
 
@@ -19,7 +20,8 @@ import { StatisticModule } from '../statistic/statistic.module';
         { model: RestPassworToken }
       ]
     ),
-    StatisticModule
+    StatisticModule,
+    MailerModule,
   ],
   controllers: [AuthController],
   providers: [AuthService],
