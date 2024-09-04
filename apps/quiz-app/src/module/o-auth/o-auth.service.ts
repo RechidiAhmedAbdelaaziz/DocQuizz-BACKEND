@@ -6,9 +6,9 @@ export class OAuthService {
     private gooleAuthClient: Auth.OAuth2Client
 
     constructor() {
-        const clientId = process.env.GOOGLE_CLIENT_ID
-        const clientSecret = process.env.GOOGLE_CLIENT_SECRET
-        const redirectUri = process.env.GOOGLE_REDIRECT_URI
+        const clientId = process.env.GOOGLE_OAUTH_CLIENT_ID
+        const clientSecret = process.env.GOOGLE_OAUTH_CLIENT_SECRET
+        const redirectUri = process.env.GOOGLE_OAUTH_REDIRECT_URI
         this.gooleAuthClient = new google.auth.OAuth2(clientId, clientSecret, redirectUri)
     }
 
