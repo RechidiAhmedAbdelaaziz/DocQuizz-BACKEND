@@ -66,19 +66,16 @@ export class QuizService {
         const { title, questionAnswer, lastAnsweredIndex, isCompleted } = updates
 
         if (title) quiz.title = title
-        if (lastAnsweredIndex) quiz.lastAnsweredIndex = lastAnsweredIndex
-        if (isCompleted) {
-            quiz.isCompleted = isCompleted
-            quiz.lastAnsweredIndex = quiz.totalQuestions
-        }
+        if (lastAnsweredIndex && lastAnsweredIndex < quiz.totalQuestions) quiz.lastAnsweredIndex = lastAnsweredIndex
+        if (isCompleted) quiz.isCompleted = isCompleted
 
         if (questionAnswer) {
             const { questionId, isCorrect, choices, time } = questionAnswer
             const questionStatus = this.getQuestionStatusInQuiz(quiz, questionId)
 
-            questionStatus.result = { isCorrect, choices, time }
+            questionStatus.result = { isCorrect, choices, time, isAnswerd: true }
 
-            quiz.result.answered = quiz.questions.filter(q => q.result).length
+            quiz.result.answered = quiz.questions.filter(q => q.result.isAnswerd).length
             quiz.result.time = quiz.questions.reduce((acc, q) => acc + (q.result?.time || 0), 0)
             quiz.result.correct = quiz.questions.filter(q => q.result?.isCorrect).length
             quiz.result.correctTime = quiz.questions.reduce((acc, q) => acc + (q.result?.isCorrect ? q.result.time : 0), 0)
@@ -87,7 +84,8 @@ export class QuizService {
             quiz.markModified('result')
         }
 
-        return await quiz.save()
+        const { questions, ...details } = (await quiz.save()).toJSON()
+        return details
     }
 
     deleteQuiz = async (quiz: Quiz) => {

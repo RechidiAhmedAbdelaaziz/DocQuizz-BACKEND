@@ -35,17 +35,21 @@ export class Quiz extends AbstractSchema {
     @Prop({
         type: [raw({
             question: { type: Schema.Types.ObjectId, ref: Question.name },
-            result: raw({ time: Number, choices: [String], isCorrect: Boolean }),
+            result: raw({
+                time: Number, choices: [String], isCorrect: Boolean ,
+                isAnswerd: { type: Boolean, default: false }
+            }),
         })],
         select: false,
         _id: false
     })
     questions: {
         question: Question,
-        result?: {
+        result: {
             time: number,
             choices: String[],
             isCorrect: boolean
+            isAnswerd: boolean
         }
     }[]
 
