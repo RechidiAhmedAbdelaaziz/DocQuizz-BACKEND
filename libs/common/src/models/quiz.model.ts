@@ -5,7 +5,9 @@ import { AbstractSchema } from "../shared";
 import { User } from "./user.model";
 
 
-@DSchema()
+@DSchema(
+    { timestamps: true }
+)
 export class Quiz extends AbstractSchema {
 
     @Prop()
@@ -36,7 +38,7 @@ export class Quiz extends AbstractSchema {
         type: [raw({
             question: { type: Schema.Types.ObjectId, ref: Question.name },
             result: raw({
-                time: Number, choices: [String], isCorrect: Boolean ,
+                time: Number, choices: [String], isCorrect: Boolean,
                 isAnswerd: { type: Boolean, default: false }
             }),
         })],

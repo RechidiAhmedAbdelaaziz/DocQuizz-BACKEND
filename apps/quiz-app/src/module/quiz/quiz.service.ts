@@ -45,6 +45,7 @@ export class QuizService {
 
         const quizes = await this.quizModel
             .find(filter)
+            .sort("-createdAt")
             .skip((page - 1) * limit)
             .limit(limit)
 
