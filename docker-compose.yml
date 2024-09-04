@@ -2,13 +2,13 @@ services:
   docquizz:
     image: docquiz-app
     build: ./
-    container_name: DocQuizz
+    container_name: DocQuizzAPI
     ports:
       - "3000:3000"
     volumes:
       - ./apps/quiz-app/src:/usr/src/app/src
       - ./libs:/usr/src/app/libs
-    command: npm run start
+    command: bash -c "npm run build && node dist/src/main"
     dns:
       - 8.8.8.8 # Google DNS
       - 8.8.4.4 # Google DNS
@@ -18,13 +18,13 @@ services:
   admin-panel:
     image: admin-panel
     build: ./
-    container_name: AdminPanel
+    container_name: AdminPanelAPI
     ports:
       - "3001:3000"
     volumes:
       - ./apps/admin/src:/usr/src/app/src
       - ./libs:/usr/src/app/libs
-    command: npm run start
+    command: bash -c "npm run build && node dist/src/main"
     env_file:
       - .env
     dns:
