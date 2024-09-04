@@ -24,6 +24,7 @@ export class NestedPagination<T> {
             pagination: {
                 page: currentPage || 0,
                 length: this.list.length,
+                total,
                 next: total > currentPage * limit ? currentPage + 1 : undefined,
                 prev: currentPage > 1 ? currentPage - 1 : undefined,
             },

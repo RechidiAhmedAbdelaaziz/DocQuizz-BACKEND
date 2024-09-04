@@ -10,6 +10,7 @@ import { UpdateQuizBody } from './dto/update-quiz.dto';
 import { PaginationQuery } from '@app/common/utils/pagination';
 import { NotesService } from '../notes/notes.service';
 import { QuestionsNumberQuery } from './dto/question-number.dto';
+import { NestedPagination } from '@app/common/utils/nested-pagination';
 
 @Controller('quiz')
 @UseGuards(HttpAuthGuard)
@@ -108,20 +109,16 @@ export class QuizController {
     const user = await this.userService.getUserById(userId)
     const quiz = await this.quizService.getQuizById(user, quizId, { populateOptions: { limit, page } })
 
-    const total = quiz.totalQuestions;
-    const currentPage = Math.min(page, Math.ceil(total / limit || 15));
-    const { questions: list, ...quizData } = quiz.toJSON()
+    const { questions, ...quizData } = quiz.toJSON()
+
+
+    const { data, pagination } = new NestedPagination(questions, { page, limit, total: quizData.totalQuestions }).generate();
 
     return {
-      pagination: {
-        page: currentPage || 0,
-        length: list.length,
-        next: total > currentPage * limit ? currentPage + 1 : undefined,
-        prev: currentPage > 1 ? currentPage - 1 : undefined,
-      },
+      pagination,
       data: {
         quiz: quizData,
-        data: list
+        data,
       }
     }
   }

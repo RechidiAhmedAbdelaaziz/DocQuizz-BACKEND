@@ -33,15 +33,18 @@ export class Pagination<T> {
 
         const { page, limit, total } = options;
 
+        const currentPage = Math.min(page, Math.ceil(total / limit)) || 0;
 
-        const currentPage = Math.min(page, Math.ceil(total / limit));
+        const next = total > currentPage * limit ? currentPage + 1 : undefined
+        const prev = currentPage > 1 ? currentPage - 1 : undefined
 
         return {
             pagination: {
                 page: currentPage || 0,
                 length: list.length,
-                next: total > currentPage * limit ? currentPage + 1 : undefined,
-                prev: currentPage > 1 ? currentPage - 1 : undefined,
+                total,
+                next,
+                prev
             },
             data: list
         }
