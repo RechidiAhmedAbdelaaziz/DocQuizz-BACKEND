@@ -7,12 +7,14 @@ import { ForgetPasswordBody } from './dtos/forget-password.dto';
 import { RestPasswordBody } from './dtos/rest-password.dto';
 import { VerifyOtpBody } from './dtos/verify-otp.dto';
 import { StatisticService } from '../statistic/statistic.service';
+import { MailerService } from '@app/common/module/mailer/mailer.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private readonly statisticService: StatisticService
+    private readonly statisticService: StatisticService,
+    private readonly mailerService: MailerService
   ) { }
 
   @Post('register') //*  USER | Register  {{host}}/auth/register
@@ -58,6 +60,12 @@ export class AuthController {
     const { email } = data
 
     const otp = await this.authService.forgetPassword(email)
+
+    await this.mailerService.sendMail({
+      to: email,
+      subject: 'Forget Password',
+      text: `Your OTP is ${otp}`
+    })
 
     return { message: 'Email sent' }
   }
