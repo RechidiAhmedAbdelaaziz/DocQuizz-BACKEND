@@ -20,25 +20,6 @@ export class OAuthService {
         })
     }
 
-    //signup with google 
-    async signUpWithGoogle(code: string) {
-        const data = await this.getDataFromGoogle(code)
-        return {
-            email: data.email,
-            name: data.name,
-        }
-    }
-
-    //login with google
-    async loginWithGoogle(code: string) {
-        const data = await this.getDataFromGoogle(code)
-        return {
-            email: data.email,
-        }
-    }
-
-
-
 
     async getDataFromGoogle(code: string) {
         const { tokens } = await this.gooleAuthClient.getToken(code)

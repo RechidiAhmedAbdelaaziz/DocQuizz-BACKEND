@@ -1,8 +1,8 @@
-import { Body, Controller, Get, Post, Query, Redirect, Res, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Query, Redirect, Req, Res, UseGuards } from '@nestjs/common';
 import { OAuthService } from './o-auth.service';
 import { GoogleAuthQuery } from './dto/google-signup.dto';
 import { AuthService } from '../auth/auth.service';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { StatisticService } from '../statistic/statistic.service';
 
 @Controller('o-auth')
@@ -14,27 +14,24 @@ export class OAuthController {
 
   ) { }
 
+
   @Get('google') //* GOOGLE | Auth ~ {{host}}/o-auth/google
-  @Redirect()
   async googleAuth(@Res() res: Response) {
     const url = this.oAuthService.generateAuthUrl()
     res.redirect(url)
+    return {}
   }
 
 
   @Get('google/callback') //* GOOGLE | Auth ~ {{host}}/o-auth/google/callback
-  async googleCallback(@Query() query: GoogleAuthQuery) {
+  async googleCallback(@Query() query: GoogleAuthQuery, @Req() req: Request) {
+    console.log("I'm here >>>", req.headers)
+
     const details = await this.oAuthService.getDataFromGoogle(query.code)
     try {
       const { email } = details
 
-      const user = await this.authService.login({
-        email,
-        password: process.env.GOOGLE_USERS_PASSWORD
-      })
-
-
-
+      const user = await this.authService.login({ email }, { isOAuth: true })
       const tokens = await this.authService.generateTokens(user)
 
       return { tokens, user }
@@ -57,6 +54,8 @@ export class OAuthController {
 
 
   }
+
+
 
 
 }

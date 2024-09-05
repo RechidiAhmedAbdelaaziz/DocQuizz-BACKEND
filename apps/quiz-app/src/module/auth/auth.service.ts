@@ -24,7 +24,8 @@ export class AuthService {
         name: string,
         email: string,
         password: string,
-    }) => {
+    },
+    ) => {
         const { name, email, password } = details
 
         const userExists = await this.userModel.findOne({ email })
@@ -42,12 +43,16 @@ export class AuthService {
         return await user.save()
     }
 
-    login = async (data: { email: string, password: string }) => {
+    login = async (data: { email: string, password?: string }, options?: {
+        isOAuth: boolean
+    }) => {
         const { email, password } = data
+        const { isOAuth } = options || {}
 
         const user = await this.userModel.findOne({ email }).select('+password')
-
         if (!user) throw new HttpException('Email not found', 404)
+
+        if (isOAuth) return user
 
         const isPasswordMatch = compareHash(password, user.password)
         if (!isPasswordMatch) throw new HttpException('Invalid password', 400)
