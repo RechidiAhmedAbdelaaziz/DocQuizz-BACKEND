@@ -50,7 +50,7 @@ export class NotesController {
     const { deleteNote, newNote } = body
 
     const user = await this.userService.getUserById(userId)
-    const noteToUpdate = await this.notesService.getNoteById(noteId, user)
+    const noteToUpdate = await this.notesService.getNoteById(noteId, user,)
 
     return await this.notesService.updateNote(noteToUpdate, index, { deleteNote, newNote })
   }
@@ -63,7 +63,9 @@ export class NotesController {
     const user = await this.userService.getUserById(userId)
     const question = await this.questionService.getQuestionById(questionId)
 
-    return await this.notesService.getNote(user, question)
+    const note = await this.notesService.getNote(user, question)
+
+    return { data: note?.notes ?? [] }
 
 
   }

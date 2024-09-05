@@ -34,7 +34,6 @@ export class NotesService {
 
     getNote = async (user: User, question: Question) => {
         const note = await this.noteModel.findOne({ user, question })
-        if (!note) throw new HttpException('Note not found', 404)
         return note
     }
 
