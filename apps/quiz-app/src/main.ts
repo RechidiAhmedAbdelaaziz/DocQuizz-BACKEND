@@ -15,9 +15,12 @@ async function bootstrap() {
   }))
 
   app.enableCors({
-    origin: 'http://localhost:5173',
-    credentials: true
-  })
+    origin: /https?:\/\/(.+\.)?docquizz\.top$/, // Allow all subdomains of example.com
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // If you need to allow credentials (cookies, authorization headers)
+  });
+
+
 
 
   await app.listen(3000);
