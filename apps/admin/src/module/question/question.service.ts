@@ -11,7 +11,7 @@ export class QuestionService {
     ) { }
 
     getAllQuestions = async (
-        fitler : {
+        fitler: {
             field?: {
                 level?: string,
                 major?: string,
@@ -43,7 +43,7 @@ export class QuestionService {
         question.type = correctAnswers.length > 1 ? "QCM" : "QCU"
         question.source = source
         question.field = field
-        question.explanation = explanation
+        question.explanation = explanation ?? ''
 
         return question.save()
     }
