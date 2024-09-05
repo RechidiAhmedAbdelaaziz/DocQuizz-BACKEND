@@ -12,7 +12,7 @@ export class Note extends AbstractSchema {
     @Prop({ type: Schema.Types.ObjectId, ref: User.name, select: false })
     user: User
 
-    @Prop({ type: Schema.Types.ObjectId, ref: Question.name, select: false })
+    @Prop({ type: Schema.Types.ObjectId, ref: Question.name })
     question: Question
 
     @Prop({

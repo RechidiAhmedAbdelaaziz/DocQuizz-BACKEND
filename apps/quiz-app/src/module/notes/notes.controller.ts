@@ -65,7 +65,7 @@ export class NotesController {
 
     const note = await this.notesService.getNote(user, question)
 
-    return { data: note?.notes ?? [] }
+    return { data: note }
 
 
   }
