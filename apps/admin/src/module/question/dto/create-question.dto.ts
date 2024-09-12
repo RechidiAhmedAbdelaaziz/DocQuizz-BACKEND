@@ -3,19 +3,6 @@ import { IsString, IsMongoId, IsEnum, IsOptional, ArrayNotEmpty, ValidateNested,
 import { Types } from "mongoose";
 
 
-
-class FieldDto {
-    @IsString()
-    level: string;
-
-    @IsString()
-    major: string;
-
-    @IsString()
-    course: string;
-
-}
-
 export class CreateQuestionBody {
     @IsString()
     questionText: string;
@@ -34,17 +21,16 @@ export class CreateQuestionBody {
     @IsMongoId()
     examId?: Types.ObjectId;
 
-    @ValidateNested()
-    @Type(() => FieldDto)
-    field: FieldDto;
+    @IsMongoId()
+    courseId: Types.ObjectId;
 
     @IsOptional()
     @IsString()
     explanation?: string;
 
     @IsOptional()
-    @IsString()
-    source?: string;
+    @IsMongoId()
+    sourceId?: Types.ObjectId;
 
     @IsOptional()
     @IsNumber()

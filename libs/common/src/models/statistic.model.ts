@@ -4,7 +4,7 @@
 import { Schema as DSchema, Prop } from "@nestjs/mongoose";
 import { AbstractSchema } from "../shared";
 
-@DSchema()
+@DSchema({ versionKey: false })
 export class Statistic extends AbstractSchema {
 
     @Prop({ type: Number, default: 0 })

@@ -7,6 +7,7 @@ import { ResponseInterceptor } from '@app/common/interceptors/response.intercept
 import { LevelsModule } from './module/levels/levels.module';
 import { QuestionModule } from './module/question/question.module';
 import { StatisticModule } from './module/statistic/statistic.module';
+import { SourceAdminModule } from './module/source-admin/source-admin.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { StatisticModule } from './module/statistic/statistic.module';
     ExamAdminModule,
     LevelsModule,
     QuestionModule,
-    StatisticModule
+    StatisticModule,
+    SourceAdminModule
   ],
   controllers: [],
   providers: [

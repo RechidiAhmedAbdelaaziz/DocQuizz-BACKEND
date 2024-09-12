@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { SourceService } from './source.service';
-import { AdminSourceController, SourceController } from './source.controller';
+import {  SourceController } from './source.controller';
 import { DatabaseModule } from '@app/common';
 import { Source } from '@app/common/models';
 
@@ -8,7 +8,7 @@ import { Source } from '@app/common/models';
   imports: [
     DatabaseModule.forFeature([{ model: Source }])
   ],
-  controllers: [SourceController, AdminSourceController],
+  controllers: [SourceController],
   providers: [SourceService],
 })
 export class SourceModule { }

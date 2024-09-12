@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ExamService } from './exam.service';
 import { ExamController } from './exam.controller';
 import { DatabaseModule } from '@app/common';
@@ -8,7 +8,7 @@ import { QuestionModule } from '../question/question.module';
 @Module({
   imports: [
     DatabaseModule.forFeature([{ model: Exam }]),
-    QuestionModule
+    forwardRef(() => QuestionModule),
   ],
   controllers: [ExamController],
   providers: [ExamService],

@@ -1,4 +1,4 @@
-import { Exam, Source } from "@app/common/models";
+import { Course, Exam, Source } from "@app/common/models";
 
 export interface QuestionDetails {
     questionText: string,
@@ -6,13 +6,10 @@ export interface QuestionDetails {
     wrongAnswers: string[],
     difficulty: "easy" | "medium" | "hard",
     exam?: Exam,
-    field: {
-        level: string,
-        major: string,
-        course: string
-    },
+    course?: Course,
     explanation?: string,
     source?: Source,
-    year?: number
+    year?: number,
+
 
 }

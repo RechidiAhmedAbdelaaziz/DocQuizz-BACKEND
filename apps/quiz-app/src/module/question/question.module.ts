@@ -8,7 +8,7 @@ import { ExamModule } from '../exam/exam.module';
 @Module({
   imports: [
     DatabaseModule.forFeature([{ model: Question }]),
-    forwardRef(() => ExamModule)
+    ExamModule,
   ],
   controllers: [QuestionController],
   providers: [QuestionService],

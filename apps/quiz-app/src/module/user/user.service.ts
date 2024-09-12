@@ -1,5 +1,5 @@
 import { compareHash, hashData } from '@app/common';
-import { User } from '@app/common/models';
+import { Major, User } from '@app/common/models';
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -51,33 +51,6 @@ export class UserService {
 
         if (!compareHash(oldPassword, user.password)) throw new HttpException('Old password is not correct', 400)
         user.password = hashData(newPassword);
-
-        await user.save();
-    }
-
-    updateAnalyse = async (
-        user: User,
-        analyse: {
-            major: string;
-            isCorrectAnswers: boolean;
-        }) => {
-        const { major, isCorrectAnswers } = analyse;
-
-        if(!user.analyse) user.analyse = [];
-
-        const index = user.analyse.findIndex(a => a.major === major);
-        if (index !== -1) {
-            if (isCorrectAnswers) user.analyse[index].correctAnswers++;
-            else user.analyse[index].wrongAnswers++;
-        } else {
-            user.analyse.push({
-                major,
-                correctAnswers: isCorrectAnswers ? 1 : 0,
-                wrongAnswers: isCorrectAnswers ? 0 : 1
-            })
-        }
-
-        user.markModified('analyse');
 
         await user.save();
     }

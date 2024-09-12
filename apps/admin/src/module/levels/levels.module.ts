@@ -12,5 +12,6 @@ import { CloudinaryModule } from '@app/common/module/cloudinary/cloudinary.modul
   ],
   controllers: [LevelsController],
   providers: [LevelsService],
+  exports: [LevelsService]
 })
 export class LevelsModule { }

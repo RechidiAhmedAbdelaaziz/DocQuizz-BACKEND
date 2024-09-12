@@ -11,6 +11,7 @@ import { PaginationQuery } from '@app/common/utils/pagination';
 import { NotesService } from '../notes/notes.service';
 import { QuestionsNumberQuery } from './dto/question-number.dto';
 import { NestedPagination } from '@app/common/utils/nested-pagination';
+import { QuizRecordService } from '../quiz-record/quiz-record.service';
 
 @Controller('quiz')
 @UseGuards(HttpAuthGuard)
@@ -19,7 +20,8 @@ export class QuizController {
     private readonly quizService: QuizService,
     private readonly questionService: QuestionService,
     private readonly userService: UserService,
-    private readonly notesService: NotesService
+    private readonly notesService: NotesService,
+    private readonly recordService: QuizRecordService,
   ) { }
 
   @Post() //* QUIZ | Create ~ {{host}}/quiz
@@ -27,7 +29,7 @@ export class QuizController {
     @CurrentUser() userId: Types.ObjectId,
     @Body() body: CreateQuizBody,
   ) {
-    const { title, fields, difficulties, types, sources, years, alreadyAnsweredFalse, withExplanation, withNotes } = body
+    const { title, courses, difficulties, types, sources, years, alreadyAnsweredFalse, withExplanation, withNotes } = body
 
     const ids = []
     let sendIds: boolean = false
@@ -45,7 +47,7 @@ export class QuizController {
 
     }
 
-    const questionFilter = this.questionService.generateFilterQuery({ fields, difficulties, types, withExplanation, ids: sendIds ? ids : undefined, sources, years })
+    const questionFilter = this.questionService.generateFilterQuery({ courses, difficulties, types, withExplanation, ids: sendIds ? ids : undefined, sources, years })
 
 
     const { data: questions } = await this.questionService.getQuestions(questionFilter, { limit: 500, min: 1 })
@@ -72,7 +74,7 @@ export class QuizController {
 
 
 
-    const { fields, difficulties, types, sources, years: strings, alreadyAnsweredFalse, withExplanation, withNotes } = queries
+    const { courses, difficulties, types, sources, years: strings, alreadyAnsweredFalse, withExplanation, withNotes } = queries
 
     let years: number[] = []
     if (strings) years = strings.map(y => parseInt(y))
@@ -96,7 +98,7 @@ export class QuizController {
     }
 
     const questionFilter = this.questionService.generateFilterQuery({
-      fields, difficulties, types, withExplanation, ids: sendIds ? ids : undefined, sources, years
+      courses, difficulties, types, withExplanation, ids: sendIds ? ids : undefined, sources, years
     })
 
     const questions = await this.questionService.getQuestionsNumber(questionFilter);
@@ -120,6 +122,8 @@ export class QuizController {
 
     const { data, pagination } = new NestedPagination(questions, { page, limit, total: quizData.totalQuestions }).generate();
 
+    await this.recordService.createRecord(user, quiz)
+
     return {
       pagination,
       data: {
@@ -140,14 +144,6 @@ export class QuizController {
     const user = await this.userService.getUserById(userId)
     const quiz = await this.quizService.getQuizById(user, quizId, { withQuestions: true })
 
-    if (questionAnswer) {
-      const question = await this.questionService.getQuestionById(questionAnswer.questionId)
-
-      await this.userService.updateAnalyse(user, {
-        major: question.field.major,
-        isCorrectAnswers: questionAnswer.isCorrect
-      })
-    }
 
     return await this.quizService.updateQuiz(quiz, { title, isCompleted, questionAnswer, lastAnsweredIndex })
   }

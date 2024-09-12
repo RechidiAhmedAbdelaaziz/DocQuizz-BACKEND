@@ -1,25 +1,12 @@
-import { Type } from "class-transformer";
-import { IsString, ValidateNested, IsEnum, IsOptional, ArrayNotEmpty, IsBoolean, ArrayMaxSize, IsNumber, IsNumberString } from "class-validator";
-
-class Field {
-
-    @IsString()
-    level: string
-
-    @IsString()
-    major: string
-
-    @IsString()
-    course: string
-}
+import {  IsEnum, IsOptional, ArrayNotEmpty, IsBoolean, ArrayMaxSize, IsNumber, IsNumberString, IsMongoId } from "class-validator";
+import { Types } from "mongoose";
 
 export class QuestionsNumberQuery {
 
 
-    @ValidateNested({ each: true })
-    @Type(() => Field)
     @ArrayNotEmpty()
-    fields: Field[]
+    @IsMongoId({ each: true })
+    courses: Types.ObjectId[]
 
     @IsOptional()
     @IsEnum(["easy", "medium", "hard"], { each: true })
@@ -44,8 +31,8 @@ export class QuestionsNumberQuery {
     withNotes?: boolean
 
     @IsOptional()
-    @IsString({ each: true })
-    sources?: string[]
+    @IsMongoId({ each: true })
+    sources?: Types.ObjectId[]
 
     @IsOptional()
     @IsNumberString({}, { each: true })
@@ -53,3 +40,4 @@ export class QuestionsNumberQuery {
 
 
 }
+

@@ -7,7 +7,6 @@ import { UserModule } from './module/user/user.module';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { ExamModule } from './module/exam/exam.module';
 import { ResponseInterceptor } from '@app/common/interceptors/response.interceptor';
-import { ExamResultModule } from './module/exam-result/exam-result.module';
 import { LevelsModule } from './module/levels/levels.module';
 import { QuestionModule } from './module/question/question.module';
 import { PlaylistModule } from './module/playlist/playlist.module';
@@ -15,6 +14,7 @@ import { QuizModule } from './module/quiz/quiz.module';
 import { NotesModule } from './module/notes/notes.module';
 import { StatisticModule } from './module/statistic/statistic.module';
 import { SourceModule } from './module/source/source.module';
+import { QuizRecordModule } from './module/quiz-record/quiz-record.module';
 
 
 @Module({
@@ -25,7 +25,6 @@ import { SourceModule } from './module/source/source.module';
     OAuthModule,
     UserModule,
     ExamModule,
-    ExamResultModule,
     LevelsModule,
     QuestionModule,
     PlaylistModule,
@@ -33,6 +32,7 @@ import { SourceModule } from './module/source/source.module';
     NotesModule,
     StatisticModule,
     SourceModule,
+    QuizRecordModule,
   ],
   providers: [
     {

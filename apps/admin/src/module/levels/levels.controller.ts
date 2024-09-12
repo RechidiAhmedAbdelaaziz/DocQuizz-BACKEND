@@ -15,8 +15,7 @@ export class LevelsController {
     private readonly statisticService: StatisticService
   ) { }
 
-  //* {"name":"DOMAIN | Create","request":{"method":"POST","header":[],"body":{"mode":"raw","raw":"{\n    \"name\": \"Math\"\n}","options":{"raw":{"language":"json"}}},"url":{"raw":"{{host}}/domains","host":["{{host}}"],"path":["domains"]}},"response":[]}
-  @Post('domains') 
+  @Post('domains') // * DOMAIN | Create ~ {{host}}/domains
   async createDomain(@Body() body: NameBody) {
     const { name } = body
 
@@ -26,8 +25,7 @@ export class LevelsController {
 
     return domain
   }
- //* {"name":"DOMAIN | Update","request":{"method":"PATCH","header":[],"body":{"mode":"raw","raw":"{\n    \"name\": \"Math\"\n}","options":{"raw":{"language":"json"}}},"url":{"raw":"{{host}}/domains/60f4b1b3b3b3b3b3b3b3b3b3","host":["{{host}}"],"path":["domains","60f4b1b3b3b3b3b3b3b3b3"]}},"response":[]}
-  @Patch('domains/:domainId') 
+  @Patch('domains/:domainId')  // * DOMAIN | Update ~ {{host}}/domains/:domainId
   async updateDomain(
     @Body() body: NameBody,
     @Param('domainId', ParseMonogoIdPipe) domainId: Types.ObjectId,
@@ -39,9 +37,7 @@ export class LevelsController {
     return await this.levelsService.updateDomain(domain, name)
   }
 
-
-  //* {"name":"DOMAIN | Delete","request":{"method":"DELETE","header":[],"url":{"raw":"{{host}}/domains/60f4b1b3b3b3b3b3b3b3b3","host":["{{host}}"],"path":["domains","60f4b1b3b3b3b3b3b3b3b3"]}},"response":[]}
-  @Delete('domains/:domainId') 
+  @Delete('domains/:domainId')  // * DOMAIN | Delete ~ {{host}}/domains/:domainId
   async deleteDomain(
     @Param('domainId', ParseMonogoIdPipe) domainId: Types.ObjectId,
   ) {
@@ -54,8 +50,7 @@ export class LevelsController {
     return { message: 'Domain deleted successfully' }
   }
 
-  // {"name":"LEVEL | Create","request":{"method":"POST","header":[],"body":{"mode":"raw","raw":"{\n    \"name\": \"Math\",\n}","options":{"raw":{"language":"json"}}},"url":{"raw":"{{host}}/levels/60f4b1b3b3b3b3b3b3b3b3b3","host":["{{host}}"],"path":["levels","60f4b1b3b3b3b3b3b3b3b3b3"]}},"response":[]}
-  @Post('levels/:domainId') 
+  @Post('levels/:domainId')  // * LEVEL | Create ~ {{host}}/levels/:domainId
   async createLevel(
     @Body() body: NameBody,
     @Param('domainId', ParseMonogoIdPipe) domainId: Types.ObjectId,
@@ -69,8 +64,7 @@ export class LevelsController {
     return level
   }
 
-  // {"name":"LEVEL | Update","request":{"method":"PATCH","header":[],"body":{"mode":"raw","raw":"{\n    \"name\": \"Math\"\n}","options":{"raw":{"language":"json"}}},"url":{"raw":"{{host}}/levels/60f4b1b3b3b3b3b3b3b3b3b3","host":["{{host}}"],"path":["levels","60f4b1b3b3b3b3b3b3b3b3"]}},"response":[]}
-  @Patch('levels/:levelId') 
+  @Patch('levels/:levelId')  // * LEVEL | Update ~ {{host}}/levels/:levelId
   async updateLevel(
     @Body() body: NameBody,
     @Param('levelId', ParseMonogoIdPipe) levelId: Types.ObjectId,
@@ -82,8 +76,7 @@ export class LevelsController {
     return await this.levelsService.updateLevel(level, name)
   }
 
-  // {"name":"LEVEL | Delete","request":{"method":"DELETE","header":[],"url":{"raw":"{{host}}/levels/60f4b1b3b3b3b3b3b3b3b3","host":["{{host}}"],"path":["levels","60f4b1b3b3b3b3b3b3b3b3"]}},"response":[]}
-  @Delete('levels/:levelId') 
+  @Delete('levels/:levelId')  // * LEVEL | Delete ~ {{host}}/levels/:levelId
   async deleteLevel(
     @Param('levelId', ParseMonogoIdPipe) levelId: Types.ObjectId,
   ) {
@@ -94,8 +87,7 @@ export class LevelsController {
     return { message: 'Level deleted successfully' }
   }
 
-  // {"name":"MAJOR | Create","request":{"method":"POST","header":[],"body":{"mode":"raw","raw":"{\n    \"name\": \"Math\"\n}","options":{"raw":{"language":"json"}}},"url":{"raw":"{{host}}/majors/60f4b1b3b3b3b3b3b3b3b3b3","host":["{{host}}"],"path":["majors","60f4b1b3b3b3b3b3b3b3b3"]}},"response":[]}
-  @Post('majors/:levelId') 
+  @Post('majors/:levelId')  // * MAJOR | Create ~ {{host}}/majors/:levelId
   async createMajor(
     @Body() body: NameBody,
     @Param('levelId', ParseMonogoIdPipe) levelId: Types.ObjectId,
@@ -111,8 +103,7 @@ export class LevelsController {
     return major
   }
 
-  // {"name":"MAJOR | Update","request":{"method":"PATCH","header":[],"body":{"mode":"raw","raw":"{\n    \"name\": \"Math\"\n}","options":{"raw":{"language":"json"}}},"url":{"raw":"{{host}}/majors/60f4b1b3b3b3b3b3b3b3b3b3","host":["{{host}}"],"path":["majors","60f4b1b3b3b3b3b3b3b3b3"]}},"response":[]}
-  @Patch('majors/:majorId') 
+  @Patch('majors/:majorId')  // * MAJOR | Update ~ {{host}}/majors/:majorId
   async updateMajor(
     @Body() body: NameBody,
     @Param('majorId', ParseMonogoIdPipe) majorId: Types.ObjectId,
@@ -124,8 +115,7 @@ export class LevelsController {
     return await this.levelsService.updateMajor(major, name)
   }
 
-  // {"name":"MAJOR | Delete","request":{"method":"DELETE","header":[],"url":{"raw":"{{host}}/majors/60f4b1b3b3b3b3b3b3b3b3","host":["{{host}}"],"path":["majors","60f4b1b3b3b3b3b3b3b3b3"]}},"response":[]}
-  @Delete('majors/:majorId') 
+  @Delete('majors/:majorId')  // * MAJOR | Delete ~ {{host}}/majors/:majorId
   async deleteMajor(
     @Param('majorId', ParseMonogoIdPipe) majorId: Types.ObjectId,
   ) {
@@ -138,8 +128,7 @@ export class LevelsController {
     return { message: 'Major deleted successfully' }
   }
 
-  // {"name":"COURSE | Create","request":{"method":"POST","header":[],"body":{"mode":"raw","raw":"{\n    \"name\": \"Math\"\n}","options":{"raw":{"language":"json"}}},"url":{"raw":"{{host}}/courses/60f4b1b3b3b3b3b3b3b3b3b3","host":["{{host}}"],"path":["courses","60f4b1b3b3b3b3b3b3b3b3"]}},"response":[]}
-  @Post('courses/:majorId') 
+  @Post('courses/:majorId')  // * COURSE | Create ~ {{host}}/courses/:majorId
   async createCourse(
     @Body() body: NameBody,
     @Param('majorId', ParseMonogoIdPipe) majorId: Types.ObjectId,
@@ -153,8 +142,7 @@ export class LevelsController {
     return course
   }
 
-  // {"name":"COURSE | Update","request":{"method":"PATCH","header":[],"body":{"mode":"raw","raw":"{\n    \"name\": \"Math\"\n}","options":{"raw":{"language":"json"}}},"url":{"raw":"{{host}}/courses/60f4b1b3b3b3b3b3b3b3b3b3","host":["{{host}}"],"path":["courses","60f4b1b3b3b3b3b3b3b3b3"]}}
-  @Patch('courses/:courseId') 
+  @Patch('courses/:courseId')  // * COURSE | Update ~ {{host}}/courses/:courseId
   async updateCourse(
     @Body() body: NameBody,
     @Param('courseId', ParseMonogoIdPipe) courseId: Types.ObjectId,
@@ -166,8 +154,7 @@ export class LevelsController {
     return await this.levelsService.updateCourse(course, name)
   }
 
-  // {"name":"COURSE | Delete","request":{"method":"DELETE","header":[],"url":{"raw":"{{host}}/courses/60f4b1b3b3b3b3b3b3b3b3","host":["{{host}}"],"path":["courses","60f4b1b3b3b3b3b3b3b3b3"]}},"response":[]
-  @Delete('courses/:courseId') 
+  @Delete('courses/:courseId')  // * COURSE | Delete ~ {{host}}/courses/:courseId
   async deleteCourse(
     @Param('courseId', ParseMonogoIdPipe) courseId: Types.ObjectId,
   ) {

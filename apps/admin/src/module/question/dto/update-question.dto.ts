@@ -2,16 +2,7 @@ import { Type } from "class-transformer";
 import { IsString, IsMongoId, IsEnum, IsOptional, ArrayNotEmpty, ValidateNested, IsNumber } from "class-validator";
 import { Types } from "mongoose";
 
-class FieldDto {
-    @IsString()
-    level: string
 
-    @IsString()
-    major: string
-
-    @IsString()
-    course: string
-} // {""}
 
 export class UpdateQuestionBody {
 
@@ -37,18 +28,16 @@ export class UpdateQuestionBody {
     @IsMongoId()
     examId?: Types.ObjectId
 
-    @IsOptional()
-    @ValidateNested()
-    @Type(() => FieldDto)
-    field: FieldDto
+    @IsMongoId()
+    courseId: Types.ObjectId
 
     @IsOptional()
     @IsString()
     explanation?: string
 
     @IsOptional()
-    @IsString()
-    source?: string
+    @IsMongoId()
+    sourceId?: Types.ObjectId
 
     @IsOptional()
     @IsNumber()

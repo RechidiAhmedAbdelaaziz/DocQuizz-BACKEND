@@ -15,7 +15,7 @@ export class QuestionService {
     createQuestion = async (
         details: QuestionDetails
     ) => {
-        const { questionText, year,correctAnswers, wrongAnswers, difficulty, exam, source, field, explanation } = details
+        const { questionText, year, correctAnswers, wrongAnswers, difficulty, exam, source, course, explanation } = details
 
         const question = new this.questionModel()
 
@@ -25,7 +25,7 @@ export class QuestionService {
         question.difficulty = difficulty
         question.type = correctAnswers.length > 1 ? "QCM" : "QCU"
         question.exam = exam
-        question.field = field
+        question.course = course
         question.explanation = explanation ?? ''
         question.source = source
         question.year = year
@@ -37,7 +37,7 @@ export class QuestionService {
         question: Question,
         details: QuestionDetails
     ) => {
-        const { questionText, correctAnswers,year, wrongAnswers, difficulty, exam, source, field, explanation } = details
+        const { questionText, correctAnswers, year, wrongAnswers, difficulty, exam, source, course, explanation } = details
 
         if (questionText) question.questionText = questionText
         if (correctAnswers) {
@@ -48,7 +48,7 @@ export class QuestionService {
         if (difficulty) question.difficulty = difficulty
         if (exam) question.exam = exam
         if (source) question.source = source
-        if (field) question.field = field
+        if (course) question.course = course
         if (explanation) question.explanation = explanation
         if (year) question.year = year
 
