@@ -18,15 +18,18 @@ export class LevelsService {
     }
 
     getLevels = async (domain?: Domain) => {
-        return await this.levelModel.find({ domain });
+        const filter = domain ? { domain } : {};
+        return await this.levelModel.find(filter);
     }
 
     getMajors = async (level?: Level) => {
-        return await this.majorModel.find({ level });
+        const filter = level ? { levels: level } : {};
+        return await this.majorModel.find(filter);
     }
 
     getCourses = async (major?: Major) => {
-        return await this.courseModel.find({ major });
+        const filter = major ? { major } : {};
+        return await this.courseModel.find(filter);
     }
 
     getDomainById = async (id: Types.ObjectId) => {
