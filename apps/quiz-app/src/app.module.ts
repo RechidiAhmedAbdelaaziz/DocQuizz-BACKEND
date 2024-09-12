@@ -14,6 +14,7 @@ import { PlaylistModule } from './module/playlist/playlist.module';
 import { QuizModule } from './module/quiz/quiz.module';
 import { NotesModule } from './module/notes/notes.module';
 import { StatisticModule } from './module/statistic/statistic.module';
+import { SourceModule } from './module/source/source.module';
 
 
 @Module({
@@ -31,6 +32,7 @@ import { StatisticModule } from './module/statistic/statistic.module';
     QuizModule,
     NotesModule,
     StatisticModule,
+    SourceModule,
   ],
   providers: [
     {

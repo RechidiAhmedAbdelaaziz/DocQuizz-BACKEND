@@ -5,6 +5,8 @@ import { Schema as DSchema, Prop } from "@nestjs/mongoose";
 import { AbstractSchema } from "@app/common/shared/abstract.model";
 import { Schema } from "mongoose";
 import { Exam } from "./exam.model";
+import { Course } from "./levels.model";
+import { Source } from "./source.model";
 
 
 
@@ -29,31 +31,17 @@ export class Question extends AbstractSchema {
     @Prop({ type: Schema.Types.ObjectId, ref: Exam.name })
     exam?: Exam
 
-    @Prop({
-        type: {
-            level: String,
-            major: String,
-            course: String
-        },
-        _id: false
-    })
-    field: {
-        level: string
-
-        major: string
-
-        course: string
-    }
+    @Prop({ type: Schema.Types.ObjectId, ref: Course.name })
+    course: Course
 
     @Prop()
     explanation?: string
 
+    @Prop({ type: Schema.Types.ObjectId, ref: Source.name })
+    source: Source
 
     @Prop()
-    source: string
-
-    @Prop()
-    year : number
+    year: number
 }
 
 

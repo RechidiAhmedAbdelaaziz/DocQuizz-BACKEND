@@ -1,4 +1,4 @@
-import { Exam } from "@app/common/models";
+import { Exam, Source } from "@app/common/models";
 
 export interface QuestionDetails {
     questionText: string,
@@ -12,7 +12,7 @@ export interface QuestionDetails {
         course: string
     },
     explanation?: string,
-    source?: string,
+    source?: Source,
     year?: number
 
 }

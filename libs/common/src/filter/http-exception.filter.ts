@@ -18,6 +18,8 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const status = exception.getStatus();
     const error = exception.getResponse();
 
+    console.log(error);
+
 
     const message =
       isString(error) ?
