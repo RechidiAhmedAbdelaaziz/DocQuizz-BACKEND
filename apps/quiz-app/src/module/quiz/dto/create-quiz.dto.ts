@@ -1,27 +1,16 @@
-import { Type } from "class-transformer";
-import { IsString, ValidateNested, IsEnum, IsOptional, ArrayNotEmpty, IsBoolean, ArrayMaxSize } from "class-validator";
+import { IsString, IsEnum, IsOptional, ArrayNotEmpty, IsBoolean, ArrayMaxSize, IsNumber, IsMongoId } from "class-validator";
+import { Types } from "mongoose";
 
-class Field {
 
-    @IsString()
-    level: string
-
-    @IsString()
-    major: string
-
-    @IsString()
-    course: string
-}
 
 export class CreateQuizBody {
 
     @IsString()
     title: string;
 
-    @ValidateNested({ each: true })
-    @Type(() => Field)
+    @IsMongoId({ each: true })
     @ArrayNotEmpty()
-    fields: Field[]
+    courses: Types.ObjectId[]
 
     @IsOptional()
     @IsEnum(["easy", "medium", "hard"], { each: true })
@@ -45,5 +34,15 @@ export class CreateQuizBody {
     @IsBoolean()
     withNotes?: boolean
 
+    @IsOptional()
+    @IsMongoId({ each: true })
+    sources?: Types.ObjectId[]
+
+    @IsOptional()
+    @IsNumber({}, { each: true })
+    years?: number[]
+
 
 }
+
+// {"title" : "test", "courses" : ["5f9b1b3b1c9d440000f4b3b4"], "difficulties" : ["easy", "medium", "hard"], "types" : ["QCM", "QCU"], "alreadyAnsweredFalse" : true, "withExplanation" : true, "withNotes" : true, "sources" : ["5f9b1b3b1c9d440000f4b3b4"], "years" : [2020, 2021]}

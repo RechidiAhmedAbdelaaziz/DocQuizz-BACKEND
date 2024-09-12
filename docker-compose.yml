@@ -1,3 +1,5 @@
+name: DocQuizz
+
 services:
   docquizz:
     image: docquiz-app

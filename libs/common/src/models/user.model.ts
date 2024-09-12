@@ -1,6 +1,8 @@
 import { Schema as DSchema, Prop, raw } from "@nestjs/mongoose";
 import { AbstractSchema } from "@app/common/shared/abstract.model";
 import { UserRoles } from "../shared";
+import { Major } from "./levels.model";
+import { Schema } from "mongoose";
 
 
 @DSchema()
@@ -35,16 +37,7 @@ export class User extends AbstractSchema {
     @Prop({ default: 0 })
     playlists: number;
 
-    @Prop({
-        type: [{ major: String, correctAnswers: Number, wrongAnswers: Number }],
-        select: false,
-        _id: false,
-    })
-    analyse: {
-        major: string;
-        correctAnswers: number;
-        wrongAnswers: number;
-    }[]
+
 
 }
 

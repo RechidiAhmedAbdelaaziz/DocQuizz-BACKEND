@@ -10,29 +10,12 @@ export class QuestionService {
         @InjectModel(Question.name) private readonly questionModel: Model<Question>,
     ) { }
 
-    getAllQuestions = async (
-        fitler: {
-            field?: {
-                level?: string,
-                major?: string,
-                course?: string
-            },
-            difficulty?: "easy" | "medium" | "hard",
-            type?: "QCM" | "QCU",
-            source?: Types.ObjectId
-        },
-        pagination: {
-            page?: number,
-            limit?: number,
-        }
 
-
-    ) => { }
 
     createQuestion = async (
         details: QuestionDetails
     ) => {
-        const { questionText, correctAnswers, wrongAnswers, difficulty, source, field, explanation } = details
+        const { questionText, year, correctAnswers, wrongAnswers, difficulty, exam, source, course, explanation } = details
 
         const question = new this.questionModel()
 
@@ -41,9 +24,11 @@ export class QuestionService {
         question.wrongAnswers = wrongAnswers
         question.difficulty = difficulty
         question.type = correctAnswers.length > 1 ? "QCM" : "QCU"
-        question.source = source
-        question.field = field
+        question.exam = exam
+        question.course = course
         question.explanation = explanation ?? ''
+        question.source = source
+        question.year = year
 
         return question.save()
     }
@@ -52,7 +37,7 @@ export class QuestionService {
         question: Question,
         details: QuestionDetails
     ) => {
-        const { questionText, correctAnswers, wrongAnswers, difficulty, source, field, explanation } = details
+        const { questionText, correctAnswers, year, wrongAnswers, difficulty, exam, source, course, explanation } = details
 
         if (questionText) question.questionText = questionText
         if (correctAnswers) {
@@ -61,9 +46,11 @@ export class QuestionService {
         }
         if (wrongAnswers) question.wrongAnswers = wrongAnswers
         if (difficulty) question.difficulty = difficulty
+        if (exam) question.exam = exam
         if (source) question.source = source
-        if (field) question.field = field
+        if (course) question.course = course
         if (explanation) question.explanation = explanation
+        if (year) question.year = year
 
         return question.save()
     }

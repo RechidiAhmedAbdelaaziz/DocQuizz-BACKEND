@@ -1,20 +1,7 @@
 import { Type } from "class-transformer";
-import { IsString, IsMongoId, IsEnum, IsOptional, ArrayNotEmpty, ValidateNested } from "class-validator";
+import { IsString, IsMongoId, IsEnum, IsOptional, ArrayNotEmpty, ValidateNested, IsNumber } from "class-validator";
 import { Types } from "mongoose";
 
-
-
-class FieldDto {
-    @IsString()
-    level: string;
-
-    @IsString()
-    major: string;
-
-    @IsString()
-    course: string;
-
-}
 
 export class CreateQuestionBody {
     @IsString()
@@ -32,15 +19,22 @@ export class CreateQuestionBody {
 
     @IsOptional()
     @IsMongoId()
-    source?: Types.ObjectId;
+    examId?: Types.ObjectId;
 
-    @ValidateNested()
-    @Type(() => FieldDto)
-    field: FieldDto;
+    @IsMongoId()
+    courseId: Types.ObjectId;
 
     @IsOptional()
     @IsString()
     explanation?: string;
+
+    @IsOptional()
+    @IsMongoId()
+    sourceId?: Types.ObjectId;
+
+    @IsOptional()
+    @IsNumber()
+    year?: number;
 }
 
 // {"questionText":"What is the capital of Nigeria?","correctAnswers":["Abuja"],"wrongAnswers":["Lagos","Kano","Ibadan"],"difficulty":"easy","course":"General Knowledge"}

@@ -1,18 +1,8 @@
 import { PaginationQuery } from "@app/common/utils/pagination";
-import { Type } from "class-transformer";
-import { IsBoolean, IsEnum, IsMongoId, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator";
+import { IsBoolean, IsEnum, IsMongoId, IsNumber, IsNumberString, IsOptional, IsString, ValidateNested } from "class-validator";
 import { Types } from "mongoose";
 
-class Field {
-    @IsString()
-    level: string;
 
-    @IsString()
-    major: string;
-
-    @IsString()
-    course: string;
-}
 
 export class ListQuestionsQuery extends PaginationQuery {
     @IsOptional()
@@ -25,12 +15,11 @@ export class ListQuestionsQuery extends PaginationQuery {
 
     @IsOptional()
     @IsMongoId()
-    source?: Types.ObjectId;
+    examId?: Types.ObjectId;
 
     @IsOptional()
-    @ValidateNested({ each: true })
-    @Type(() => Field)
-    fields?: Field[];
+    @IsMongoId({ each: true })
+    courses?: Types.ObjectId[];
 
     @IsOptional()
     @IsBoolean()
@@ -39,6 +28,16 @@ export class ListQuestionsQuery extends PaginationQuery {
     @IsOptional()
     @IsString()
     keywords?: string;
+
+    @IsOptional()
+    @IsMongoId({ each: true })
+    sources?: Types.ObjectId[];
+
+    @IsOptional()
+    @IsNumberString({}, { each: true })
+    years?: string[];
+
 }
 
+// ?
 

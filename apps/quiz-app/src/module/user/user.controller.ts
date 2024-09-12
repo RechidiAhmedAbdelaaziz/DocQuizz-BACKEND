@@ -45,15 +45,4 @@ export class UserController {
     return { message: 'password updated successfully' }
   }
 
-  @Patch('me/analyse') //* USER | Update analyse ~ {{host}}/user/me/analyse
-  async updateAnalyse(
-    @CurrentUser() userId: Types.ObjectId,
-    @Body() analyse: UpdateAnalyseBody
-  ) {
-    const user = await this.userService.getUserById(userId, { withAnalyse: true });
-
-    await this.userService.updateAnalyse(user, analyse)
-
-    return { message: 'analyse updated successfully' }
-  }
 }

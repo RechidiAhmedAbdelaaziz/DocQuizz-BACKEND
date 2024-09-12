@@ -1,40 +1,54 @@
-import { Controller, Get, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { LevelsService } from './levels.service';
-import { HttpAuthGuard } from '@app/common';
-import { ListMajorQuery } from './dto/list-major.dto';
-import { ListCoursesQuery } from './dto/list-courses.dto';
+import { HttpAuthGuard, ParseMonogoIdPipe } from '@app/common';
+import { Types } from 'mongoose';
+import { query } from 'express';
+import { ListCoursesQuery, ListLevelsQuery, ListMajorsQuery } from './dto/domains.dto';
 
-@Controller('levels')
+
+
+@Controller('')
 @UseGuards(HttpAuthGuard)
 export class LevelsController {
   constructor(private readonly levelsService: LevelsService) { }
 
-  @Get()  //* LEVELS | Get all ~ {{host}}/levels
-  async getLevels() {
-    return await this.levelsService.getLevels();
+
+  @Get('domains') // * DOMAINS | List ~ {{host}}/domains
+  async getDomains() {
+    return await this.levelsService.getDomains();
   }
 
-  @Get('majors')  //* MAJOR | Get by level ~ {{host}}/levels/majors?level=...
-  async getMajors(
-    @Query() query: ListMajorQuery
-  ) {
-    const { level } = query;
+  @Get('levels')  // * LEVELS | List ~ {{host}}/levels?domainId=60f7b3b3b3b3b3b3b3b3b3b3
+  async getLevels(@Query() query: ListLevelsQuery) {
+    const { domainId } = query;
 
-    const levelEntity = await this.levelsService.getLevel(level);
+    const domain = domainId ? await this.levelsService.getDomainById(domainId) : undefined;
 
-    return this.levelsService.getMajors(levelEntity);
+    return await this.levelsService.getLevels(domain);
   }
 
-  @Get('courses')  //* COURSES | Get by level and major ~ {{host}}/levels/courses?level=...&major=...
-  async getCourses(
-    @Query() query: ListCoursesQuery
-  ) {
-    const { level, major } = query;
+  @Get('majors') // * LEVELS | Get ~ {{host}}/levels/60f7b3b3b3b3b3b3b3b3
+  async getMajors(@Query() query: ListMajorsQuery) {
+    const { levelId } = query;
 
-    const levelEntity = await this.levelsService.getLevel(level);
+    const level = levelId ? await this.levelsService.getLevelById(levelId) : undefined;
 
-    const majorIndex = this.levelsService.getMajorIndex(levelEntity, major);
-
-    return this.levelsService.getCourses(levelEntity, majorIndex);
+    return await this.levelsService.getMajors(level);
   }
+
+  @Get('courses') // * LEVELS | Get ~ {{host}}/levels/60f7b3b3b3b3b3b3b3b3b3
+  async getCourses(@Query() query: ListCoursesQuery) {
+    const { majorId } = query;
+
+    const major = majorId ? await this.levelsService.getMajorById(majorId) : undefined;
+
+    return await this.levelsService.getCourses(major);
+  }
+
+  
+
+
+
+
 }
+

@@ -40,7 +40,7 @@ export class QuestionService {
             limit?: number,
         }
     ) => {
-        const filter: FilterQuery<Question> = { source: exam };
+        const filter: FilterQuery<Question> = { exam };
 
         const { generate, limit, page } = new Pagination(this.questionModel, { filter, ...options }).getOptions();
 
@@ -59,16 +59,18 @@ export class QuestionService {
     }
 
     generateFilterQuery(filters: QuestionFilter): FilterQuery<Question> {
-        const { fields, difficulties, types, source, withExplanation, ids, keywords } = filters;
+        const { courses, difficulties, types, sources, exam, years, withExplanation, ids, keywords } = filters;
 
         const filter: FilterQuery<Question> = {};
 
         if (ids) filter._id = { $in: ids };
-        if (fields) filter.field = { $in: fields };
+        if (courses) filter.course = { $in: courses };
         if (difficulties) filter.difficulty = { $in: difficulties };
         if (types) filter.type = { $in: types };
-        if (source) filter.source = source;
-        if (withExplanation) filter.explanation = { $exists: true, $ne: '',  };
+        if (exam) filter.exam = exam;
+        if (withExplanation) filter.explanation = { $ne: '', };
+        if (sources) filter.source = { $in: sources };
+        if (years) filter.year = { $in: years };
         if (keywords) {
             const keywordsArray = keywords.split(' ');
             filter.$and = keywordsArray.map(keyword => ({
