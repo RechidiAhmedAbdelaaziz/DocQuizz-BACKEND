@@ -28,7 +28,7 @@ export class Major extends AbstractSchema {
     name: string
 
     @Prop({ type: Schema.Types.ObjectId, ref: Domain.name, select: false })
-    levels: Level
+    level: Level
 
 }
 
