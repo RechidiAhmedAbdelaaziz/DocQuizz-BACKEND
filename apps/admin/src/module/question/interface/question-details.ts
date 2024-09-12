@@ -5,11 +5,14 @@ export interface QuestionDetails {
     correctAnswers: string[],
     wrongAnswers: string[],
     difficulty: "easy" | "medium" | "hard",
-    source?: Exam,
+    exam?: Exam,
     field: {
         level: string,
         major: string,
         course: string
     },
-    explanation?: string
+    explanation?: string,
+    source?: string,
+    year?: number
+
 }

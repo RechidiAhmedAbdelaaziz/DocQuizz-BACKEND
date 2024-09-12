@@ -9,9 +9,11 @@ export interface QuestionFilter {
     }[],
     difficulties?: ("easy" | "medium" | "hard")[],
     types?: ("QCM" | "QCU")[],
-    source?: Exam,
+    exam?: Exam,
     withExplanation?: boolean,
     ids? : Types.ObjectId[],
     keywords ?: string,
+    sources ? : string[],
+    years ? : number[]
 }
 

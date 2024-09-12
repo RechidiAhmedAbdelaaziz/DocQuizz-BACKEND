@@ -25,7 +25,7 @@ export class ListQuestionsQuery extends PaginationQuery {
 
     @IsOptional()
     @IsMongoId()
-    source?: Types.ObjectId;
+    examId?: Types.ObjectId;
 
     @IsOptional()
     @ValidateNested({ each: true })
@@ -39,6 +39,15 @@ export class ListQuestionsQuery extends PaginationQuery {
     @IsOptional()
     @IsString()
     keywords?: string;
+
+    @IsOptional()
+    @IsString({ each: true })
+    sources?: string[];
+
+    @IsOptional()
+    @IsNumber({},{each:true})
+    years?: number[];
+
 }
 
 

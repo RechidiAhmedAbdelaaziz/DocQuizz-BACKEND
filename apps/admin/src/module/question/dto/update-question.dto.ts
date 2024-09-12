@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsString, IsMongoId, IsEnum, IsOptional, ArrayNotEmpty, ValidateNested } from "class-validator";
+import { IsString, IsMongoId, IsEnum, IsOptional, ArrayNotEmpty, ValidateNested, IsNumber } from "class-validator";
 import { Types } from "mongoose";
 
 class FieldDto {
@@ -35,7 +35,7 @@ export class UpdateQuestionBody {
     @IsOptional()
     @IsOptional()
     @IsMongoId()
-    source?: Types.ObjectId
+    examId?: Types.ObjectId
 
     @IsOptional()
     @ValidateNested()
@@ -45,5 +45,13 @@ export class UpdateQuestionBody {
     @IsOptional()
     @IsString()
     explanation?: string
+
+    @IsOptional()
+    @IsString()
+    source?: string
+
+    @IsOptional()
+    @IsNumber()
+    year?: number
 }
 

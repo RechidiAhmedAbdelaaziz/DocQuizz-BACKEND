@@ -13,7 +13,7 @@ export class ExamAdminController {
 
   ) { }
 
-  @Post() //* EXAM | Create ~ {{host}}/exam-admin
+  @Post() //* {"name":"EXAM | Create","request":{"method":"POST","header":[],"body":{"mode":"raw","raw":"{\n    \"major\": \"Math 2\",\n    \"time\": 1200, // secend\n    \"year\": 2022,\n    \"city\": \"El Bayadh\"\n}","options":{"raw":{"language":"json"}}},"url":{"raw":"{{host}}/exam-admin","host":["{{host}}"],"path":["exam-admin"]}},"response":[]}
   async createExam(
     @Body() body: CreateExamBody
   ) {
@@ -28,8 +28,9 @@ export class ExamAdminController {
 
     return exam;
   }
-
-  @Patch(':id') //* EXAM | Update ~ {{host}}/exam-admin/:id
+  
+  //* {"name":"EXAM | Update","request":{"method":"PATCH","header":[],"body":{"mode":"raw","raw":"{\n    \"major\": \"Math 2\",\n    \"time\": 1200, // secend\n    \"year\": 2022,\n    \"city\": \"El Bayadh\"\n}","options":{"raw":{"language":"json"}}},"url":{"raw":"{{host}}/exam-admin/:id","host":["{{host}}"],"path":["exam-admin",":id"]}},"response":[]}
+  @Patch(':id')
   async updateExam(
     @Body() body: UpdateExamBody,
     @Param('id', ParseMonogoIdPipe) id: Types.ObjectId

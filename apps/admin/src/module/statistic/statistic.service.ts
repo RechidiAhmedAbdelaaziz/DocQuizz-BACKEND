@@ -14,8 +14,8 @@ export class StatisticService {
         newExam?: -1 | 1,
         newQuestion?: -1 | 1,
         newMajor?: -1 | 1,
-        newUser?: -1 | 1,
-        newSubscribedUser?: -1 | 1
+        newDomain?: -1 | 1,
+
     }) {
 
         const statistic = await this.statisticModel.findOne() || new this.statisticModel()
@@ -23,8 +23,7 @@ export class StatisticService {
         if (details.newExam) statistic.totalExam += details.newExam
         if (details.newQuestion) statistic.totalQuestion += details.newQuestion
         if (details.newMajor) statistic.totalMajor += details.newMajor
-        if (details.newUser) statistic.totalUser += details.newUser
-        if (details.newSubscribedUser) statistic.totalSubscribedUser += details.newSubscribedUser
+        if (details.newDomain) statistic.totalDomain += details.newDomain
 
         return await statistic.save()
 

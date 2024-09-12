@@ -27,7 +27,7 @@ export class Question extends AbstractSchema {
     type: "QCM" | "QCU"
 
     @Prop({ type: Schema.Types.ObjectId, ref: Exam.name })
-    source?: Exam
+    exam?: Exam
 
     @Prop({
         type: {
@@ -48,6 +48,12 @@ export class Question extends AbstractSchema {
     @Prop()
     explanation?: string
 
+
+    @Prop()
+    source: string
+
+    @Prop()
+    year : number
 }
 
 

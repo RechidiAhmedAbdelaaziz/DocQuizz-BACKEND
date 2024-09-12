@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsString, ValidateNested, IsEnum, IsOptional, ArrayNotEmpty, IsBoolean, ArrayMaxSize } from "class-validator";
+import { IsString, ValidateNested, IsEnum, IsOptional, ArrayNotEmpty, IsBoolean, ArrayMaxSize, IsNumber } from "class-validator";
 
 class Field {
 
@@ -44,6 +44,14 @@ export class CreateQuizBody {
     @IsOptional()
     @IsBoolean()
     withNotes?: boolean
+
+    @IsOptional()
+    @IsString({ each: true })
+    sources?: string[]
+
+    @IsOptional()
+    @IsNumber({}, { each: true })
+    years?: number[]
 
 
 }

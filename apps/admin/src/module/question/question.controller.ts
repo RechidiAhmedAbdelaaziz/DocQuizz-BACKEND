@@ -17,11 +17,11 @@ export class QuestionController {
 
   @Post() //* QUESTION | Create ~ {{host}}/question
   async createQuestion(@Body() body: CreateQuestionBody) {
-    const { questionText, correctAnswers, wrongAnswers, difficulty, source, field, explanation } = body
+    const { questionText, correctAnswers, year, wrongAnswers, difficulty, examId, source, field, explanation } = body
 
     await this.questionService.checkQuestionExists(questionText)
 
-    const exam = source ? await this.examService.getExamById(source) : undefined
+    const exam = examId ? await this.examService.getExamById(examId) : undefined
 
     if (exam) await this.examService.updateExam(exam, { addQuiz: true })
 
@@ -30,9 +30,11 @@ export class QuestionController {
       correctAnswers,
       wrongAnswers,
       difficulty,
-      source: exam,
+      exam,
       field,
-      explanation
+      explanation,
+      source,
+      year,
     })
 
     await this.statisticService.updateStatistic({ newQuestion: 1 })
@@ -45,19 +47,21 @@ export class QuestionController {
     @Body() body: UpdateQuestionBody,
     @Param('questionId', ParseMonogoIdPipe) questionId: Types.ObjectId,
   ) {
-    const { questionText, correctAnswers, wrongAnswers, difficulty, source, field, explanation } = body
+    const { questionText, correctAnswers, year, wrongAnswers, difficulty, source, examId, field, explanation } = body
 
     const question = await this.questionService.getQuestionById(questionId)
-    const exam = source ? await this.examService.getExamById(source) : undefined
+    const exam = examId ? await this.examService.getExamById(examId) : undefined
 
     return await this.questionService.updateQuestion(question, {
       questionText,
       correctAnswers,
       wrongAnswers,
       difficulty,
-      source: exam,
+      exam: exam,
       field,
-      explanation
+      explanation,
+      source,
+      year
     })
   }
 
@@ -68,7 +72,7 @@ export class QuestionController {
     const question = await this.questionService.getQuestionById(questionId, { withExam: true })
 
     await this.questionService.deleteQuestionById(question)
-    if (question.source) await this.examService.updateExam(question.source, { deleteQuiz: true })
+    if (question.exam) await this.examService.updateExam(question.exam, { deleteQuiz: true })
 
     await this.statisticService.updateStatistic({ newQuestion: -1 })
 

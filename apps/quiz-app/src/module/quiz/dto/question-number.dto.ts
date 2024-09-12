@@ -1,5 +1,5 @@
 import { Type } from "class-transformer";
-import { IsString, ValidateNested, IsEnum, IsOptional, ArrayNotEmpty, IsBoolean, ArrayMaxSize } from "class-validator";
+import { IsString, ValidateNested, IsEnum, IsOptional, ArrayNotEmpty, IsBoolean, ArrayMaxSize, IsNumber, IsNumberString } from "class-validator";
 
 class Field {
 
@@ -42,6 +42,14 @@ export class QuestionsNumberQuery {
     @IsOptional()
     @IsBoolean()
     withNotes?: boolean
+
+    @IsOptional()
+    @IsString({ each: true })
+    sources?: string[]
+
+    @IsOptional()
+    @IsNumberString({}, { each: true })
+    years?: string[]
 
 
 }

@@ -1,80 +1,101 @@
-import { Level } from '@app/common/models';
+import { Level, Domain, Major, Course } from '@app/common/models';
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 
 @Injectable()
 export class LevelsService {
     constructor(
-        @InjectModel(Level.name) private readonly levelModel: Model<Level>
+        @InjectModel(Domain.name) private readonly domainModel: Model<Domain>,
+        @InjectModel(Level.name) private readonly levelModel: Model<Level>,
+        @InjectModel(Major.name) private readonly majorModel: Model<Major>,
+        @InjectModel(Course.name) private readonly courseModel: Model<Course>,
+
     ) { }
-
-
-
-    createLevel = async (name: string) => {
-        const level = new this.levelModel()
-
-        level.name = name;
-
-        return await level.save()
+    createDomain = async (name: string) => {
+        const domain = new this.domainModel({ name })
+        return domain.save()
     }
 
-    addMajor = async (
-        level: Level, options: { name: string, iconUrl?: string }
-    ) => {
-        const { name, iconUrl: icon } = options
-
-        level.major.push({ name, icon, courses: [] })
-
-        await level.save()
-
-        return { name, icon }
+    createLevel = async (name: string, domain: Domain) => {
+        const level = new this.levelModel({ name, domain })
+        return level.save()
     }
 
-    addCourse = async (
-        level: Level, majorIndex: number, course: { title: string, isFree: boolean }
-    ) => {
-
-
-        level.major[majorIndex].courses.push(course)
-
-
-
-        level.markModified('major')
-
-        await level.save()
-
-        return course
+    createMajor = async (name: string, levels: Level) => {
+        const major = new this.majorModel({ name, levels })
+        return major.save()
     }
 
-    async checkLevelExists(name: string) {
-        const level = await this.levelModel.findOne({ name })
-        if (level) throw new HttpException('Level already exists', 400)
+    createCourse = async (name: string, major: Major) => {
+        const course = new this.courseModel({ name, major })
+        return course.save()
     }
 
-    async getLevel(name: string) {
-        const level = await this.levelModel.findOne({ name }).select("+major")
+    updateDomain = async (domain: Domain, name: string) => {
+        domain.name = name
+        return domain.save()
+    }
+
+    updateLevel = async (level: Level, name: string) => {
+        level.name = name
+        return level.save()
+    }
+
+    updateMajor = async (major: Major, name: string) => {
+        major.name = name
+        return major.save()
+    }
+
+    updateCourse = async (course: Course, name: string) => {
+        course.name = name
+        return course.save()
+    }
+
+    deleteDomain = async (domain: Domain) => {
+        await domain.deleteOne()
+
+    }
+
+    deleteLevel = async (level: Level) => {
+        await level.deleteOne()
+    }
+
+    deleteMajor = async (major: Major) => {
+        await major.deleteOne()
+    }
+
+    deleteCourse = async (course: Course) => {
+        await course.deleteOne()
+    }
+
+    async getDomainById(id: Types.ObjectId) {
+        const domain = await this.domainModel.findById(id)
+        if (!domain) throw new HttpException('Domain not found', 404)
+        return domain
+    }
+
+    async getLevelById(id: Types.ObjectId) {
+        const level = await this.levelModel.findById(id)
         if (!level) throw new HttpException('Level not found', 404)
-
         return level
     }
 
-    checkMajorExists(level: Level, name: string) {
-        const major = level.major.find(major => major.name === name)
-        if (major) throw new HttpException('Major already exists', 400)
+    async getMajorById(id: Types.ObjectId) {
+        const major = await this.majorModel.findById(id)
+        if (!major) throw new HttpException('Major not found', 404)
+        return major
     }
 
-    getMajorIndex(level: Level, name: string) {
-        const majorIndex = level.major.findIndex(major => major.name === name)
-        if (majorIndex === -1) throw new HttpException('Major not found', 404)
-
-        return majorIndex
+    async getCourseById(id: Types.ObjectId) {
+        const course = await this.courseModel.findById(id)
+        if (!course) throw new HttpException('Course not found', 404)
+        return course
     }
 
-    checkCourseExists(level: Level, majorIndex: number, course: string) {
-        const courseExists = level.major[majorIndex].courses.find(c => c.title === course)
-        if (courseExists) throw new HttpException('Course already exists', 400)
-    }
+
+
+
 
 
 
