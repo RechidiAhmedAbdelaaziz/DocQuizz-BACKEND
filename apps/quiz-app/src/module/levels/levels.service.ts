@@ -23,7 +23,7 @@ export class LevelsService {
     }
 
     getMajors = async (level?: Level) => {
-        const filter = level ? { levels: level } : {};
+        const filter = level ? { level: level } : {};
         return await this.majorModel.find(filter);
     }
 
