@@ -1,4 +1,4 @@
-import { Body, Controller, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
 import { ExamAdminService } from './exam-admin.service';
 import { CreateExamBody } from './dto/create-exam.dto';
 import { ParseMonogoIdPipe } from '@app/common';
@@ -41,5 +41,17 @@ export class ExamAdminController {
     const updatedExam = await this.examAdminService.updateExam(exam, { time, major, year, city });
 
     return updatedExam;
+  }
+
+  @Delete(':id')
+  async deleteExam(
+    @Param('id', ParseMonogoIdPipe) id: Types.ObjectId
+  ) {
+    const exam = await this.examAdminService.getExamById(id);
+    await this.examAdminService.deleteExam(exam);
+
+    await this.statisticService.updateStatistic({ newExam: -1 });
+
+    return { message: 'Exam deleted successfully' };
   }
 }

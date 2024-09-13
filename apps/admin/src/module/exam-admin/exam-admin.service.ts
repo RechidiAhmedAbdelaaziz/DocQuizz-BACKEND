@@ -55,6 +55,10 @@ export class ExamAdminService {
         return await exam.save();
     }
 
+    deleteExam = async (exam: Exam) => await exam.deleteOne();
+
+
+
     async checkByName(title: string) {
         const exam = await this.examModel.findOne({ title });
         if (exam) throw new HttpException('Exam already exists', 400);
@@ -66,10 +70,9 @@ export class ExamAdminService {
         return exam;
     }
 
-    //remove string from string
-    async removeFromString(str: string, remove: string) {
-        return str.replace(remove, '');
-    }
+
+
+
 
 
 
