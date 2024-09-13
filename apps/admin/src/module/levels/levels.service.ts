@@ -22,8 +22,8 @@ export class LevelsService {
         return level.save()
     }
 
-    createMajor = async (name: string, levels: Level) => {
-        const major = new this.majorModel({ name, levels })
+    createMajor = async (name: string, level: Level) => {
+        const major = new this.majorModel({ name, level })
         return major.save()
     }
 
