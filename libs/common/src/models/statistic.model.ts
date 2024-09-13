@@ -25,4 +25,7 @@ export class Statistic extends AbstractSchema {
     @Prop({ type: Number, default: 0 })
     totalDomain: number
 
+    @Prop({ type: Number, default: 0 })
+    totalSources: number
+
 }
