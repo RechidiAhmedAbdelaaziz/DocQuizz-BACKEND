@@ -57,7 +57,18 @@ export class QuestionController {
     const { questionText, correctAnswers, year, wrongAnswers, difficulty, sourceId, examId, courseId, explanation } = body
 
     const question = await this.questionService.getQuestionById(questionId)
+
     const exam = examId ? await this.examService.getExamById(examId) : undefined
+    if (exam) {
+      if (question.exam && exam.id !== question.exam.id) {
+        await this.examService.updateExam(exam, { addQuiz: true })
+        await this.examService.updateExam(question.exam, { deleteQuiz: true })
+      }
+      if (!question.exam) await this.examService.updateExam(exam, { addQuiz: true })
+    }
+    else if (question.exam) await this.examService.updateExam(question.exam, { deleteQuiz: true })
+
+
     const source = sourceId ? await this.sourceService.getSourceById(sourceId) : undefined
     const course = courseId ? await this.levelService.getCourseById(courseId) : undefined
 

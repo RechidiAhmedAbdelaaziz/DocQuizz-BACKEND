@@ -22,9 +22,14 @@ export class LevelsService {
         return await this.levelModel.find(filter);
     }
 
-    getMajors = async (level?: Level) => {
-        const filter = level ? { level: level } : {};
-        return await this.majorModel.find(filter);
+    getMajors = async (level?: Level, domain?: Domain) => {
+        if (level) return await this.majorModel.find({ level });
+
+        if (domain) return await this.majorModel
+            .find({ level: { $in: await this.levelModel.find({ domain }) } })
+
+        return await this.majorModel.find()
+
     }
 
     getCourses = async (major?: Major) => {

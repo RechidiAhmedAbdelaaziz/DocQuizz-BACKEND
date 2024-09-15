@@ -41,7 +41,7 @@ export class ExamAdminService {
 
         const major = details.major || exam.title.split(' | ')[0].replace('Exam: ', '');
         const year = details.year || exam.year;
-        const city = details.city || exam.title.split(' | ')[1]
+        const city = details.city || exam.title.split(' | ')[2]
 
 
 

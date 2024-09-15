@@ -29,11 +29,12 @@ export class LevelsController {
 
   @Get('majors') // * LEVELS | Get ~ {{host}}/levels/60f7b3b3b3b3b3b3b3b3
   async getMajors(@Query() query: ListMajorsQuery) {
-    const { levelId } = query;
+    const { levelId, domainId } = query;
 
     const level = levelId ? await this.levelsService.getLevelById(levelId) : undefined;
+    const domain = domainId ? await this.levelsService.getDomainById(domainId) : undefined;
 
-    return await this.levelsService.getMajors(level);
+    return await this.levelsService.getMajors(level, domain);
   }
 
   @Get('courses') // * LEVELS | Get ~ {{host}}/levels/60f7b3b3b3b3b3b3b3b3b3
@@ -45,7 +46,7 @@ export class LevelsController {
     return await this.levelsService.getCourses(major);
   }
 
-  
+
 
 
 

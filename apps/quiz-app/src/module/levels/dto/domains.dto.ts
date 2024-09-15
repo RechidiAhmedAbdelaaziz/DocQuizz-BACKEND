@@ -11,6 +11,10 @@ export class ListMajorsQuery {
     @IsOptional()
     @IsMongoId()
     levelId?: Types.ObjectId;
+
+    @IsOptional()
+    @IsMongoId()
+    domainId?: Types.ObjectId;
 }
 
 export class ListCoursesQuery {
