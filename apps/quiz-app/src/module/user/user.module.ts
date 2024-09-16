@@ -3,10 +3,11 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { DatabaseModule } from '@app/common';
 import { User } from '@app/common/models';
+import { LevelsModule } from '../levels/levels.module';
 
 @Module({
   imports: [
-    DatabaseModule.forFeature([{ model: User }])
+    DatabaseModule.forFeature([{ model: User }]), LevelsModule
   ],
   controllers: [UserController],
   providers: [UserService],

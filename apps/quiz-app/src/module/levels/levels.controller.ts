@@ -1,8 +1,7 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { LevelsService } from './levels.service';
-import { CurrentDomain, CurrentUser, HttpAuthGuard, ParseMonogoIdPipe } from '@app/common';
+import { CurrentDomain,  HttpAuthGuard } from '@app/common';
 import { Types } from 'mongoose';
-import { query } from 'express';
 import { ListCoursesQuery, ListLevelsQuery, ListMajorsQuery } from './dto/domains.dto';
 
 

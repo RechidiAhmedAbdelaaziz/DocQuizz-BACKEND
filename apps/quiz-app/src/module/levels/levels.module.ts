@@ -10,5 +10,7 @@ import { Level, Course, Domain, Major } from '@app/common/models';
   ],
   controllers: [LevelsController],
   providers: [LevelsService],
+  exports: [LevelsService],
+  
 })
 export class LevelsModule { }
