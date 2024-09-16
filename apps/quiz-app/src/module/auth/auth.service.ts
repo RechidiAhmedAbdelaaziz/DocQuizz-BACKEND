@@ -119,7 +119,7 @@ export class AuthService {
             role: user.role,
             id: user._id,
             isPro: user.isPro,
-            domain: user.domain._id,
+            domain: user.domain?._id,
         }
 
         const accessToken = this.jwtService.sign(payload)

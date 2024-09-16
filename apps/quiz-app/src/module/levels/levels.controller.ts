@@ -1,6 +1,6 @@
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, HttpException, Param, Query, UseGuards } from '@nestjs/common';
 import { LevelsService } from './levels.service';
-import { CurrentDomain,  HttpAuthGuard } from '@app/common';
+import { CurrentDomain, HttpAuthGuard } from '@app/common';
 import { Types } from 'mongoose';
 import { ListCoursesQuery, ListLevelsQuery, ListMajorsQuery } from './dto/domains.dto';
 
@@ -37,9 +37,10 @@ export class LevelsController {
   }
 
   @Get('majors/me') // * LEVELS | Get ~ {{host}}/levels/60f7b3b3b3b3b3b3b3b3
-  async getMyMajors(@CurrentDomain() domainId: Types.ObjectId) {
+  async getMyMajors(@CurrentDomain() domainId?: Types.ObjectId) {
+    if (!domainId) throw new HttpException('Select domain before', 400);
     
-    const domain =  await this.levelsService.getDomainById(domainId) ;
+    const domain = await this.levelsService.getDomainById(domainId);
 
     return await this.levelsService.getMajors(undefined, domain);
   }

@@ -24,7 +24,7 @@ export class User extends AbstractSchema {
     password: string;
 
     @Prop({ type: Schema.Types.ObjectId, ref: Domain.name })
-    domain: Domain
+    domain?: Domain
 
     @Prop({ type: Schema.Types.ObjectId, ref: Level.name })
     level: Level
