@@ -1,7 +1,7 @@
 import { Schema as DSchema, Prop, raw } from "@nestjs/mongoose";
 import { AbstractSchema } from "@app/common/shared/abstract.model";
 import { UserRoles } from "../shared";
-import { Major } from "./levels.model";
+import { Level, Major , Domain } from "./levels.model";
 import { Schema } from "mongoose";
 
 
@@ -23,13 +23,12 @@ export class User extends AbstractSchema {
     @Prop({ select: false })
     password: string;
 
-    @Prop(
-        raw({ domain: String, level: String, faculty: String }))
-    speciality: {
-        domain: string;
-        level: string;
-        faculty: string;
-    }
+    @Prop({ type: Schema.Types.ObjectId, ref: Domain.name })
+    domain: Domain
+
+    @Prop({ type: Schema.Types.ObjectId, ref: Level.name })
+    level: Level
+    
 
     @Prop({ default: 0 })
     quizez: number;

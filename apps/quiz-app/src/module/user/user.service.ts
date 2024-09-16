@@ -1,5 +1,5 @@
 import { compareHash, hashData } from '@app/common';
-import { Major, User } from '@app/common/models';
+import { Domain, Level, Major, User } from '@app/common/models';
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -18,22 +18,20 @@ export class UserService {
             isPro?: boolean;
             name?: string;
             email?: string;
-            speciality?: {
-                domain: string;
-                level: string;
-                faculty: string;
-            };
+            level?: Level;
             createQuiz?: boolean;
             createPlaylist?: boolean;
+            domain?: Domain
         }
     ) => {
-        const { isPro, name, email, speciality, createQuiz, createPlaylist } = updates;
+        const { isPro, name, email, level, createQuiz, createPlaylist, domain } = updates;
 
 
         if (isPro !== undefined) user.isPro = isPro;
         if (name) user.name = name;
         if (email) user.email = email;
-        if (speciality) user.speciality = speciality;
+        if (level) user.level = level;
+        if (domain) user.domain = domain;
         if (createQuiz) user.quizez++;
         if (createPlaylist) user.playlists++;
 

@@ -5,11 +5,15 @@ import { Types } from 'mongoose';
 import { UpdateUserBody } from './dto/update-user.dto';
 import { UpdatePasswordBody } from './dto/update-password.dto';
 import { UpdateAnalyseBody } from './dto/update-analyse.dto';
+import { LevelsService } from '../levels/levels.service';
 
 @UseGuards(HttpAuthGuard)
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
+  constructor(private readonly userService: UserService,
+
+    private readonly levelService: LevelsService
+  ) { }
 
 
   @Get('me') //* USER | Get profile ~ {{host}}/user/me
@@ -26,11 +30,17 @@ export class UserController {
     @CurrentUser() userId: Types.ObjectId,
     @Body() updates: UpdateUserBody
   ) {
-    if (updates.email) await this.userService.checkEmail(updates.email)
+    const { levelId, email, name, domainId } = updates;
 
     const user = await this.userService.getUserById(userId);
 
-    return await this.userService.updateUser(user, updates)
+
+    if (email) await this.userService.checkEmail(updates.email)
+
+    const level = levelId ? await this.levelService.getLevelById(levelId) : undefined;
+    const domain = domainId ? await this.levelService.getDomainById(domainId) : undefined;
+
+    return await this.userService.updateUser(user, { email, name, level , domain})
   }
 
   @Patch('me/password') //* USER | Update password ~ {{host}}/user/me/password

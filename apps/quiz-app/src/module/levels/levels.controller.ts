@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { LevelsService } from './levels.service';
-import { HttpAuthGuard, ParseMonogoIdPipe } from '@app/common';
+import { CurrentDomain, CurrentUser, HttpAuthGuard, ParseMonogoIdPipe } from '@app/common';
 import { Types } from 'mongoose';
 import { query } from 'express';
 import { ListCoursesQuery, ListLevelsQuery, ListMajorsQuery } from './dto/domains.dto';
@@ -36,6 +36,16 @@ export class LevelsController {
 
     return await this.levelsService.getMajors(level, domain);
   }
+
+  @Get('majors/me') // * LEVELS | Get ~ {{host}}/levels/60f7b3b3b3b3b3b3b3b3
+  async getMyMajors(@CurrentDomain() domainId: Types.ObjectId) {
+    
+    const domain =  await this.levelsService.getDomainById(domainId) ;
+
+    return await this.levelsService.getMajors(undefined, domain);
+  }
+
+
 
   @Get('courses') // * LEVELS | Get ~ {{host}}/levels/60f7b3b3b3b3b3b3b3b3b3
   async getCourses(@Query() query: ListCoursesQuery) {

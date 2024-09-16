@@ -4,5 +4,6 @@ import { UserRoles } from "./user.roles";
 export type JwtPayload = {
     id: Types.ObjectId,
     role: UserRoles,
-    isPro: boolean
+    isPro: boolean,
+    domain: Types.ObjectId,
 }

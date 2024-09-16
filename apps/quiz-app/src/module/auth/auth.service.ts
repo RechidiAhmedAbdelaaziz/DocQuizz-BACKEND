@@ -115,7 +115,12 @@ export class AuthService {
     }
 
     async generateTokens(user: User) {
-        const payload: JwtPayload = { role: user.role, id: user._id, isPro: user.isPro }
+        const payload: JwtPayload = {
+            role: user.role,
+            id: user._id,
+            isPro: user.isPro,
+            domain: user.domain._id,
+        }
 
         const accessToken = this.jwtService.sign(payload)
         const refreshToken = v4()
@@ -142,7 +147,7 @@ export class AuthService {
     }
 
     generateAdminToken() {
-        const payload: JwtPayload = { role: UserRoles.ADMIN, id: new Types.ObjectId(), isPro: true }
+        const payload: JwtPayload = { role: UserRoles.ADMIN, id: new Types.ObjectId(), isPro: true, domain: new Types.ObjectId() }
         return this.jwtService.sign(payload)
     }
 

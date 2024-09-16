@@ -1,6 +1,6 @@
 import { IsName } from "@app/common";
-import { Type } from "class-transformer";
-import { IsEmail, IsOptional, IsString, ValidateNested } from "class-validator";
+import { IsEmail, IsMongoId, IsOptional } from "class-validator";
+import { Types } from "mongoose";
 
 export class UpdateUserBody {
     @IsOptional()
@@ -12,22 +12,11 @@ export class UpdateUserBody {
     email?: string;
 
     @IsOptional()
-    @ValidateNested()
-    @Type(() => Speciality)
-    speciality?: {
-        domain: string;
-        level: string;
-        faculty: string;
-    }
+    @IsMongoId()
+    levelId: Types.ObjectId
+
+    @IsOptional()
+    @IsMongoId()
+    domainId: Types.ObjectId
 }
 
-class Speciality {
-    @IsString()
-    domain: string;
-
-    @IsString()
-    level: string;
-
-    @IsString()
-    faculty: string;
-}
