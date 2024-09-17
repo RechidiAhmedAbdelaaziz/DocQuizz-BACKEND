@@ -61,7 +61,7 @@ export class QuestionService {
     }
 
     generateFilterQuery(filters: QuestionFilter): FilterQuery<Question> {
-        const { courses, difficulties, types, sources, exam, years, withExplanation, ids, keywords } = filters;
+        const { courses, difficulties, types, sources, exam, year, withExplanation, ids, keywords } = filters;
 
         const filter: FilterQuery<Question> = {};
 
@@ -72,7 +72,7 @@ export class QuestionService {
         if (exam) filter.exam = exam;
         if (withExplanation) filter.explanation = { $ne: '', };
         if (sources) filter.source = { $in: sources };
-        if (years) filter.year = { $in: years };
+        if (year) filter.year = { $gte: year };
         if (keywords) {
             const keywordsArray = keywords.split(' ');
             filter.$and = keywordsArray.map(keyword => ({

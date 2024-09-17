@@ -29,7 +29,7 @@ export class QuizController {
     @CurrentUser() userId: Types.ObjectId,
     @Body() body: CreateQuizBody,
   ) {
-    const { title, courses, difficulties, types, sources, years, alreadyAnsweredFalse, withExplanation, withNotes } = body
+    const { title, courses, difficulties, types, sources, year, alreadyAnsweredFalse, withExplanation, withNotes } = body
 
     const ids = []
     let sendIds: boolean = false
@@ -47,7 +47,7 @@ export class QuizController {
 
     }
 
-    const questionFilter = this.questionService.generateFilterQuery({ courses, difficulties, types, withExplanation, ids: sendIds ? ids : undefined, sources, years })
+    const questionFilter = this.questionService.generateFilterQuery({ courses, difficulties, types, withExplanation, ids: sendIds ? ids : undefined, sources, year })
 
 
     const { data: questions } = await this.questionService.getQuestions(questionFilter, { limit: 500, min: 1 })
@@ -74,10 +74,9 @@ export class QuizController {
 
 
 
-    const { courses, difficulties, types, sources, years: strings, alreadyAnsweredFalse, withExplanation, withNotes } = queries
+    const { courses, difficulties, types, sources, year: yearString, alreadyAnsweredFalse, withExplanation, withNotes } = queries
 
-    let years: number[] = []
-    if (strings) years = strings.map(y => parseInt(y))
+    const year = yearString ? parseInt(yearString) : undefined
 
 
     const ids: Types.ObjectId[] = [];
@@ -98,7 +97,7 @@ export class QuizController {
     }
 
     const questionFilter = this.questionService.generateFilterQuery({
-      courses, difficulties, types, withExplanation, ids: sendIds ? ids : undefined, sources, years
+      courses, difficulties, types, withExplanation, ids: sendIds ? ids : undefined, sources, year
     })
 
     const questions = await this.questionService.getQuestionsNumber(questionFilter);

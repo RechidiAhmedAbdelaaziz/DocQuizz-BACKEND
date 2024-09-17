@@ -10,6 +10,6 @@ export interface QuestionFilter {
     ids?: Types.ObjectId[],
     keywords?: string,
     sources?: Types.ObjectId[],
-    years?: number[]
+    year?: number
 }
 

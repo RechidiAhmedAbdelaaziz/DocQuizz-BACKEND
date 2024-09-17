@@ -39,8 +39,8 @@ export class CreateQuizBody {
     sources?: Types.ObjectId[]
 
     @IsOptional()
-    @IsNumber({}, { each: true })
-    years?: number[]
+    @IsNumber()
+    year?: number
 
 
 }

@@ -35,8 +35,8 @@ export class QuestionsNumberQuery {
     sources?: Types.ObjectId[]
 
     @IsOptional()
-    @IsNumberString({}, { each: true })
-    years?: string[]
+    @IsNumberString()
+    year?: string
 
 
 }

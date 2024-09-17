@@ -25,7 +25,6 @@ export class OAuthController {
 
   @Get('google/callback') //* GOOGLE | Auth ~ {{host}}/o-auth/google/callback
   async googleCallback(@Query() query: GoogleAuthQuery, @Req() req: Request) {
-    console.log("I'm here >>>", req.headers)
 
     const details = await this.oAuthService.getDataFromGoogle(query.code)
     try {
