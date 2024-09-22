@@ -106,6 +106,11 @@ export class PlaylistService {
             })
             .populate({
                 path: 'questions',
+                populate: [
+                    { path: 'exam' },
+                    { path: 'course' },
+                    { path: 'source' }
+                ]
             })
 
         const playlist = await query.exec();

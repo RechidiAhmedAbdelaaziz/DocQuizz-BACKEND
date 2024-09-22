@@ -132,6 +132,11 @@ export class QuizService {
             })
             .populate({
                 path: 'questions.question',
+                populate: [
+                    { path: 'source' },
+                    { path: 'exam' },
+                    { path: 'course' }
+                ]
             })
 
         const quiz = await query.exec()
