@@ -66,6 +66,8 @@ export class UserService {
         const { withPassword, withAnalyse } = options || {}
 
         const query = this.userModel.findById(id)
+            .populate('domain')
+            .populate('level')
 
         if (withPassword) query.select('password')
         if (withAnalyse) query.select('analyse')

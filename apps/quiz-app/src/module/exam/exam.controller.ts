@@ -19,7 +19,7 @@ export class ExamController {
   async getExams(
     @Query() query: ListExamQuery
   ) {
-    const { keys: keywords, limit, page } = query;
+    const { keywords, limit, page } = query;
 
     return await this.examService.getExams({ keywords }, { limit, page });
   }

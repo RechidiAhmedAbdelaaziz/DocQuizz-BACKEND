@@ -4,5 +4,5 @@ import { IsOptional, IsString } from "class-validator";
 export class ListExamQuery extends PaginationQuery {
     @IsOptional()
     @IsString()
-    keys: string
+    keywords: string
 }
