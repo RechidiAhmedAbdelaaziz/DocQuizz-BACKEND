@@ -50,10 +50,8 @@ export class PlaylistController {
 
     return {
       pagination,
-      data: {
-        playlist: playlistData,
-        data
-      }
+      object: playlistData,
+      data,
     }
   }
 

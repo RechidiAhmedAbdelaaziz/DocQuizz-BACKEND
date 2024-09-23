@@ -125,10 +125,8 @@ export class QuizController {
 
     return {
       pagination,
-      data: {
-        quiz: quizData,
-        data,
-      }
+      object: quizData,
+      data,
     }
   }
 

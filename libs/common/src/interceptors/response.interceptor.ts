@@ -7,7 +7,8 @@ interface Response {
   tokens?: { refreshToken: string, accessToken: string }
   message?: string
   user?: any
-  pagination?: { page?: number; length?: number; next?: number; prev?: number }
+  pagination?: { page?: number; length?: number; next?: number; prev?: number },
+  object: any,
   data?: any
 }
 
@@ -26,7 +27,7 @@ export class ResponseInterceptor implements NestInterceptor {
     const statusCode = res.statusCode;
 
 
-    const { tokens, message, pagination, data } = response;
+    const { tokens, message, pagination, data, object } = response;
     response.message = undefined
     response.tokens = undefined
 
@@ -41,6 +42,7 @@ export class ResponseInterceptor implements NestInterceptor {
       message,
       tokens,
       pagination,
+      object,
       data: data || (dataIsEmpty ? undefined : response)
     }
   }

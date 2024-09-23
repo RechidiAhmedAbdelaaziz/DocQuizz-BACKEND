@@ -37,7 +37,8 @@ export class ExamController {
 
     return {
       pagination,
-      data: { exam, data }
+      object: exam,
+      data: data,
     }
   }
 }
