@@ -63,7 +63,7 @@ export class NotesController {
     const user = await this.userService.getUserById(userId)
     const question = await this.questionService.getQuestionById(questionId)
 
-    const note = await this.notesService.getNote(user, question)
+    const note = await this.notesService.createNote(user, question)
 
     return { data: note }
 

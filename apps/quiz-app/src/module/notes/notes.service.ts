@@ -12,8 +12,8 @@ export class NotesService {
     createNote = async (
         user: User,
         question: Question,
-        details: {
-            note: string,
+        details?: {
+            note?: string,
             imageUrl?: string
         }
     ) => {
@@ -22,20 +22,17 @@ export class NotesService {
             (await this.noteModel.findOne({ user, question }))
             || new this.noteModel({ user, question, notes: [] })
 
-        note.notes.push({
-            note: details.note,
-            imgUrl: details.imageUrl,
-            index: note.notes.length
-        })
+        if (details && (details.note || details.imageUrl))
+            note.notes.push({
+                note: details.note,
+                imgUrl: details.imageUrl,
+                index: note.notes.length
+            })
 
         return await note.save()
 
     }
 
-    getNote = async (user: User, question: Question) => {
-        const note = await this.noteModel.findOne({ user, question })
-        return note
-    }
 
     getNoteById = async (id: Types.ObjectId, user: User) => {
         const note = await this.noteModel.findOne({ _id: id, user })
