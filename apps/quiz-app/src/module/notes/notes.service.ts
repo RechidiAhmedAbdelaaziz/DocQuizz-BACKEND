@@ -52,6 +52,7 @@ export class NotesService {
         const { newNote, newImageUrl, deleteNote } = updates
 
         const noteToUpdate = note.notes.find(n => n.index === index)
+        if (!noteToUpdate) throw new HttpException('Note not found', 404)
 
         if (newNote) noteToUpdate.note = newNote
         if (newImageUrl) noteToUpdate.imgUrl = newImageUrl
