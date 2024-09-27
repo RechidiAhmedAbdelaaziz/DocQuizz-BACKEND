@@ -55,6 +55,12 @@ export class Quiz extends AbstractSchema {
         }
     }[]
 
+    @Prop({ default: [] })
+    coerrectIndexes: number[]
+
+    @Prop({ default: [] })
+    wrongIndexes: number[]
+
     // last quiestion has been answered index
     @Prop({ default: 0 })
     lastAnsweredIndex: number

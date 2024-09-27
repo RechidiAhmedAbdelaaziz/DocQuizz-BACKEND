@@ -76,6 +76,7 @@ export class QuizService {
 
             questionStatus.result = { isCorrect, choices, time, isAnswerd: true }
 
+
             quiz.result.answered = quiz.questions.filter(q => q.result.isAnswerd).length
             quiz.result.time = quiz.questions.reduce((acc, q) => acc + (q.result?.time || 0), 0)
             quiz.result.correct = quiz.questions.filter(q => q.result?.isCorrect).length
@@ -83,6 +84,18 @@ export class QuizService {
 
             quiz.markModified('questions')
             quiz.markModified('result')
+
+            const index = quiz.questions.findIndex(q => q.question._id.equals(questionId))
+            if (isCorrect) {
+                quiz.coerrectIndexes.push(index)
+                quiz.markModified('coerrectIndexes')
+            } else {
+                quiz.wrongIndexes.push(index)
+                quiz.markModified('wrongIndexes')
+            }
+
+
+
         }
 
         const { questions, ...details } = (await quiz.save()).toJSON()
