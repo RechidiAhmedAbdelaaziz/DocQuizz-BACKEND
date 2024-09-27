@@ -21,7 +21,7 @@ export class QuestionController {
 
   @Post() //* QUESTION | Create ~ {{host}}/question
   async createQuestion(@Body() body: CreateQuestionBody) {
-    const { questionText, correctAnswers, year, wrongAnswers, difficulty, examId, sourceId, courseId, explanation } = body
+    const { questionText, answers, year, difficulty, examId, sourceId, courseId, explanation } = body
 
     await this.questionService.checkQuestionExists(questionText)
 
@@ -34,8 +34,7 @@ export class QuestionController {
 
     const question = await this.questionService.createQuestion({
       questionText,
-      correctAnswers,
-      wrongAnswers,
+      answers,
       difficulty,
       exam,
       course,
@@ -54,7 +53,7 @@ export class QuestionController {
     @Body() body: UpdateQuestionBody,
     @Param('questionId', ParseMonogoIdPipe) questionId: Types.ObjectId,
   ) {
-    const { questionText, correctAnswers, year, wrongAnswers, difficulty, sourceId, examId, courseId, explanation } = body
+    const { questionText, answers, year, difficulty, sourceId, examId, courseId, explanation } = body
 
     const question = await this.questionService.getQuestionById(questionId)
 
@@ -74,8 +73,8 @@ export class QuestionController {
 
     return await this.questionService.updateQuestion(question, {
       questionText,
-      correctAnswers,
-      wrongAnswers,
+      answers,
+
       difficulty,
       exam: exam,
       course,

@@ -17,16 +17,16 @@ export class Question extends AbstractSchema {
     questionText: string
 
     @Prop()
-    correctAnswers: string[]
-
-    @Prop()
-    wrongAnswers: string[]
+    answers: {
+        text: string,
+        isCorrect: boolean,
+    }[]
 
     @Prop()
     difficulty: "easy" | "medium" | "hard"
 
     @Prop()
-    type: "QCM" | "QCU"
+    type: "QCM" | "QCU" 
 
     @Prop({ type: Schema.Types.ObjectId, ref: Exam.name })
     exam?: Exam

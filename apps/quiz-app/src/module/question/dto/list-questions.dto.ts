@@ -1,5 +1,5 @@
 import { PaginationQuery } from "@app/common/utils/pagination";
-import { IsBoolean, IsEnum, IsMongoId, IsNumber, IsNumberString, IsOptional, IsString, ValidateNested } from "class-validator";
+import { IsBoolean, IsEnum, IsMongoId, IsNumberString, IsOptional, IsString, ValidateNested } from "class-validator";
 import { Types } from "mongoose";
 
 

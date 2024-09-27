@@ -1,6 +1,7 @@
 import { Type } from "class-transformer";
 import { IsString, IsMongoId, IsEnum, IsOptional, ArrayNotEmpty, ValidateNested, IsNumber } from "class-validator";
 import { Types } from "mongoose";
+import { QuestionAnswer } from "./create-question.dto";
 
 
 
@@ -12,12 +13,11 @@ export class UpdateQuestionBody {
 
     @IsOptional()
     @ArrayNotEmpty()
-    @IsString({ each: true })
-    correctAnswers: string[]
+    @ValidateNested()
+    @Type(() => QuestionAnswer)
+    answers: QuestionAnswer[];
 
-    @IsOptional()
-    @IsString({ each: true })
-    wrongAnswers: string[]
+
 
     @IsOptional()
     @IsEnum(["easy", "medium", "hard"])

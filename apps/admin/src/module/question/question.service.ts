@@ -15,15 +15,16 @@ export class QuestionService {
     createQuestion = async (
         details: QuestionDetails
     ) => {
-        const { questionText, year, correctAnswers, wrongAnswers, difficulty, exam, source, course, explanation } = details
+        const { questionText, year, answers, difficulty, exam, source, course, explanation } = details
 
         const question = new this.questionModel()
 
+        const correctAnswersNumber = answers.filter(answer => answer.isCorrect).length
+
         question.questionText = questionText
-        question.correctAnswers = correctAnswers
-        question.wrongAnswers = wrongAnswers
+        question.answers = answers
         question.difficulty = difficulty
-        question.type = correctAnswers.length > 1 ? "QCM" : "QCU"
+        question.type = correctAnswersNumber > 1 ? "QCM" : "QCU"
         question.exam = exam
         question.course = course
         question.explanation = explanation ?? ''
@@ -37,12 +38,11 @@ export class QuestionService {
         question: Question,
         details: QuestionDetails
     ) => {
-        const { questionText, correctAnswers, year, wrongAnswers, difficulty, exam, source, course, explanation } = details
+        const { questionText, answers, year, difficulty, exam, source, course, explanation } = details
 
         question.questionText = questionText
-        question.correctAnswers = correctAnswers
-        question.type = correctAnswers.length > 1 ? "QCM" : "QCU"
-        question.wrongAnswers = wrongAnswers
+        question.answers = answers
+        question.type = (answers.filter(answer => answer.isCorrect).length > 1) ? "QCM" : "QCU"
         question.difficulty = difficulty
         question.exam = exam
         question.source = source
