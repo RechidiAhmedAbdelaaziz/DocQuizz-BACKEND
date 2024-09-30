@@ -1,15 +1,24 @@
 import { Course, Exam, Source } from "@app/common/models";
-import { QuestionAnswer } from "../dto/create-question.dto";
+import { Difficulty, QuestionType } from "@app/common";
+
+export interface QuestionAnswer {
+    text: string,
+    isCorrect: boolean
+}
+
+export interface SubQuestion {
+    text: string,
+    answers: QuestionAnswer[],
+    difficulty: Difficulty,
+    type?: QuestionType,
+    explanation?: string
+}
 
 export interface QuestionDetails {
-    questionText: string,
-    answers: QuestionAnswer[],
-    difficulty: "easy" | "medium" | "hard",
+    caseText?: string,
+    questions: SubQuestion[],
     exam?: Exam,
     course?: Course,
-    explanation?: string,
     source?: Source,
     year?: number,
-
-
 }

@@ -3,6 +3,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { QuestionDetails } from './interface/question-details';
+import { QuestionType } from '@app/common';
 
 @Injectable()
 export class QuestionService {
@@ -12,46 +13,66 @@ export class QuestionService {
 
 
 
-    createQuestion = async (
-        details: QuestionDetails
+    createOrUpdateQuestion = async (
+        details: QuestionDetails, questionToUpdate?: Question
     ) => {
-        const { questionText, year, answers, difficulty, exam, source, course, explanation } = details
+        const { caseText, year, questions, exam, source, course } = details
+        const question = questionToUpdate || new this.questionModel({ difficulties: [] })
 
-        const question = new this.questionModel()
 
-        const correctAnswersNumber = answers.filter(answer => answer.isCorrect).length
+        for (let i = 0; i < questions.length; i++) {
+            const correctAnswers = questions[i].answers.filter(answer => answer.isCorrect).length
+            questions[i].type = correctAnswers > 1 ? QuestionType.QCM : QuestionType.QCU
+            question.difficulties.push(questions[i].difficulty)
+            if (questions[i].explanation) question.withExplanation = true
+        }
 
-        question.questionText = questionText
-        question.answers = answers
-        question.difficulty = difficulty
-        question.type = correctAnswersNumber > 1 ? "QCM" : "QCU"
+
+
+        if (caseText) {
+            question.caseText = caseText
+            question.type = QuestionType.CAS_CLINIQUE
+        } else {
+            question.type = questions[0].type
+        }
+
+        question.questions = questions
         question.exam = exam
         question.course = course
-        question.explanation = explanation ?? ''
         question.source = source
         question.year = year
 
         return question.save()
     }
 
-    updateQuestion = async (
-        question: Question,
-        details: QuestionDetails
-    ) => {
-        const { questionText, answers, year, difficulty, exam, source, course, explanation } = details
+    // updateQuestion = async (
+    //     question: Question,
+    //     details: QuestionDetails
+    // ) => {
+    //     const { year, exam, source, course, questions, caseText } = details
 
-        question.questionText = questionText
-        question.answers = answers
-        question.type = (answers.filter(answer => answer.isCorrect).length > 1) ? "QCM" : "QCU"
-        question.difficulty = difficulty
-        question.exam = exam
-        question.source = source
-        question.course = course
-        question.explanation = explanation
-        question.year = year
 
-        return question.save()
-    }
+    //     // modify type for each question in questions
+    //     for (let i = 0; i < questions.length; i++) {
+    //         const correctAnswers = questions[i].answers.filter(answer => answer.isCorrect).length
+    //         questions[i].type = correctAnswers > 1 ? QuestionType.QCM : QuestionType.QCU
+    //     }
+
+    //     if (caseText) {
+    //         question.caseText = caseText
+    //         question.type = QuestionType.CAS_CLINIQUE
+    //     } else {
+    //         question.type = questions[0].type
+    //     }
+
+    //     question.questions = questions
+    //     question.exam = exam
+    //     question.source = source
+    //     question.course = course
+    //     question.year = year
+
+    //     return question.save()
+    // }
 
     deleteQuestionById = async (
         question: Question
@@ -59,10 +80,10 @@ export class QuestionService {
         await question.deleteOne()
     }
 
-    async checkQuestionExists(questionText: string) {
-        const question = await this.questionModel.findOne({ questionText })
-        if (question) throw new HttpException('Question already exists', 400)
-    }
+    // async checkQuestionExists(questionText: string) {
+    //     const question = await this.questionModel.findOne({ questionText })
+    //     if (question) throw new HttpException('Question already exists', 400)
+    // }
 
     async getQuestionById(id: Types.ObjectId, options?: { withExam: boolean }) {
         const { withExam } = options || { withExam: false }

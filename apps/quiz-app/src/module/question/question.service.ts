@@ -67,10 +67,10 @@ export class QuestionService {
 
         if (ids) filter._id = { $in: ids };
         if (courses) filter.course = { $in: courses };
-        if (difficulties) filter.difficulty = { $in: difficulties };
+        if (difficulties) filter.difficulties = { $in: difficulties };
         if (types) filter.type = { $in: types };
         if (exam) filter.exam = exam;
-        if (withExplanation) filter.explanation = { $ne: '', };
+        if (withExplanation) filter.withExplanation = withExplanation;
         if (sources) filter.source = { $in: sources };
         if (year) filter.year = { $gte: year };
         if (keywords) {

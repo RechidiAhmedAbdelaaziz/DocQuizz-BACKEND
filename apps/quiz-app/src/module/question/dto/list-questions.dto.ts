@@ -6,8 +6,9 @@ import { Types } from "mongoose";
 
 export class ListQuestionsQuery extends PaginationQuery {
     @IsOptional()
-    @IsEnum(['QCM', 'QCU'], { each: true })
-    types?: ('QCM' | 'QCU')[];
+    // @IsEnum(['QCM', 'QCU', 'Cas Clinique'], { each: true })
+    types?: ('QCM' | 'QCU' | 'Cas Clinique')[];
+
 
     @IsOptional()
     @IsEnum(['easy', 'medium', 'hard'], { each: true })

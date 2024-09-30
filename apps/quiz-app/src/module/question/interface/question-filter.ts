@@ -4,7 +4,7 @@ import { Types } from "mongoose";
 export interface QuestionFilter {
     courses?: Types.ObjectId[],
     difficulties?: ("easy" | "medium" | "hard")[],
-    types?: ("QCM" | "QCU")[],
+    types?: ("QCM" | "QCU" | "Cas Clinique")[],
     exam?: Exam,
     withExplanation?: boolean,
     ids?: Types.ObjectId[],

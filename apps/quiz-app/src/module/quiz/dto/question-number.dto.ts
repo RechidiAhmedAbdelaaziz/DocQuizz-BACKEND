@@ -1,4 +1,4 @@
-import {  IsEnum, IsOptional, ArrayNotEmpty, IsBoolean, ArrayMaxSize, IsNumber, IsNumberString, IsMongoId } from "class-validator";
+import { IsEnum, IsOptional, ArrayNotEmpty, IsBoolean, ArrayMaxSize, IsNumber, IsNumberString, IsMongoId } from "class-validator";
 import { Types } from "mongoose";
 
 export class QuestionsNumberQuery {
@@ -14,9 +14,9 @@ export class QuestionsNumberQuery {
     difficulties?: ("easy" | "medium" | "hard")[]
 
     @IsOptional()
-    @IsEnum(["QCM", "QCU"], { each: true })
+    @IsEnum(["QCM", "QCU", "Cas Clinique"], { each: true })
     @ArrayMaxSize(2)
-    types?: ("QCM" | "QCU")[]
+    types?: ("QCM" | "QCU" | "Cas Clinique")[]
 
     @IsOptional()
     @IsBoolean()

@@ -56,8 +56,8 @@ export class QuizService {
         title?: string,
         questionAnswer?: {
             questionId: Types.ObjectId,
-            choices: string[],
-            isCorrect: boolean,
+            choices: number[][],
+            isCorrect: boolean[],
             time: number
         },
         isCompleted?: boolean,
@@ -79,18 +79,22 @@ export class QuizService {
 
             quiz.result.answered = quiz.questions.filter(q => q.result.isAnswerd).length
             quiz.result.time = quiz.questions.reduce((acc, q) => acc + (q.result?.time || 0), 0)
-            quiz.result.correct = quiz.questions.filter(q => q.result?.isCorrect).length
-            quiz.result.correctTime = quiz.questions.reduce((acc, q) => acc + (q.result?.isCorrect ? q.result.time : 0), 0)
+            quiz.result.correct = quiz.questions.filter(q => q.result?.isCorrect.every(c=> c) ).length
+            quiz.result.correctTime = quiz.questions.reduce((acc, q) => acc + (q.result?.isCorrect.every(c => c) ? (q.result.time || 0) : 0), 0)
 
             quiz.markModified('questions')
             quiz.markModified('result')
 
             const index = quiz.questions.findIndex(q => q.question._id.equals(questionId))
-            if (isCorrect) {
+
+            if (isCorrect.every(c => c)) {
                 quiz.coerrectIndexes.push(index)
                 quiz.markModified('coerrectIndexes')
             } else {
-                quiz.wrongIndexes.push(index)
+                quiz.wrongIndexes.push({
+                    questionIndex: index,
+                    subQuestionIndexes: isCorrect.map((c, i) => c ? i : null).filter(i => i !== null)
+                },)
                 quiz.markModified('wrongIndexes')
             }
 
@@ -109,8 +113,13 @@ export class QuizService {
     async getAlreadyAnswerWrongQuestions(user: User) {
         const filter: FilterQuery<Quiz> = {
             user,
-            isCompleted: true,
-            'questions.result.isCorrect': false
+            // isCompleted: true,
+            //questions.result.isCorrect is an array of booleans 
+            //if the question is answered wrong, all the elements in the array will be false
+            //so we need get only the quizes that have at least one false in the array
+            'questions.result.isCorrect': { $in: [false] }
+
+
         }
 
         const quizes = await this.quizModel

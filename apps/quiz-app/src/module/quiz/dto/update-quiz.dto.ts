@@ -1,19 +1,19 @@
 import { Type } from "class-transformer"
-import { IsBoolean, IsMongoId, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
+import { IsArray, IsBoolean, IsMongoId, IsNumber, IsOptional, IsString, ValidateNested } from "class-validator"
 import { Types } from "mongoose"
 
 class QuestionAnswer {
     @IsMongoId()
     questionId: Types.ObjectId
 
-    @IsBoolean()
-    isCorrect: boolean
+    @IsBoolean({ each: true })
+    isCorrect: boolean[]
 
     @IsNumber()
     time: number
 
-    @IsString({ each: true })
-    choices: string[]
+    @IsArray({ each: true })
+    choices: number[][]
 }
 
 export class UpdateQuizBody {

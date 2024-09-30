@@ -18,9 +18,9 @@ export class CreateQuizBody {
     difficulties?: ("easy" | "medium" | "hard")[]
 
     @IsOptional()
-    @IsEnum(["QCM", "QCU"], { each: true })
+    @IsEnum(["QCM", "QCU", "Cas Clinique"], { each: true })
     @ArrayMaxSize(2)
-    types?: ("QCM" | "QCU")[]
+    types?: ("QCM" | "QCU" | "Cas Clinique")[]
 
     @IsOptional()
     @IsBoolean()

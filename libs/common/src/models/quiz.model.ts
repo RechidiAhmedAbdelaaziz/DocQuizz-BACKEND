@@ -38,7 +38,7 @@ export class Quiz extends AbstractSchema {
         type: [raw({
             question: { type: Schema.Types.ObjectId, ref: Question.name },
             result: raw({
-                time: Number, choices: [String], isCorrect: Boolean,
+                time: Number, choices: [[Number]], isCorrect: [Boolean],
                 isAnswerd: { type: Boolean, default: false }
             }),
         })],
@@ -49,8 +49,8 @@ export class Quiz extends AbstractSchema {
         question: Question,
         result: {
             time: number,
-            choices: String[],
-            isCorrect: boolean
+            choices: number[][],
+            isCorrect: boolean[],
             isAnswerd: boolean
         }
     }[]
@@ -58,8 +58,19 @@ export class Quiz extends AbstractSchema {
     @Prop({ default: [] })
     coerrectIndexes: number[]
 
-    @Prop({ default: [] })
-    wrongIndexes: number[]
+    @Prop({
+        type: [{
+            questionIndex: Number,
+            subQuestionIndexes: [Number]
+        }],
+        _id: false,
+        default: []
+    })
+    wrongIndexes: {
+        questionIndex: number,
+        subQuestionIndexes: number[]
+    }[]
+
 
     // last quiestion has been answered index
     @Prop({ default: 0 })
@@ -68,6 +79,6 @@ export class Quiz extends AbstractSchema {
 
 }
 
-
+// {"case"}
 
 

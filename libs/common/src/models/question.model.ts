@@ -7,26 +7,30 @@ import { Schema } from "mongoose";
 import { Exam } from "./exam.model";
 import { Course } from "./levels.model";
 import { Source } from "./source.model";
+import { Difficulty, QuestionType } from "../shared";
 
 
 
-@DSchema({ timestamps: true })
+@DSchema({ timestamps: true, })
 export class Question extends AbstractSchema {
 
     @Prop()
-    questionText: string
+    caseText?: string
 
     @Prop()
-    answers: {
+    questions: {
         text: string,
-        isCorrect: boolean,
+        answers: {
+            text: string,
+            isCorrect: boolean,
+        }[],
+        difficulty: Difficulty,
+        type?: QuestionType,
+        explanation?: string
     }[]
 
     @Prop()
-    difficulty: "easy" | "medium" | "hard"
-
-    @Prop()
-    type: "QCM" | "QCU" 
+    type : QuestionType;
 
     @Prop({ type: Schema.Types.ObjectId, ref: Exam.name })
     exam?: Exam
@@ -34,16 +38,21 @@ export class Question extends AbstractSchema {
     @Prop({ type: Schema.Types.ObjectId, ref: Course.name })
     course: Course
 
-    @Prop()
-    explanation?: string
-
     @Prop({ type: Schema.Types.ObjectId, ref: Source.name })
     source: Source
 
     @Prop()
     year: number
+
+    @Prop()
+    withExplanation: boolean
+
+    @Prop()
+    difficulties: Difficulty[]
+
+
 }
 
 
 
-
+// {"caseText":"string","questions":[{"text":"string","answers":[{"text":"string","isCorrect":true}],"difficulty":"EASY","type":"MCQ","explanation":"string"}],"type":"MCQ","exam":"5f9b1b3b1f4b1b001f1b1f4b","course":"5f9b1b3b1f4b1b001f1b1f4a","source":"5f9b1b3b1f4b1b001f1b1f4a","year":2020,"withExplanation":true,"difficulties":["EASY","MEDIUM","HARD"]}

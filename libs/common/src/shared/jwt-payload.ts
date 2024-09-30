@@ -1,5 +1,5 @@
 import { Types } from "mongoose";
-import { UserRoles } from "./user.roles";
+import { UserRoles } from "./enums";
 
 export type JwtPayload = {
     id: Types.ObjectId,

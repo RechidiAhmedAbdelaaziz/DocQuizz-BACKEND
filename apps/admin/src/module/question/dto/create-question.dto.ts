@@ -1,52 +1,59 @@
-import { Question } from "@app/common/models";
+import { Difficulty } from "@app/common";
 import { Type } from "class-transformer";
 import { IsString, IsMongoId, IsEnum, IsOptional, ArrayNotEmpty, ValidateNested, IsNumber, IsBoolean } from "class-validator";
 import { Types } from "mongoose";
 
 
-export class QuestionAnswer {
-
+export class Answer {
     @IsString()
-    text: string;
+    text: string
 
     @IsBoolean()
-    isCorrect: boolean;
-
-    
+    isCorrect: boolean
 }
 
-export class CreateQuestionBody {
+export class SubQuestion {
     @IsString()
-    questionText: string;
+    text: string
 
     @ArrayNotEmpty()
-    @ValidateNested()
-    @Type(() => QuestionAnswer)
-    answers: QuestionAnswer[];
-    //
+    @ValidateNested({ each: true })
+    @Type(() => Answer)
+    answers: Answer[]
 
-    @IsEnum(["easy", "medium", "hard"])
-    difficulty: "easy" | "medium" | "hard";
-
-    @IsOptional()
-    @IsMongoId()
-    examId?: Types.ObjectId;
-
-    @IsMongoId()
-    courseId: Types.ObjectId;
+    @IsEnum(['easy', 'medium', 'hard'])
+    difficulty: Difficulty
 
     @IsOptional()
     @IsString()
-    explanation?: string;
-
-    @IsOptional()
-    @IsMongoId()
-    sourceId?: Types.ObjectId;
-
-    @IsOptional()
-    @IsNumber()
-    year?: number;
+    explanation?: string
 }
 
+export class CreateOrUpdateQuestionBody {
+    @IsString()
+    @IsOptional()
+    caseText?: string
 
-// {"questionText":"What is the capital of Nigeria?","correctAnswers":["Abuja"],"wrongAnswers":["Lagos","Kano","Ibadan"],"difficulty":"easy","course":"General Knowledge"}
+    @ArrayNotEmpty()
+    @ValidateNested({ each: true })
+    @Type(() => SubQuestion)
+    questions: SubQuestion[]
+
+    @IsMongoId()
+    @IsOptional()
+    examId?: Types.ObjectId
+
+    @IsMongoId()
+    courseId: Types.ObjectId
+
+    @IsMongoId()
+    sourceId?: Types.ObjectId
+
+    @IsNumber()
+    year: number
+
+
+
+}
+
+// {"caseText":"string","questions":[{"text":"string","answers":[{"text":"string","isCorrect":true}],"difficulty":"easy","explanation":"string"}],"examId":"string","courseId":"string","sourceId":"string","year":0}
