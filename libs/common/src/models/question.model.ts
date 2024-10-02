@@ -30,7 +30,7 @@ export class Question extends AbstractSchema {
     }[]
 
     @Prop()
-    type : QuestionType;
+    type: QuestionType;
 
     @Prop({ type: Schema.Types.ObjectId, ref: Exam.name })
     exam?: Exam
@@ -38,11 +38,18 @@ export class Question extends AbstractSchema {
     @Prop({ type: Schema.Types.ObjectId, ref: Course.name })
     course: Course
 
-    @Prop({ type: Schema.Types.ObjectId, ref: Source.name })
-    source: Source
+    @Prop({
+        type: [{
+            source: { type: Schema.Types.ObjectId, ref: Source.name },
+            year: { type: Number, default: 0 }
+        }],
+        _id: false
+    })
+    sources: {
+        source: Source,
+        year: number
+    }[]
 
-    @Prop()
-    year: number
 
     @Prop()
     withExplanation: boolean

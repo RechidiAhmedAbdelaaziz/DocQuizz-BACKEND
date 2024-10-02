@@ -24,11 +24,12 @@ export class PlaylistController {
     @CurrentUser() userId: Types.ObjectId,
     @Query() query: ListPlaylistQuery
   ) {
-    const { page, limit, keywords } = query;
+    const { page, limit, keywords, questionId } = query;
 
     const user = await this.userService.getUserById(userId);
+    const question = questionId ? await this.questionService.getQuestionById(questionId) : undefined;
 
-    return await this.playlistService.getPlaylists(user, { keywords }, { page, limit });
+    return await this.playlistService.getPlaylists(user, { keywords, question }, { page, limit });
   }
 
   @Get(':playlistId') //* PLAYLIST | Get Questions ~ {{host}}/playlist/:playlistId?page=1&limit=10

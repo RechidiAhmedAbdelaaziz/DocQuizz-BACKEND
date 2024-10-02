@@ -15,7 +15,7 @@ export class QuestionsNumberQuery {
 
     @IsOptional()
     @IsEnum(["QCM", "QCU", "Cas Clinique"], { each: true })
-    @ArrayMaxSize(2)
+    @ArrayMaxSize(3)
     types?: ("QCM" | "QCU" | "Cas Clinique")[]
 
     @IsOptional()

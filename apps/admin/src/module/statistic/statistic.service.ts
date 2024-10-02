@@ -15,7 +15,8 @@ export class StatisticService {
         newQuestion?: -1 | 1,
         newMajor?: -1 | 1,
         newDomain?: -1 | 1,
-        newSource? : -1 | 1,
+        newSource?: -1 | 1,
+        newCC?: -1 | 1,
 
     }) {
 
@@ -26,6 +27,7 @@ export class StatisticService {
         if (details.newMajor) statistic.totalMajor += details.newMajor
         if (details.newDomain) statistic.totalDomain += details.newDomain
         if (details.newSource) statistic.totalSources += details.newSource
+        if (details.newCC) statistic.totalCCQuestion += details.newCC
 
         return await statistic.save()
 

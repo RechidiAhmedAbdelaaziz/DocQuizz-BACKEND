@@ -15,6 +15,7 @@ import { NotesModule } from './module/notes/notes.module';
 import { StatisticModule } from './module/statistic/statistic.module';
 import { SourceModule } from './module/source/source.module';
 import { QuizRecordModule } from './module/quiz-record/quiz-record.module';
+import { UpdatesModule } from './module/updates/updates.module';
 
 
 @Module({
@@ -33,6 +34,7 @@ import { QuizRecordModule } from './module/quiz-record/quiz-record.module';
     StatisticModule,
     SourceModule,
     QuizRecordModule,
+    UpdatesModule,
   ],
   providers: [
     {

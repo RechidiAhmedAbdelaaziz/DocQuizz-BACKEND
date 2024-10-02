@@ -55,16 +55,18 @@ export class PlaylistService {
     getPlaylists = async (user: User,
         options: {
             keywords?: string,
+            question?: Question,
         },
         pagination: {
             page: number,
             limit: number,
         }
+
     ) => {
 
-        const { keywords } = options;
+        const { keywords, question } = options;
 
-        const filter: FilterQuery<Playlist> = { user: user };
+        const filter: FilterQuery<Playlist> = { user: user._id };
 
         if (keywords) {
             const keywordsArray = keywords.split(' ')
@@ -75,9 +77,37 @@ export class PlaylistService {
 
         const { generate, limit, page } = new Pagination(this.playlistModel, { filter, ...pagination }).getOptions();
 
-        const playlists = await this.playlistModel.find(filter)
-            .skip((page - 1) * limit)
-            .limit(limit)
+        // const addFields: any = question ? {
+        //     isIn: {
+        //         $in: [question._id, "$questions"]
+        //     }
+        // } : {};
+
+        const fields: any = {
+            _id: 1,
+            title: 1,
+            totalQuestions: 1,
+        }
+
+        if (question) fields.isIn = { $in: [question._id, "$questions"] }
+
+
+        const playlists = await this.playlistModel.aggregate([
+            {
+                $match: filter
+            },
+            {
+                $project: fields
+            },
+            { $skip: (page - 1) * limit },  // Apply pagination within the aggregation
+            { $limit: limit }
+        ]);
+
+        // console.log(playlists);
+
+        // const playlists = await this.playlistModel.find(filter)
+        //     .skip((page - 1) * limit)
+        //     .limit(limit)
 
         return await generate(playlists);
     }

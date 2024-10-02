@@ -14,6 +14,9 @@ export class Statistic extends AbstractSchema {
     totalQuestion: number
 
     @Prop({ type: Number, default: 0 })
+    totalCCQuestion: number
+
+    @Prop({ type: Number, default: 0 })
     totalUser: number
 
     @Prop({ type: Number, default: 0 })

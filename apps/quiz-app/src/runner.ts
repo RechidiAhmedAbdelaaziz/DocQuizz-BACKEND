@@ -1,96 +1,36 @@
-import mongoose, { Schema, Document } from 'mongoose';
+import mongoose, { Schema, Document, Types } from 'mongoose';
 
 interface OldQuestion extends Document {
-    questionText: string;
-    answers: {
-        text: string;
-        isCorrect: boolean;
-    }[];
-    difficulty: "easy" | "medium" | "hard";
-    type: "QCM" | "QCU";
-    exam?: Schema.Types.ObjectId;
-    course: Schema.Types.ObjectId;
-    explanation?: string;
-    source: Schema.Types.ObjectId;
-    year: number;
-    //add new fields
-    withExplanation: boolean;
-    difficulties: string[];
-    questions: {
-        text: string;
-        answers: {
-            text: string;
-            isCorrect: boolean;
-        }[];
-        difficulty: "easy" | "medium" | "hard";
-        type: "QCM" | "QCU";
-        explanation?: string;
-    }[];
+
+    source: Types.ObjectId,
+    year: number,
+    sources: {
+        source: Types.ObjectId,
+        year: number,
+    }[],
 }
 
-const questionSchema = new Schema({
+const sourceSchame = new Schema({
 
-    text: String,
-    answers: [
-        {
-            text: String,
-            isCorrect: Boolean,
-        },
-    ],
-    difficulty: { type: String, enum: ["easy", "medium", "hard"] },
-    type: { type: String, enum: ["QCM", "QCU"] },
-    explanation: String,
+    source: Types.ObjectId,
+    year: Number,
 }, { _id: false });
 
 
 // Define Old Question Schema
-const OldQuestionSchema = new Schema<OldQuestion>({
-    questionText: String,
-    answers: [
-        {
-            text: String,
-            isCorrect: Boolean,
-        },
-    ],
-    difficulty: { type: String, enum: ["easy", "medium", "hard"] },
-    type: { type: String, enum: ["QCM", "QCU"] },
-    exam: { type: Schema.Types.ObjectId, ref: 'Exam' },
-    course: { type: Schema.Types.ObjectId, ref: 'Course' },
-    explanation: String,
+const QuestionSchema = new Schema<OldQuestion>({
+
     source: { type: Schema.Types.ObjectId, ref: 'Source' },
     year: Number,
-    //add new fields
-    withExplanation: Boolean,
-    difficulties: [String],
-    questions: [questionSchema],
+
+    sources: [sourceSchame],
 
 
 });
 
 // Model for the Question
-const Question = mongoose.model<OldQuestion>('Question', OldQuestionSchema);
+const Question = mongoose.model<OldQuestion>('Question', QuestionSchema);
 
-// Function to transform the structure
-function transformAnswers(old: OldQuestion) {
-    return {
-
-        questions: [{
-            text: old.questionText,
-            answers: old.answers,
-            difficulty: old.difficulty,
-            type: old.type,
-            explanation: old.explanation,
-        }],
-        type: old.type,
-        exam: old.exam,
-        course: old.course,
-        source: old.source,
-        year: old.year,
-        withExplanation: !!old.explanation,
-        difficulties: [old.difficulty],
-
-    };
-}
 
 // Function to update all documents
 async function updateQuestions() {
@@ -110,21 +50,14 @@ async function updateQuestions() {
 
 
 
-            
-            question.type = question.questions[0].type;
-            
 
+            question.sources = [
+                {
+                    source: question.source,
+                    year: question.year
+                }
+            ]
 
-
-
-
-
-
-
-            
-
-
-            // Save the updated document
             await question.save();
         }
 

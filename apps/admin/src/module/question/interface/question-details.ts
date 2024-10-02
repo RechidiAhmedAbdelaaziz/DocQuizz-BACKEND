@@ -19,6 +19,9 @@ export interface QuestionDetails {
     questions: SubQuestion[],
     exam?: Exam,
     course?: Course,
-    source?: Source,
+    sources: {
+        source: Source,
+        year: number
+    }[],
     year?: number,
 }

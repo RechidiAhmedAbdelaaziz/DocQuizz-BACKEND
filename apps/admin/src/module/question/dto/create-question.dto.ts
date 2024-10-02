@@ -29,6 +29,14 @@ export class SubQuestion {
     explanation?: string
 }
 
+class Source_Year {
+    @IsMongoId()
+    sourceId: Types.ObjectId
+
+    @IsNumber()
+    year: number
+}
+
 export class CreateOrUpdateQuestionBody {
     @IsString()
     @IsOptional()
@@ -46,11 +54,10 @@ export class CreateOrUpdateQuestionBody {
     @IsMongoId()
     courseId: Types.ObjectId
 
-    @IsMongoId()
-    sourceId?: Types.ObjectId
-
-    @IsNumber()
-    year: number
+    @ArrayNotEmpty()
+    @ValidateNested({ each: true })
+    @Type(() => Source_Year)
+    sources: Source_Year[]
 
 
 

@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
 import { QuestionService } from './question.service';
 import { CreateOrUpdateQuestionBody } from './dto/create-question.dto';
 import { ExamAdminService } from '../exam-admin/exam-admin.service';
-import { ParseMonogoIdPipe } from '@app/common';
+import { ParseMonogoIdPipe, QuestionType } from '@app/common';
 import { Types } from 'mongoose';
 import { StatisticService } from '../statistic/statistic.service';
 import { SourceAdminService } from '../source-admin/source-admin.service';
@@ -20,22 +20,27 @@ export class QuestionController {
 
   @Post() //* QUESTION | Create ~ {{host}}/question
   async createQuestion(@Body() body: CreateOrUpdateQuestionBody) {
-    const { courseId, questions, year, caseText, examId, sourceId } = body
+    const { courseId, questions, caseText, examId, sources: sourceIds } = body
 
     // await this.questionService.checkQuestionExists(questionText)
 
     const exam = examId ? await this.examService.getExamById(examId) : undefined
-    const source = sourceId ? await this.sourceService.getSourceById(sourceId) : undefined
     const course = courseId ? await this.levelService.getCourseById(courseId) : undefined
-
+    const sources = sourceIds ? await Promise.all(sourceIds.map(async source => {
+      const sourceE = await this.sourceService.getSourceById(source.sourceId)
+      return { source: sourceE, year: source.year }
+    })) : undefined;
 
     if (exam) await this.examService.updateExam(exam, { addQuiz: true })
 
     const question = await this.questionService.createOrUpdateQuestion({
-      questions, caseText, course, exam, source, year
+      questions, caseText, course, exam, sources
     })
 
-    await this.statisticService.updateStatistic({ newQuestion: 1 })
+    await this.statisticService.updateStatistic({
+      newQuestion: 1,
+      newCC: question.type == QuestionType.CAS_CLINIQUE ? 1 : undefined,
+    },)
 
     return question
   }
@@ -45,7 +50,9 @@ export class QuestionController {
     @Body() body: CreateOrUpdateQuestionBody,
     @Param('questionId', ParseMonogoIdPipe) questionId: Types.ObjectId,
   ) {
-    const { courseId, questions, year, caseText, examId, sourceId } = body
+    const { courseId, questions, caseText, examId, sources: sourceIds } = body
+
+
 
 
     const question = await this.questionService.getQuestionById(questionId)
@@ -61,7 +68,10 @@ export class QuestionController {
     else if (question.exam) await this.examService.updateExam(question.exam, { deleteQuiz: true })
 
 
-    const source = sourceId ? await this.sourceService.getSourceById(sourceId) : undefined
+    const sources = sourceIds ? await Promise.all(sourceIds.map(async source => {
+      const sourceE = await this.sourceService.getSourceById(source.sourceId)
+      return { source: sourceE, year: source.year }
+    })) : undefined;
     const course = courseId ? await this.levelService.getCourseById(courseId) : undefined
 
     return await this.questionService.createOrUpdateQuestion({
@@ -69,8 +79,7 @@ export class QuestionController {
       caseText,
       exam,
       course,
-      source,
-      year
+      sources,
     }, question)
   }
 
@@ -83,7 +92,10 @@ export class QuestionController {
     await this.questionService.deleteQuestionById(question)
     if (question.exam) await this.examService.updateExam(question.exam, { deleteQuiz: true })
 
-    await this.statisticService.updateStatistic({ newQuestion: -1 })
+    await this.statisticService.updateStatistic({
+      newQuestion: -1,
+      newCC: question.type == QuestionType.CAS_CLINIQUE ? -1 : undefined
+    })
 
 
     return { message: 'Question deleted successfully' }

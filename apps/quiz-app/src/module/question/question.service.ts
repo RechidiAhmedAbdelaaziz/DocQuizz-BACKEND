@@ -20,7 +20,7 @@ export class QuestionService {
 
         const questions = await this.questionModel
             .find(filter)
-            .populate('source')
+            .populate('sources.source')
             .populate('exam')
             .populate('course')
             .skip((page - 1) * limit)
@@ -61,7 +61,7 @@ export class QuestionService {
     }
 
     generateFilterQuery(filters: QuestionFilter): FilterQuery<Question> {
-        const { courses, difficulties, types, sources, exam, year, withExplanation, ids, keywords } = filters;
+        const { courses, difficulties, types, sources, year, exam, withExplanation, ids, keywords } = filters;
 
         const filter: FilterQuery<Question> = {};
 
@@ -71,8 +71,16 @@ export class QuestionService {
         if (types) filter.type = { $in: types };
         if (exam) filter.exam = exam;
         if (withExplanation) filter.withExplanation = withExplanation;
-        if (sources) filter.source = { $in: sources };
-        if (year) filter.year = { $gte: year };
+
+        const sourcesFilter: any = {}
+
+        if (year) sourcesFilter.year = { $gte: year }
+        if (sources) sourcesFilter.source = { $in: sources }
+
+        if (year || sources) filter.sources = { $elemMatch: sourcesFilter };
+
+
+
         if (keywords) {
             const keywordsArray = keywords.split(' ');
             filter.$and = keywordsArray.map(keyword => ({

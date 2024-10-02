@@ -8,6 +8,7 @@ import { LevelsModule } from './module/levels/levels.module';
 import { QuestionModule } from './module/question/question.module';
 import { StatisticModule } from './module/statistic/statistic.module';
 import { SourceAdminModule } from './module/source-admin/source-admin.module';
+import { UpdatesAdminModule } from './module/updates-admin/updates-admin.module';
 
 @Module({
   imports: [
@@ -17,7 +18,8 @@ import { SourceAdminModule } from './module/source-admin/source-admin.module';
     LevelsModule,
     QuestionModule,
     StatisticModule,
-    SourceAdminModule
+    SourceAdminModule,
+    UpdatesAdminModule
   ],
   controllers: [],
   providers: [

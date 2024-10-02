@@ -155,7 +155,7 @@ export class QuizService {
             .populate({
                 path: 'questions.question',
                 populate: [
-                    { path: 'source' },
+                    { path: 'sources.source' },
                     { path: 'exam' },
                     { path: 'course' }
                 ]
