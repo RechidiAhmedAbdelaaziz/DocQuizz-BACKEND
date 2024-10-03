@@ -1,4 +1,4 @@
-import { Exam, Question } from '@app/common/models';
+import { Exam, Playlist, Question } from '@app/common/models';
 import { Pagination } from '@app/common/utils/pagination';
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -49,10 +49,12 @@ export class QuestionService {
         const questions = await this.questionModel
             .find(filter)
             .skip((page - 1) * limit)
-            .limit(limit).populate(['source', 'course', 'exam'])
+            .limit(limit).populate(['sources.source', 'course', 'exam'])
 
         return await generate(questions);
     }
+
+
 
     async getQuestionById(id: Types.ObjectId) {
         const question = await this.questionModel.findById(id);
@@ -90,6 +92,8 @@ export class QuestionService {
 
         return filter;
     }
+
+
 
 
 

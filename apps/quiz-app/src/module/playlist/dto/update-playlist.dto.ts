@@ -1,4 +1,4 @@
-import { IsMongoId, IsOptional, IsString } from "class-validator";
+import { IsArray, IsMongoId, IsOptional, IsString } from "class-validator";
 import { Types } from "mongoose";
 
 export class UpdatePlaylistBody {
@@ -13,4 +13,16 @@ export class UpdatePlaylistBody {
     @IsOptional()
     @IsMongoId()
     removeQuestionId?: Types.ObjectId;
+}
+
+export class AddQuestionToPlaylistBody {
+
+    @IsArray()
+    @IsMongoId({ each: true })
+    playlistsToAdd: Types.ObjectId[];
+
+    @IsArray()
+    @IsMongoId({ each: true })
+    playlistsToRemove: Types.ObjectId[];
+
 }

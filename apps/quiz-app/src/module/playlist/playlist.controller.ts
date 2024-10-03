@@ -5,7 +5,7 @@ import { Types } from 'mongoose';
 import { ListPlaylistQuery } from './dto/list-playlist.dto';
 import { UserService } from '../user/user.service';
 import { CreatePalyListBody } from './dto/create-playlist.dto';
-import { UpdatePlaylistBody } from './dto/update-playlist.dto';
+import { AddQuestionToPlaylistBody, UpdatePlaylistBody } from './dto/update-playlist.dto';
 import { QuestionService } from '../question/question.service';
 import { PaginationQuery } from '@app/common/utils/pagination';
 import { NestedPagination } from '@app/common/utils/nested-pagination';
@@ -73,15 +73,26 @@ export class PlaylistController {
     @Body() body: UpdatePlaylistBody,
     @Param('playlistId', ParseMonogoIdPipe) playlistId: Types.ObjectId
   ) {
-    const { title, addQuestionId, removeQuestionId } = body;
+    const { title, removeQuestionId } = body;
     const user = await this.userService.getUserById(userId);
     const playlist = await this.playlistService.getPlaylistById(playlistId, user, { withQuestions: true });
 
-    const addQuestion = addQuestionId ? await this.questionService.getQuestionById(addQuestionId) : undefined;
     const removeQuestion = removeQuestionId ? await this.questionService.getQuestionById(removeQuestionId) : undefined;
 
 
-    return await this.playlistService.updatePlaylist(playlist, { title, addQuestion, removeQuestion });
+    return await this.playlistService.updatePlaylist(playlist, { title, removeQuestion });
+  }
+
+  @Patch('question/:questionId') //* PLAYLIST | Add Question ~ {{host}}/playlist/question/:questionId
+  async addQuestionToPlaylist(
+    @Param('questionId', ParseMonogoIdPipe) questionId: Types.ObjectId,
+    @Body() body: AddQuestionToPlaylistBody
+  ) {
+    const question = await this.questionService.getQuestionById(questionId);
+
+    await this.playlistService.addQuestions(question, body);
+
+    return { message: 'Question added to playlist successfully' };
   }
 
   @Delete(':playlistId') //* PLAYLIST | Delete ~ {{host}}/playlist/:playlistId

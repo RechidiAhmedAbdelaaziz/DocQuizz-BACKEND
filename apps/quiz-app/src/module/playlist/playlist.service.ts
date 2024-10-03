@@ -112,6 +112,52 @@ export class PlaylistService {
         return await generate(playlists);
     }
 
+    addQuestions = async (question: Question, playlistsIds: {
+        playlistsToAdd: Types.ObjectId[],
+        playlistsToRemove: Types.ObjectId[]
+
+
+    }) => {
+        const { playlistsToAdd, playlistsToRemove } = playlistsIds;
+        const playlists = await this.playlistModel
+            .find({
+                _id: { $in: [...playlistsToAdd, ...playlistsToRemove] }
+            })
+            .select('_id questions');
+
+        const promises = []
+
+        for (const playlist of playlists) {
+
+            let isToAdd;
+
+            for (const id of playlistsToAdd) {
+                if (playlist._id.equals(id)) {
+                    isToAdd = true;
+                    break;
+                }
+            }
+
+            if (isToAdd) {
+                const questionExists = playlist.questions.some(q => q._id.equals(question._id));
+                if (!questionExists) {
+                    playlist.questions.push(question);
+                    playlist.totalQuestions = playlist.questions.length;
+                    promises.push(playlist.save());
+                }
+            }
+            else {
+
+                playlist.questions = playlist.questions.filter(q => !q._id.equals(question._id));
+                playlist.totalQuestions = playlist.questions.length;
+                promises.push(playlist.save());
+            }
+        }
+
+        await Promise.all(promises);
+
+    }
+
 
     async getPlaylistById(
         playlistId: Types.ObjectId,
@@ -139,7 +185,7 @@ export class PlaylistService {
                 populate: [
                     { path: 'exam' },
                     { path: 'course' },
-                    { path: 'source' }
+                    { path: 'sources.source' }
                 ]
             })
 
