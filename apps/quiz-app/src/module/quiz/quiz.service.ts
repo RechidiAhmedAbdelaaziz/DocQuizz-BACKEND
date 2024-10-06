@@ -97,7 +97,7 @@ export class QuizService {
             }
 
             quiz.result.correct = quiz.coerrectIndexes.length
-            quiz.result.answered = quiz.totalQuestions - quiz.wrongIndexes.length - quiz.coerrectIndexes.length
+            quiz.result.answered = quiz.wrongIndexes.length + quiz.coerrectIndexes.length
 
 
 
