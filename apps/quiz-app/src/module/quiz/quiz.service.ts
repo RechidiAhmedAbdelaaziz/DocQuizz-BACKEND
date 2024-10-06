@@ -77,9 +77,9 @@ export class QuizService {
             questionStatus.result = { isCorrect, choices, time, isAnswerd: true }
 
 
-            quiz.result.answered = quiz.questions.filter(q => q.result.isAnswerd).length
+            quiz.result.answered = quiz.questions.filter(q => q.result.isAnswerd || false).length
             quiz.result.time = quiz.questions.reduce((acc, q) => acc + (q.result?.time || 0), 0)
-            quiz.result.correct = quiz.questions.filter(q => q.result?.isCorrect.every(c=> c) ).length
+            quiz.result.correct = quiz.questions.filter(q => q.result.isCorrect.every(c=> c) || false).length
             quiz.result.correctTime = quiz.questions.reduce((acc, q) => acc + (q.result?.isCorrect.every(c => c) ? (q.result.time || 0) : 0), 0)
 
             quiz.markModified('questions')
