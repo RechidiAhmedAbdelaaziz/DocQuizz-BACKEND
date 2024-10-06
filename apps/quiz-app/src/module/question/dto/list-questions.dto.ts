@@ -27,6 +27,10 @@ export class ListQuestionsQuery extends PaginationQuery {
     withExplanation?: boolean;
 
     @IsOptional()
+    @IsBoolean()
+    withoutExplanation?: boolean;
+
+    @IsOptional()
     @IsString()
     keywords?: string;
 

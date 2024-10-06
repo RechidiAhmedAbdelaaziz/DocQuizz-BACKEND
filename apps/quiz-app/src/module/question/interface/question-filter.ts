@@ -7,6 +7,7 @@ export interface QuestionFilter {
     types?: ("QCM" | "QCU" | "Cas Clinique")[],
     exam?: Exam,
     withExplanation?: boolean,
+    withoutExplanation?: boolean,
     ids?: Types.ObjectId[],
     keywords?: string,
     sources?: Types.ObjectId[],

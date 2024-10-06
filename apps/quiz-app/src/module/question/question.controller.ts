@@ -18,15 +18,15 @@ export class QuestionController {
   async getQuestions(
     @Query() query: ListQuestionsQuery,
   ) {
-    const { keywords, page, limit, types, difficulties, sources, examId, year : yearString, courses, withExplanation } = query;
+    const { keywords, page, limit, types, withoutExplanation, difficulties, sources, examId, year: yearString, courses, withExplanation } = query;
 
-    const year =  yearString ? parseInt(yearString) : undefined;
+    const year = yearString ? parseInt(yearString) : undefined;
 
     const exam = examId ? await this.examService.getExamById(examId) : undefined;
 
 
     const filter = this.questionService.generateFilterQuery({
-      difficulties, courses, exam, types, withExplanation, keywords, sources, year
+      difficulties, courses, exam, types, withExplanation, withoutExplanation, keywords, sources, year
     });
 
     return await this.questionService.getQuestions(filter, { page, limit });

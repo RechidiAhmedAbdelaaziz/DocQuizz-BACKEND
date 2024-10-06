@@ -63,7 +63,7 @@ export class QuestionService {
     }
 
     generateFilterQuery(filters: QuestionFilter): FilterQuery<Question> {
-        const { courses, difficulties, types, sources, year, exam, withExplanation, ids, keywords } = filters;
+        const { courses, difficulties, withoutExplanation, types, sources, year, exam, withExplanation, ids, keywords } = filters;
 
         const filter: FilterQuery<Question> = {};
 
@@ -72,14 +72,21 @@ export class QuestionService {
         if (difficulties) filter.difficulties = { $in: difficulties };
         if (types) filter.type = { $in: types };
         if (exam) filter.exam = exam;
-        if (withExplanation) filter.withExplanation = withExplanation;
 
         const sourcesFilter: any = {}
-
         if (year) sourcesFilter.year = { $gte: year }
         if (sources) sourcesFilter.source = { $in: sources }
-
         if (year || sources) filter.sources = { $elemMatch: sourcesFilter };
+
+
+        if (withExplanation && withoutExplanation) {
+            filter.$or = [{ withExplanation: true }, { withExplanation: false }];
+        } else if (withExplanation) {
+            filter.withExplanation = true;
+        }
+        else if (withoutExplanation) {
+            filter.withExplanation = false;
+        }
 
 
 
