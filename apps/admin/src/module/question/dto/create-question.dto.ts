@@ -57,10 +57,10 @@ export class CreateOrUpdateQuestionBody {
     @ArrayNotEmpty()
     @ValidateNested({ each: true })
     @Type(() => Source_Year)
-    sources: Source_Year[]
+    sources: Source_Year[] 
 
 
 
 }
 
-// {"caseText":"string","questions":[{"text":"string","answers":[{"text":"string","isCorrect":true}],"difficulty":"easy","explanation":"string"}],"examId":"string","courseId":"string","sourceId":"string","year":0}
+// {"caseText":"case text","questions":[{"text":"question text","answers":[{"text":"answer text","isCorrect":true},{"text":"answer text","isCorrect":false}],"difficulty":"easy","explanation":"explanation"}],"examId":"5f9b3b3b1f3b3b3b3b3b3b3","courseId":"5f9b3b3b1f3b3b3b3b3b3b3","sources":[{"sourceId":"5f9b3b3b1f3b3b3b3b3b3b3","year":2020}]}

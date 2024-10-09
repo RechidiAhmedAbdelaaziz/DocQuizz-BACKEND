@@ -14,12 +14,20 @@ async function bootstrap() {
     }
   }))
 
-  app.enableCors({
-    origin: /https?:\/\/(.+\.)?docquizz\.top$/, // Allow all subdomains of example.com
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true, // If you need to allow credentials (cookies, authorization headers)
-  });
+  // app.enableCors({
+  //   origin: /https?:\/\/(.+\.)?docquizz\.top$/, // Allow all subdomains of example.com
+  //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  //   credentials: true, // If you need to allow credentials (cookies, authorization headers)
+  // });
 
+  app.enableCors(
+    {
+      origin: 'http://localhost:41381',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      allowedHeaders: 'Content-Type, Accept',
+      credentials: true,
+    }
+  )
 
 
 
