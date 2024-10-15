@@ -7,7 +7,6 @@ import { AdminGuard, SkipAdminGuard } from '@app/common';
 
 @Controller('question')
 @UseGuards(AdminGuard)
-@SkipAdminGuard()
 export class QuestionController {
   constructor(private readonly questionService: QuestionService,
     private readonly examService: ExamService
@@ -15,6 +14,7 @@ export class QuestionController {
 
   ) { }
 
+  @SkipAdminGuard()
   @Get() //* QUESTION | Get all ~ {{host}}/question?page=1&limit=10&keywords=keyword
   async getQuestions(
     @Query() query: ListQuestionsQuery,
