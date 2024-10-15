@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
 import { ExamAdminService } from './exam-admin.service';
 import { CreateExamBody } from './dto/create-exam.dto';
-import { ParseMonogoIdPipe } from '@app/common';
+import { ParseMonogoIdPipe, SkipAdminGuard } from '@app/common';
 import { Types } from 'mongoose';
 import { UpdateExamBody } from './dto/update-exam.dto';
 import { StatisticService } from '../statistic/statistic.service';
@@ -13,6 +13,7 @@ export class ExamAdminController {
 
   ) { }
 
+  @SkipAdminGuard()
   @Post() //* {"name":"EXAM | Create","request":{"method":"POST","header":[],"body":{"mode":"raw","raw":"{\n    \"major\": \"Math 2\",\n    \"time\": 1200, // secend\n    \"year\": 2022,\n    \"city\": \"El Bayadh\"\n}","options":{"raw":{"language":"json"}}},"url":{"raw":"{{host}}/exam-admin","host":["{{host}}"],"path":["exam-admin"]}},"response":[]}
   async createExam(
     @Body() body: CreateExamBody

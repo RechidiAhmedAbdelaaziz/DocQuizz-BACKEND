@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Param, Post } from '@nestjs/common';
 import { QuestionService } from './question.service';
 import { CreateOrUpdateQuestionBody } from './dto/create-question.dto';
 import { ExamAdminService } from '../exam-admin/exam-admin.service';
-import { ParseMonogoIdPipe, QuestionType } from '@app/common';
+import { ParseMonogoIdPipe, QuestionType, SkipAdminGuard } from '@app/common';
 import { Types } from 'mongoose';
 import { StatisticService } from '../statistic/statistic.service';
 import { SourceAdminService } from '../source-admin/source-admin.service';
@@ -18,6 +18,7 @@ export class QuestionController {
     private readonly levelService: LevelsService,
   ) { }
 
+  @SkipAdminGuard()
   @Post() //* QUESTION | Create ~ {{host}}/question
   async createQuestion(@Body() body: CreateOrUpdateQuestionBody) {
     const { courseId, questions, caseText, examIds, sources: sourceIds } = body

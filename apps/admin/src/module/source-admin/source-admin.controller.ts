@@ -2,6 +2,7 @@ import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
 import { SourceAdminService } from './source-admin.service';
 import { CreateSourceBody, SourceIdParam, UpdateSourceBody } from './dto/source.dto';
 import { StatisticService } from '../statistic/statistic.service';
+import { SkipAdminGuard } from '@app/common';
 
 @Controller('source')
 export class SourceAdminController {
@@ -10,6 +11,7 @@ export class SourceAdminController {
 
   ) { }
 
+  @SkipAdminGuard()
   @Post() // * SOURCE | Create ~ {{host}}/source
   async createSource(
     @Body() body: CreateSourceBody
