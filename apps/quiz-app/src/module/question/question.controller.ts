@@ -3,10 +3,11 @@ import { QuestionService } from './question.service';
 import { QuestionFilter } from './interface/question-filter';
 import { ListQuestionsQuery } from './dto/list-questions.dto';
 import { ExamService } from '../exam/exam.service';
-import { AdminGuard } from '@app/common';
+import { AdminGuard, SkipAdminGuard } from '@app/common';
 
 @Controller('question')
 @UseGuards(AdminGuard)
+@SkipAdminGuard()
 export class QuestionController {
   constructor(private readonly questionService: QuestionService,
     private readonly examService: ExamService

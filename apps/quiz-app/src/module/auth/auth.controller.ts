@@ -40,6 +40,18 @@ export class AuthController {
     return { data: user, tokens }
   }
 
+  @Post('login-admin') //*  ADMIN | Login  {{host}}/auth/login-admin
+  async loginAdmin(
+    @Body() data: LoginBody
+  ) {
+    const user = await this.authService.login(data, { asAdmin: true })
+    const tokens = await this.authService.generateTokens(user)
+
+    return { data: user, tokens }
+  }
+
+
+
   @Get('refresh-token') //*  USER | Refresh Token  {{host}}/auth/refresh-token
   async refreshToken(
     @Query() query: RefreshTokenQuery

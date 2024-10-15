@@ -44,15 +44,20 @@ export class AuthService {
     }
 
     login = async (data: { email: string, password?: string }, options?: {
-        isOAuth: boolean
+        isOAuth?: boolean,
+        asAdmin?: boolean
     }) => {
         const { email, password } = data
-        const { isOAuth } = options || {}
+        const { isOAuth, asAdmin } = options || {}
 
         const user = await this.userModel.findOne({ email }).select('+password')
         if (!user) throw new HttpException('Email not found', 404)
 
         if (isOAuth) return user
+        if (asAdmin &&
+            user.role !== UserRoles.ADMIN &&
+            user.role !== UserRoles.MODERATOR
+        ) throw new HttpException('Tu n\'as pas les droits pour accéder à cette ressource', 403)
 
         const isPasswordMatch = compareHash(password, user.password)
         if (!isPasswordMatch) throw new HttpException('Invalid password', 400)
