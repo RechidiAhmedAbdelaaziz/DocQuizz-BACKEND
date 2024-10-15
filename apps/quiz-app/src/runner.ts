@@ -2,28 +2,17 @@ import mongoose, { Schema, Document, Types } from 'mongoose';
 
 interface OldQuestion extends Document {
 
-    source: Types.ObjectId,
-    year: number,
-    sources: {
-        source: Types.ObjectId,
-        year: number,
-    }[],
+    exam: Types.ObjectId,
+    exams: Types.ObjectId[],
 }
 
-const sourceSchame = new Schema({
-
-    source: Types.ObjectId,
-    year: Number,
-}, { _id: false });
 
 
 // Define Old Question Schema
 const QuestionSchema = new Schema<OldQuestion>({
 
-    source: { type: Schema.Types.ObjectId, ref: 'Source' },
-    year: Number,
-
-    sources: [sourceSchame],
+    exam: { type: Schema.Types.ObjectId, ref: 'Exam' },
+    exams: [{ type: Schema.Types.ObjectId, ref: 'Exam' }],
 
 
 });
@@ -36,29 +25,26 @@ const Question = mongoose.model<OldQuestion>('Question', QuestionSchema);
 async function updateQuestions() {
     try {
         // Connect to MongoDB
-        await mongoose.connect('mongodb://localhost:27017', {
+        await mongoose.connect('mongodb+srv://ahmedrechidi:3Sd-3RF-nWn-Yth@docquizzdb.unh0tmk.mongodb.net/', {
             dbName: 'DocQuizz',
         });
 
         // Find all documents with correctAnswers and wrongAnswers
         const questions = await Question.find({
-
+            exams: { $exists: true },
         });
 
         // Loop over each question and update the structure
         for (var question of questions) {
 
+            console.log('Updating question:', question.exams);
 
 
 
-            question.sources = [
-                {
-                    source: question.source,
-                    year: question.year
-                }
-            ]
+            // question.exams = [question.exam];
+            // question.exam = undefined;
 
-            await question.save();
+            // await question.save();
         }
 
         console.log('All questions updated successfully.');
@@ -71,3 +57,4 @@ async function updateQuestions() {
 
 // Run the update function
 updateQuestions();
+
