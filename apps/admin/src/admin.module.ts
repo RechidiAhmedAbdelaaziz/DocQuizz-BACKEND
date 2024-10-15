@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { AdminGuard, DatabaseModule, HttpExceptionFilter, ModeratorGuard } from '@app/common';
+import { AdminGuard, DatabaseModule, HttpExceptionFilter } from '@app/common';
 import { JwtAuthModule } from '@app/common/module/jwt-auth/jwt-auth.module';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { ExamAdminModule } from './module/exam-admin/exam-admin.module';

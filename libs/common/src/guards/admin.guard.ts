@@ -19,10 +19,12 @@ export class AdminGuard extends HttpAuthGuard implements CanActivate {
 
     super.canActivate(context)
 
-
     const reflector = new Reflector();
     const skipAdminGuard = reflector.get<boolean>('skipAdminGuard', context.getHandler());
     if (skipAdminGuard) return ModeratorGuard.prototype.canActivate(context)
+
+      
+
 
     const request = context.switchToHttp().getRequest<Request>()
 
@@ -34,13 +36,13 @@ export class AdminGuard extends HttpAuthGuard implements CanActivate {
 
 
 @Injectable()
-export class ModeratorGuard extends HttpAuthGuard implements CanActivate {
+class ModeratorGuard extends HttpAuthGuard implements CanActivate {
 
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
 
-    super.canActivate(context)
+    
 
     const request = context.switchToHttp().getRequest<Request>()
 
