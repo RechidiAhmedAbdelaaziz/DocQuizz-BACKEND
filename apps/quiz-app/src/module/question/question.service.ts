@@ -21,7 +21,7 @@ export class QuestionService {
         const questions = await this.questionModel
             .find(filter)
             .populate('sources.source')
-            .populate('exam')
+            .populate('exams')
             .populate('course')
             .skip((page - 1) * limit)
             .limit(limit)
@@ -50,7 +50,7 @@ export class QuestionService {
         const questions = await this.questionModel
             .find(filter)
             .skip((page - 1) * limit)
-            .limit(limit).populate(['sources.source', 'course', 'exam'])
+            .limit(limit).populate(['sources.source', 'course', 'exams'])
 
         return await generate(questions);
     }
