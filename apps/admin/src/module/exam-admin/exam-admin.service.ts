@@ -70,6 +70,11 @@ export class ExamAdminService {
         return exam;
     }
 
+    async getExams(options?: {
+        ids?: Types.ObjectId[];
+    }) {
+        return await this.examModel.find(options.ids ? { _id: { $in: options.ids } } : {});
+    }
 
 
 

@@ -32,8 +32,8 @@ export class Question extends AbstractSchema {
     @Prop()
     type: QuestionType;
 
-    @Prop({ type: Schema.Types.ObjectId, ref: Exam.name })
-    exam?: Exam
+    @Prop([{ type: Schema.Types.ObjectId, ref: Exam.name }])
+    exams?: Exam[]
 
     @Prop({ type: Schema.Types.ObjectId, ref: Course.name })
     course: Course

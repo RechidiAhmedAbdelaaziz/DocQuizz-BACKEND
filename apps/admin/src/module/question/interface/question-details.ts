@@ -17,7 +17,7 @@ export interface SubQuestion {
 export interface QuestionDetails {
     caseText?: string,
     questions: SubQuestion[],
-    exam?: Exam,
+    exams?: Exam[],
     course?: Course,
     sources: {
         source: Source,

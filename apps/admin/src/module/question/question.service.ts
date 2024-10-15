@@ -16,7 +16,7 @@ export class QuestionService {
     createOrUpdateQuestion = async (
         details: QuestionDetails, questionToUpdate?: Question
     ) => {
-        const { caseText, year, questions, exam, sources, course } = details
+        const { caseText, year, questions, exams, sources, course } = details
         const question = questionToUpdate || new this.questionModel({ difficulties: [] })
 
 
@@ -37,7 +37,7 @@ export class QuestionService {
         }
 
         question.questions = questions
-        question.exam = exam
+        question.exams = exams
         question.course = course
         question.sources = sources
 

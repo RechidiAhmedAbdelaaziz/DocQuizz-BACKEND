@@ -20,21 +20,21 @@ export class QuestionController {
 
   @Post() //* QUESTION | Create ~ {{host}}/question
   async createQuestion(@Body() body: CreateOrUpdateQuestionBody) {
-    const { courseId, questions, caseText, examId, sources: sourceIds } = body
+    const { courseId, questions, caseText, examIds, sources: sourceIds } = body
 
     // await this.questionService.checkQuestionExists(questionText)
 
-    const exam = examId ? await this.examService.getExamById(examId) : undefined
+    const exams = examIds ? await this.examService.getExams({ ids: examIds }) : undefined
     const course = courseId ? await this.levelService.getCourseById(courseId) : undefined
     const sources = sourceIds ? await Promise.all(sourceIds.map(async source => {
       const sourceE = await this.sourceService.getSourceById(source.sourceId)
       return { source: sourceE, year: source.year }
     })) : undefined;
 
-    if (exam) await this.examService.updateExam(exam, { addQuiz: true })
+    if (exams) await Promise.all(exams.map(async exam => { await this.examService.updateExam(exam, { addQuiz: true }) }) )
 
     const question = await this.questionService.createOrUpdateQuestion({
-      questions, caseText, course, exam, sources
+      questions, caseText, course, exams, sources
     })
 
     await this.statisticService.updateStatistic({

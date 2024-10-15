@@ -47,9 +47,9 @@ export class CreateOrUpdateQuestionBody {
     @Type(() => SubQuestion)
     questions: SubQuestion[]
 
-    @IsMongoId()
+    @IsMongoId({ each: true })
     @IsOptional()
-    examId?: Types.ObjectId
+    examIds?: Types.ObjectId[]
 
     @IsMongoId()
     courseId: Types.ObjectId
