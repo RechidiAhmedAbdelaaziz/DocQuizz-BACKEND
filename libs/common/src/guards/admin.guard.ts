@@ -28,7 +28,7 @@ export class AdminGuard extends HttpAuthGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest<Request>()
 
-    if (request.user.role !== UserRoles.ADMIN) throw new HttpException('Tu n\'es pas admin', 401)
+    if (request.user.role !== UserRoles.ADMIN) throw new HttpException('Tu n\'es pas admin', 403)
 
     return true;
   }
@@ -48,7 +48,7 @@ class ModeratorGuard extends HttpAuthGuard implements CanActivate {
 
     if (request.user.role !== UserRoles.MODERATOR
       && request.user.role !== UserRoles.ADMIN
-    ) throw new HttpException('Tu n\'es pas modérateur', 401)
+    ) throw new HttpException('Tu n\'es pas modérateur', 403)
 
     return true;
   }
