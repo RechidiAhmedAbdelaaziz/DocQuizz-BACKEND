@@ -72,7 +72,7 @@ export class QuestionService {
         if (courses) filter.course = { $in: courses };
         if (difficulties) filter.difficulties = { $in: difficulties };
         if (types) filter.type = { $in: types };
-        if (exam) filter.exam = exam;
+        if (exam) filter.exams = { $in: [exam] };
 
         const sourcesFilter: any = {}
         if (year) sourcesFilter.year = { $gte: year }
