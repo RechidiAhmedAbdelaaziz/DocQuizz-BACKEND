@@ -31,7 +31,7 @@ export class QuestionController {
       return { source: sourceE, year: source.year }
     })) : undefined;
 
-    if (exams) await Promise.all(exams.map(async exam => { await this.examService.updateExam(exam, { addQuiz: true }) }) )
+    if (exams) await Promise.all(exams.map(async exam => { await this.examService.updateExam(exam, { addQuiz: true }) }))
 
     const question = await this.questionService.createOrUpdateQuestion({
       questions, caseText, course, exams, sources
@@ -50,23 +50,28 @@ export class QuestionController {
     @Body() body: CreateOrUpdateQuestionBody,
     @Param('questionId', ParseMonogoIdPipe) questionId: Types.ObjectId,
   ) {
-    const { courseId, questions, caseText, examId, sources: sourceIds } = body
+    const { courseId, questions, caseText, examIds, sources: sourceIds } = body
 
 
 
 
     const question = await this.questionService.getQuestionById(questionId)
 
-    const exam = examId ? await this.examService.getExamById(examId) : undefined
-    if (exam) {
-      if (question.exam && exam.id !== question.exam.id) {
-        await this.examService.updateExam(exam, { addQuiz: true })
-        await this.examService.updateExam(question.exam, { deleteQuiz: true })
-      }
-      if (!question.exam) await this.examService.updateExam(exam, { addQuiz: true })
-    }
-    else if (question.exam) await this.examService.updateExam(question.exam, { deleteQuiz: true })
+    const exams = examIds ? await this.examService.getExams({ ids: examIds }) : undefined;
 
+    for (const exam of exams) {
+      const examExist = question.exams.find(e => e.id == exam.id)
+      if (exam) {
+        
+        if (!examExist) {
+          await this.examService.updateExam(exam, { addQuiz: true })
+          await this.examService.updateExam(examExist, { deleteQuiz: true })
+        }
+        if (!examExist) await this.examService.updateExam(exam, { addQuiz: true })
+      }
+      else if (examExist) await this.examService.updateExam(examExist, { deleteQuiz: true })
+
+    }
 
     const sources = sourceIds ? await Promise.all(sourceIds.map(async source => {
       const sourceE = await this.sourceService.getSourceById(source.sourceId)
@@ -77,7 +82,7 @@ export class QuestionController {
     return await this.questionService.createOrUpdateQuestion({
       questions,
       caseText,
-      exam,
+      exams,
       course,
       sources,
     }, question)
@@ -90,7 +95,9 @@ export class QuestionController {
     const question = await this.questionService.getQuestionById(questionId, { withExam: true })
 
     await this.questionService.deleteQuestionById(question)
-    if (question.exam) await this.examService.updateExam(question.exam, { deleteQuiz: true })
+    for (const exam of question.exams) {
+      await this.examService.updateExam(exam, { deleteQuiz: true })
+    }
 
     await this.statisticService.updateStatistic({
       newQuestion: -1,
