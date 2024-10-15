@@ -25,7 +25,7 @@ import { UpdatesAdminModule } from './module/updates-admin/updates-admin.module'
   providers: [
     {
       provide: APP_GUARD,
-      useClass: ModeratorGuard,
+      useClass: AdminGuard,
     },
     {
       provide: APP_INTERCEPTOR,
