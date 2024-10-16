@@ -92,7 +92,8 @@ export class AdminUserController {
     @Param('userId', ParseMonogoIdPipe) userId: Types.ObjectId
   ) {
 
-    if (currentUserId.equals(userId)) throw new HttpException('Tu ne peux pas te supprimer toi même', 400)
+    if (currentUserId.toHexString()  === userId.toHexString()
+    ) throw new HttpException('Tu ne peux pas te supprimer toi même', 400)
 
     const user = await this.userService.getUserById(userId);
 
