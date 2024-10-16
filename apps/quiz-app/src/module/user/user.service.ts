@@ -1,4 +1,4 @@
-import { compareHash, hashData } from '@app/common';
+import { compareHash, hashData, UserRoles } from '@app/common';
 import { Domain, Level, Major, User } from '@app/common/models';
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -21,10 +21,11 @@ export class UserService {
             level?: Level;
             createQuiz?: boolean;
             createPlaylist?: boolean;
-            domain?: Domain
+            domain?: Domain,
+            role?: UserRoles,
         }
     ) => {
-        const { isPro, name, email, level, createQuiz, createPlaylist, domain } = updates;
+        const { isPro, name, email, level, role, createQuiz, createPlaylist, domain } = updates;
 
 
         if (isPro !== undefined) user.isPro = isPro;
@@ -34,6 +35,7 @@ export class UserService {
         if (domain) user.domain = domain;
         if (createQuiz) user.quizez++;
         if (createPlaylist) user.playlists++;
+        if (role) user.role = role;
 
         return await user.save();
     }
@@ -76,4 +78,19 @@ export class UserService {
         if (!user) throw new HttpException('User not found', 404)
         return user
     }
+
+    async getUserByEmail(email: string) {
+        const user = await this.userModel.findOne({ email })
+        if (!user) throw new HttpException('Ce compte n\'existe pas', 404)
+        return user
+    }
+
+    async getModeratorsAndAdmins() {
+        const users = await this.userModel.find({ role: { $in: [UserRoles.ADMIN, UserRoles.MODERATOR] } })
+        return users
+    }
+
+
+
+
 }
