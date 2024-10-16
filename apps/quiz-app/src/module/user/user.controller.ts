@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseBoolPipe, Patch, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, Param, ParseBoolPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { AdminGuard, CurrentUser, HttpAuthGuard, ParseMonogoIdPipe, UserRoles } from '@app/common';
 import { Types } from 'mongoose';
@@ -68,14 +68,18 @@ export class AdminUserController {
   ) { }
 
   @Get() //* ADMIN | Get moderators ~ {{host}}/admins
-  async getUsers() {
-    return await this.userService.getModeratorsAndAdmins()
+  async getUsers(
+    @CurrentUser() userId: Types.ObjectId
+  ) {
+
+
+    return await this.userService.getModeratorsAndAdmins({you : userId})
   }
 
   @Post() //* ADMIN | Update moderator ~ {{host}}/admins/
   async updateUser(
-    @Body('userEmail') userEmail : string,
-    @Body('admin', ParseBoolPipe) admin?: boolean
+    @Body('userEmail') userEmail: string,
+    @Body('admin') admin?: boolean
   ) {
     const user = await this.userService.getUserByEmail(userEmail);
 
@@ -84,8 +88,12 @@ export class AdminUserController {
 
   @Delete(':userId') //* ADMIN | Delete moderator ~ {{host}}/admins/:userId
   async deleteUser(
+    @CurrentUser() currentUserId: Types.ObjectId,
     @Param('userId', ParseMonogoIdPipe) userId: Types.ObjectId
   ) {
+
+    if (currentUserId.equals(userId)) throw new HttpException('Tu ne peux pas te supprimer toi même', 400)
+
     const user = await this.userService.getUserById(userId);
 
     await this.userService.updateUser(user, { role: UserRoles.USER })

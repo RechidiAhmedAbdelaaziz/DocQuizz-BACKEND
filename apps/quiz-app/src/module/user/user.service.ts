@@ -2,7 +2,7 @@ import { compareHash, hashData, UserRoles } from '@app/common';
 import { Domain, Level, Major, User } from '@app/common/models';
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { FilterQuery, Model, Types } from 'mongoose';
 
 @Injectable()
 export class UserService {
@@ -85,8 +85,15 @@ export class UserService {
         return user
     }
 
-    async getModeratorsAndAdmins() {
-        const users = await this.userModel.find({ role: { $in: [UserRoles.ADMIN, UserRoles.MODERATOR] } })
+    async getModeratorsAndAdmins(options?: { you: Types.ObjectId }) {
+        const filter : FilterQuery<User> = {
+            role: { $in: [UserRoles.ADMIN, UserRoles.MODERATOR] },
+            email: { $ne: process.env.SUPER_ADMIN_EMAIL }
+        }
+
+        if (options?.you) filter._id = { $ne: options.you }
+
+        const users = await this.userModel.find(filter).select('name email role')
         return users
     }
 

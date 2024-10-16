@@ -12,3 +12,4 @@ export const CurrentDomain = createParamDecorator((data: any, context: Execution
     const request = context.switchToHttp().getRequest<Request>();
     return request.user.domain;
 });
+
