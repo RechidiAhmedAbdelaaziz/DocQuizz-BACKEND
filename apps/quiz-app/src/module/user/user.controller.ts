@@ -74,7 +74,7 @@ export class AdminUserController {
 
   @Post() //* ADMIN | Update moderator ~ {{host}}/admins/
   async updateUser(
-    @Body('userEmail', ParseMonogoIdPipe) userEmail : string,
+    @Body('userEmail') userEmail : string,
     @Body('admin', ParseBoolPipe) admin?: boolean
   ) {
     const user = await this.userService.getUserByEmail(userEmail);
