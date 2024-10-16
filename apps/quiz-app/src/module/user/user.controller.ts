@@ -88,14 +88,9 @@ export class AdminUserController {
 
   @Delete(':userId') //* ADMIN | Delete moderator ~ {{host}}/admins/:userId
   async deleteUser(
-    @CurrentUser(ParseMonogoIdPipe) currentUserId: Types.ObjectId,
     @Param('userId', ParseMonogoIdPipe) userId: Types.ObjectId
   ) {
 
-    console.log(currentUserId, '||', userId)
-
-    if (currentUserId.toHexString() === userId.toHexString()
-    ) throw new HttpException('Tu ne peux pas te supprimer toi même', 400)
 
     const user = await this.userService.getUserById(userId);
 
