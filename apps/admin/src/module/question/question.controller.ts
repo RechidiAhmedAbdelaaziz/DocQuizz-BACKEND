@@ -64,9 +64,9 @@ export class QuestionController {
       const examExist = question.exams.find(e => e.id == exam.id)
       if (exam) {
         
-        if (!examExist) {
+        if (examExist) {
           await this.examService.updateExam(exam, { addQuiz: true })
-          // await this.examService.updateExam(examExist, { deleteQuiz: true })
+          await this.examService.updateExam(examExist, { deleteQuiz: true })
         }
         if (!examExist) await this.examService.updateExam(exam, { addQuiz: true })
       }
