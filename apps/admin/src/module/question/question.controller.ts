@@ -66,7 +66,7 @@ export class QuestionController {
         
         if (!examExist) {
           await this.examService.updateExam(exam, { addQuiz: true })
-          await this.examService.updateExam(examExist, { deleteQuiz: true })
+          // await this.examService.updateExam(examExist, { deleteQuiz: true })
         }
         if (!examExist) await this.examService.updateExam(exam, { addQuiz: true })
       }
