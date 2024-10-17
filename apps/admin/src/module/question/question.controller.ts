@@ -60,19 +60,16 @@ export class QuestionController {
 
     const exams = examIds ? await this.examService.getExams({ ids: examIds }) : undefined;
 
-    for (const exam of exams) {
-      const examExist = question.exams.find(e => e.id == exam.id)
-      if (exam) {
-        
-        if (examExist) {
-          await this.examService.updateExam(exam, { addQuiz: true })
-          await this.examService.updateExam(examExist, { deleteQuiz: true })
-        }
-        if (!examExist) await this.examService.updateExam(exam, { addQuiz: true })
-      }
-      else if (examExist) await this.examService.updateExam(examExist, { deleteQuiz: true })
 
-    }
+    const examsNotInQuestion = exams.filter(exam => !question.exams.find(e => e.id == exam.id))
+    const examsNotInExams = question.exams.filter(exam => !exams.find(e => e.id == exam.id))
+
+    for (const exam of examsNotInQuestion) await this.examService.updateExam(exam, { addQuiz: true })
+
+    for (const exam of examsNotInExams) await this.examService.updateExam(exam, { deleteQuiz: true })
+
+
+
 
     const sources = sourceIds ? await Promise.all(sourceIds.map(async source => {
       const sourceE = await this.sourceService.getSourceById(source.sourceId)
