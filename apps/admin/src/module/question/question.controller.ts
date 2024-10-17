@@ -58,7 +58,20 @@ export class QuestionController {
 
     const question = await this.questionService.getQuestionById(questionId)
 
-    const exams = examIds ? await this.examService.getExams({ ids: examIds }) : undefined;
+    const exams = examIds ? await this.examService.getExams({ ids: examIds }) : [];
+    const sources = sourceIds ? await Promise.all(sourceIds.map(async source => {
+      const sourceE = await this.sourceService.getSourceById(source.sourceId)
+      return { source: sourceE, year: source.year }
+    })) : undefined;
+    const course = courseId ? await this.levelService.getCourseById(courseId) : undefined
+
+    const newQuestion = await this.questionService.createOrUpdateQuestion({
+      questions,
+      caseText,
+      exams,
+      course,
+      sources,
+    }, question);
 
 
     const examsNotInQuestion = exams.filter(exam => !question.exams.find(e => e.id == exam.id))
@@ -69,21 +82,7 @@ export class QuestionController {
     for (const exam of examsNotInExams) await this.examService.updateExam(exam, { deleteQuiz: true })
 
 
-
-
-    const sources = sourceIds ? await Promise.all(sourceIds.map(async source => {
-      const sourceE = await this.sourceService.getSourceById(source.sourceId)
-      return { source: sourceE, year: source.year }
-    })) : undefined;
-    const course = courseId ? await this.levelService.getCourseById(courseId) : undefined
-
-    return await this.questionService.createOrUpdateQuestion({
-      questions,
-      caseText,
-      exams,
-      course,
-      sources,
-    }, question)
+    return newQuestion
   }
 
   @Delete(':questionId') //* QUESTION | Delete ~ {{host}}/question/:questionId
