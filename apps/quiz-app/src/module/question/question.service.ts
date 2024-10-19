@@ -84,24 +84,33 @@ export class QuestionService {
             filter.$or = [{ withExplanation: true }, { withExplanation: false }];
         } else if (withExplanation) {
             filter.withExplanation = true;
-        }
-        else if (withoutExplanation) {
+        } else if (withoutExplanation) {
             filter.withExplanation = false;
         }
-
-
-
+        
+        // Prepare the keywords filter
+        let keywordFilter = [];
         if (keywords) {
-            filter.$and = [
-                { $or: filter.$or },
-                {
-                    $or: [
-                        { caseText: { $regex: keywords, $options: 'i' } },
-                        { "questions.text": { $regex: keywords, $options: 'i' } },
-                        { "questions.answers.text": { $regex: keywords, $options: 'i' } },
-                    ]
-                }
+            keywordFilter = [
+                { caseText: { $regex: keywords, $options: 'i' } },
+                { "questions.text": { $regex: keywords, $options: 'i' } },
+                { "questions.answers.text": { $regex: keywords, $options: 'i' } }
             ];
+        }
+        
+        // Combine conditions
+        if (keywords) {
+            filter.$and = [];
+        
+            // Add the withExplanation filter if $or is present
+            if (filter.$or && filter.$or.length > 0) {
+                filter.$and.push({ $or: filter.$or });
+            }
+        
+            // Add the keyword filter
+            filter.$and.push({ $or: keywordFilter });
+        
+            // Clean up $or since it's now moved to $and
             delete filter.$or;
         }
 
