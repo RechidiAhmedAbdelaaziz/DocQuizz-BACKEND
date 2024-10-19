@@ -92,10 +92,17 @@ export class QuestionService {
 
 
         if (keywords) {
-            const keywordsArray = keywords.split(' ');
-            filter.$and = keywordsArray.map(keyword => ({
-                questionText: { $regex: keyword, $options: 'i' }
-            }));
+            filter.$and = [
+                { $or: filter.$or || [] },
+                {
+                    $or: [
+                        { caseText: { $regex: keywords, $options: 'i' } },
+                        { "questions.text": { $regex: keywords, $options: 'i' } },
+                        { "questions.answers.text": { $regex: keywords, $options: 'i' } },
+                    ]
+                }
+            ];
+            delete filter.$or;
         }
 
         return filter;

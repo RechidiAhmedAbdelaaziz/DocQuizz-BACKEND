@@ -97,6 +97,10 @@ export class UserService {
         return users
     }
 
+    async deleteUser(user: User) {
+        await user.deleteOne()
+    }
+
 
 
 

@@ -55,6 +55,17 @@ export class UserController {
     return { message: 'password updated successfully' }
   }
 
+  @Delete('me') //* USER | Delete account ~ {{host}}/user/me
+  async deleteUser(
+    @CurrentUser() userId: Types.ObjectId
+  ) {
+    const user = await this.userService.getUserById(userId);
+
+    await this.userService.deleteUser(user)
+
+    return { message: 'account deleted successfully' }
+  }
+
 
 
 }
