@@ -64,7 +64,7 @@ export class QuestionService {
     }
 
     generateFilterQuery(filters: QuestionFilter): FilterQuery<Question> {
-        const { courses, difficulties, withoutExplanation, types, sources, year, exam, withExplanation, ids, keywords } = filters;
+        const { courses, difficulties, withoutExplanation, types, sources, year,years, exam, withExplanation, ids, keywords } = filters;
 
         const filter: FilterQuery<Question> = {};
 
@@ -78,6 +78,8 @@ export class QuestionService {
         if (year) sourcesFilter.year = { $gte: year }
         if (sources) sourcesFilter.source = { $in: sources }
         if (year || sources) filter.sources = { $elemMatch: sourcesFilter };
+
+        if (years) filter.sources = { $elemMatch: { year: { $in: years } } };
 
 
         if (withExplanation && withoutExplanation) {

@@ -12,5 +12,6 @@ export interface QuestionFilter {
     keywords?: string,
     sources?: Types.ObjectId[],
     year?: number
+    years?: number[]
 }
 

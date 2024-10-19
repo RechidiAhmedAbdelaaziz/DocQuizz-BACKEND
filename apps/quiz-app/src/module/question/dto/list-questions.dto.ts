@@ -40,7 +40,7 @@ export class ListQuestionsQuery extends PaginationQuery {
 
     @IsOptional()
     @IsNumberString({})
-    year?: string;
+    years?: string[];
 
 }
 
