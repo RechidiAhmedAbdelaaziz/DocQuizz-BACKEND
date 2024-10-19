@@ -39,7 +39,7 @@ export class ListQuestionsQuery extends PaginationQuery {
     sources?: Types.ObjectId[];
 
     @IsOptional()
-    @IsNumberString({})
+    @IsNumberString({}, { each: true })
     years?: string[];
 
 }
