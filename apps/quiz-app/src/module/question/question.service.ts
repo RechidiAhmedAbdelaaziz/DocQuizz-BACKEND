@@ -102,7 +102,6 @@ export class QuestionService {
                     ]
                 }
             ];
-            delete filter.$or;
         }
 
         return filter;
