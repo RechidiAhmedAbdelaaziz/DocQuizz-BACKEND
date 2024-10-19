@@ -93,7 +93,7 @@ export class QuestionService {
 
         if (keywords) {
             filter.$and = [
-                { $or: filter.$or || [] },
+                { $or: filter.$or },
                 {
                     $or: [
                         { caseText: { $regex: keywords, $options: 'i' } },
@@ -102,6 +102,7 @@ export class QuestionService {
                     ]
                 }
             ];
+            delete filter.$or;
         }
 
         return filter;
