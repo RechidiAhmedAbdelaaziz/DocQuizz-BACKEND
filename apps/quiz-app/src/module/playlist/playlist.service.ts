@@ -183,7 +183,7 @@ export class PlaylistService {
             .populate({
                 path: 'questions',
                 populate: [
-                    { path: 'exam' },
+                    // { path: 'exams' },
                     { path: 'course' },
                     { path: 'sources.source' }
                 ]
