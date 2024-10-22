@@ -10,7 +10,7 @@ export class SourceService {
     ) { }
 
 
-    getSources = async () => await this.sourceModel.find();
+    getSources = async () => await this.sourceModel.find().sort('title');
 
 
 
