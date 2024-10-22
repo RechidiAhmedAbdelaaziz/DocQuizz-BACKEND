@@ -16,7 +16,7 @@ export class LevelsService {
     getDomains = async () => {
         return await this.domainModel.find()
             .sort('name')
-            .collation({ locale: "fr", strength: 1 });
+
     }
 
     getLevels = async (domain?: Domain) => {
@@ -27,16 +27,16 @@ export class LevelsService {
     getMajors = async (level?: Level, domain?: Domain) => {
         if (level) return await this.majorModel.find({ level })
             .sort('name')
-            .collation({ locale: "fr", strength: 1 });
+
 
         if (domain) return await this.majorModel
             .find({ level: { $in: await this.levelModel.find({ domain }) } })
             .sort('name')
-            .collation({ locale: "fr", strength: 1 });
+
 
         return await this.majorModel.find()
             .sort('name')
-            .collation({ locale: "fr", strength: 1 });
+
 
     }
 
@@ -44,7 +44,7 @@ export class LevelsService {
         const filter = major ? { major } : {};
         return await this.courseModel.find(filter)
             .sort('name')
-            .collation({ locale: "fr", strength: 1 });
+
     }
 
     getDomainById = async (id: Types.ObjectId) => {

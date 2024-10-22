@@ -12,7 +12,7 @@ export class SourceService {
 
     getSources = async () => await this.sourceModel.find()
         .sort('title')
-        .collation({ locale: "fr", strength: 1 });
+
 
 
 
