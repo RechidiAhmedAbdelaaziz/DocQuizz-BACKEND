@@ -14,7 +14,7 @@ export class LevelsService {
     ) { }
 
     getDomains = async () => {
-        return await this.domainModel.find({}, {}, { collation: { locale: 'fr', strength: 1 } })
+        return await this.domainModel.find()
             .sort('name')
 
     }
@@ -25,16 +25,16 @@ export class LevelsService {
     }
 
     getMajors = async (level?: Level, domain?: Domain) => {
-        if (level) return await this.majorModel.find({ level }, {}, { collation: { locale: 'fr', strength: 1 } })
+        if (level) return await this.majorModel.find({ level })
             .sort('name')
 
 
         if (domain) return await this.majorModel
-            .find({ level: { $in: await this.levelModel.find({ domain }) } }, {}, { collation: { locale: 'fr', strength: 1 } })
+            .find({ level: { $in: await this.levelModel.find({ domain }) } })
             .sort('name')
 
 
-        return await this.majorModel.find({}, {}, { collation: { locale: 'fr', strength: 1 } })
+        return await this.majorModel.find()
             .sort('name')
 
 
@@ -42,7 +42,7 @@ export class LevelsService {
 
     getCourses = async (major?: Major) => {
         const filter = major ? { major } : {};
-        return await this.courseModel.find(filter, {}, { collation: { locale: 'fr', strength: 1 } })
+        return await this.courseModel.find(filter)
             .sort('name')
 
     }
@@ -64,7 +64,6 @@ export class LevelsService {
         if (!major) throw new HttpException('Major not found', 404);
         return major;
     }
-
 
 
 
