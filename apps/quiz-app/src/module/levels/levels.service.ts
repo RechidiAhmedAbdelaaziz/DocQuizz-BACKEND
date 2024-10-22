@@ -19,7 +19,7 @@ export class LevelsService {
 
     getLevels = async (domain?: Domain) => {
         const filter = domain ? { domain } : {};
-        return await this.levelModel.find(filter).sort('name');
+        return await this.levelModel.find(filter)
     }
 
     getMajors = async (level?: Level, domain?: Domain) => {
