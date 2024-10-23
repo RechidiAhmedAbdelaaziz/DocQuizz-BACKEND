@@ -15,7 +15,7 @@ export class ProGuard extends HttpAuthGuard implements CanActivate {
 
         const request = context.switchToHttp().getRequest<Request>()
 
-        if (!request.user.isPro) throw new HttpException('Unauthorized -USE PRO PLAN-', 401)
+        if (!request.user.isPro) throw new HttpException('Tu ne peux pas accéder à cette fonctionnalité', 403)
 
         return true;
     }

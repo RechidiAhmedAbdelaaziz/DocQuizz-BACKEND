@@ -49,7 +49,7 @@ export class UserService {
     ) => {
         const { oldPassword, newPassword } = info;
 
-        if (!compareHash(oldPassword, user.password)) throw new HttpException('Old password is not correct', 400)
+        if (!compareHash(oldPassword, user.password)) throw new HttpException('Ancien mot de passe incorrect', 400)
         user.password = hashData(newPassword);
 
         await user.save();
@@ -58,7 +58,7 @@ export class UserService {
 
     async checkEmail(email: string) {
         const check = await this.userModel.findOne({ email })
-        if (check) throw new HttpException('Email already exists', 400)
+        if (check) throw new HttpException('Email déjà utilisé', 400)
     }
 
     async getUserById(id: Types.ObjectId, options?: {

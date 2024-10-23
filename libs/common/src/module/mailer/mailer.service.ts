@@ -53,7 +53,7 @@ export class MailerService {
             })
         }
         catch (err) {
-            throw new HttpException('Error in sending email', 500, { cause: err })
+            throw new HttpException('Erreur lors de l\'envoi du mail', 500)
         }
     }
 }

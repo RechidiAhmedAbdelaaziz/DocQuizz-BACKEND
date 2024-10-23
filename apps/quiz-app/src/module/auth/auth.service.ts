@@ -29,7 +29,7 @@ export class AuthService {
         const { name, email, password } = details
 
         const userExists = await this.userModel.findOne({ email })
-        if (userExists) throw new HttpException('Email already exists', 400)
+        if (userExists) throw new HttpException('Email déjà utilisé', 400)
 
         const user = new this.userModel()
 
@@ -51,7 +51,7 @@ export class AuthService {
         const { isOAuth, asAdmin } = options || {}
 
         const user = await this.userModel.findOne({ email }).select('+password')
-        if (!user) throw new HttpException('Email not found', 404)
+        if (!user) throw new HttpException('Email non trouvé', 404)
 
         if (isOAuth) return user
         if (asAdmin &&
@@ -60,14 +60,14 @@ export class AuthService {
         ) throw new HttpException('Tu n\'as pas les droits pour accéder à cette ressource', 403)
 
         const isPasswordMatch = compareHash(password, user.password)
-        if (!isPasswordMatch) throw new HttpException('Invalid password', 400)
+        if (!isPasswordMatch) throw new HttpException('Mot de passe incorrect', 400)
 
         return user
     }
 
     forgetPassword = async (email: string) => {
         const user = await this.userModel.findOne({ email })
-        if (!user) throw new HttpException('Email not found', 404)
+        if (!user) throw new HttpException('Il n\'y a pas de compte avec cet email', 404)
 
         const otp = OTP.generate(6, { lowerCaseAlphabets: false, specialChars: false, upperCaseAlphabets: false })
         const expires = new Date(Date.now() + 1000 * 60 * 60)
@@ -90,12 +90,12 @@ export class AuthService {
         const { email, otp, password } = data
 
         const user = await this.userModel.findOne({ email })
-        if (!user) throw new HttpException('User not found', 404)
+        if (!user) throw new HttpException('Utilisateur non trouvé', 404)
 
         const restPasswordToken = await this.restPasswordTokenModel.findOne(
             { user, otp, expires: { $gt: new Date() } }
         )
-        if (!restPasswordToken) throw new HttpException('Invalid OTP', 400)
+        if (!restPasswordToken) throw new HttpException('OTP invalide', 400)
 
 
         const cryptPassword = hashData(password)

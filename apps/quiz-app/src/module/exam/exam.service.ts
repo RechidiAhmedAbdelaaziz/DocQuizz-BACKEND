@@ -42,7 +42,7 @@ export class ExamService {
 
     async getExamById(id: Types.ObjectId) {
         const exam = await this.examModel.findById(id);
-        if (!exam) throw new HttpException('Exam not found', 404);
+        if (!exam) throw new HttpException('Exam non trouvé', 404);
         return exam;
     }
 }

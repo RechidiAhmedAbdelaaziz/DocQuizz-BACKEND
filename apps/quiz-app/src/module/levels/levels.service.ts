@@ -10,13 +10,11 @@ export class LevelsService {
         @InjectModel(Major.name) private readonly majorModel: Model<Major>,
         @InjectModel(Domain.name) private readonly domainModel: Model<Domain>,
         @InjectModel(Course.name) private readonly courseModel: Model<Course>,
-
     ) { }
 
     getDomains = async () => {
         return await this.domainModel.find()
             .sort('name')
-
     }
 
     getLevels = async (domain?: Domain) => {

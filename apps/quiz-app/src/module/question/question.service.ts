@@ -26,7 +26,7 @@ export class QuestionService {
             .skip((page - 1) * limit)
             .limit(limit)
 
-        if (pagination.min && questions.length < pagination.min) throw new HttpException(`There are less than ${pagination.min} questions that match the filter`, 400);
+        if (pagination.min && questions.length < pagination.min) throw new HttpException(`Il n'y a pas assez de questions`, 404);
 
         return await generate(questions);
     }
