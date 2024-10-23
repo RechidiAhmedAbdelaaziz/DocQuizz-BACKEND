@@ -5,7 +5,7 @@ export class LoginBody {
     @IsEmail({}, { message: 'Invalid email' })
     email: string
 
-    @IsStrongPassword({})
+    @IsStrongPassword({}, { message: 'Mot de passe incorrect' })
     password: string
 
 }   
