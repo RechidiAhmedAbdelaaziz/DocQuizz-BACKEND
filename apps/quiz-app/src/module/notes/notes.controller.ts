@@ -79,7 +79,7 @@ export class NotesController {
 
     await this.notesService.getNoteById(noteId, user)
 
-    return { message: 'Note found' }
+    return { message: 'Note deleted successfully' }
   }
 
 

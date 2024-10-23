@@ -78,8 +78,7 @@ export class AuthController {
       subject: 'Forget Password',
       text: `Your OTP is ${otp}`
     })
-
-    return { message: 'Email sent' }
+    return { message: 'Un email contenant le code de vérification vous a été envoyé' }
   }
 
   @Post('verify-otp') //*  OTP | Verify  {{host}}/auth/verify-otp
@@ -89,7 +88,9 @@ export class AuthController {
     const { email, otp } = data
 
     await this.authService.checkOTP({ email, otp })
-    return { message: 'OTP verified' }
+
+    //message in french
+    return { message: 'Code de vérification valide' }
   }
 
   @Post('reset-password') //*  PASSWORD | Reset   {{host}}/auth/reset-password
@@ -99,7 +100,7 @@ export class AuthController {
     const { email, otp, password } = data
 
     await this.authService.resetPassword({ email, otp, password })
-    return { message: 'Password reset' }
+    return { message: 'Mot de passe réinitialisé avec succès' }
   }
 
   @Put('getAdmin') //*  ADMIN | Get Admin  {{host}}/auth/getAdmin

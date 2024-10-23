@@ -52,7 +52,7 @@ export class UserController {
 
     await this.userService.updatePassword(user, info)
 
-    return { message: 'password updated successfully' }
+    return { message: 'mot de passe mis à jour avec succès' } 
   }
 
   @Delete('me') //* USER | Delete account ~ {{host}}/user/me
@@ -63,7 +63,7 @@ export class UserController {
 
     await this.userService.deleteUser(user)
 
-    return { message: 'account deleted successfully' }
+    return { message: 'Compte supprimé avec succès' }
   }
 
 

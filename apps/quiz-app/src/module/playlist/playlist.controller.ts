@@ -92,7 +92,7 @@ export class PlaylistController {
 
     await this.playlistService.addQuestions(question, body);
 
-    return { message: 'Question added to playlist successfully' };
+    return { message: 'Question ajoutée avec succès' };
   }
 
   @Delete(':playlistId') //* PLAYLIST | Delete ~ {{host}}/playlist/:playlistId
@@ -105,7 +105,7 @@ export class PlaylistController {
 
     await this.playlistService.deletePlaylist(playlist);
 
-    return { message: 'Playlist deleted successfully' };
+    return { message: 'Playlist supprimée avec succès' };
   }
 
 }

@@ -24,6 +24,6 @@ export class QuizRecordController {
 
     await this.quizRecordService.createRecord(user, quiz);
 
-    return { message: 'Quiz started successfully' }
+    return { message: 'Quiz started successfully' };
   }
 }

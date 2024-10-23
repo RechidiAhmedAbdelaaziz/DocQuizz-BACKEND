@@ -155,7 +155,7 @@ export class QuizController {
 
     await this.quizService.deleteQuiz(quiz)
 
-    return { message: "Quiz deleted successfully" }
+    return { message: "Quiz supprimé avec succès" }
   }
 
 }
