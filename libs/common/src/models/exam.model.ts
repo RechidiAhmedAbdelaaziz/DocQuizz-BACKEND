@@ -31,11 +31,6 @@ export class Exam extends AbstractSchema {
     @Prop()
     group: string
 
-
-
-
-
-
 }
 
 
