@@ -28,7 +28,7 @@ export class ExamAdminService {
         createdExam.type = type;
         createdExam.group = group;
 
-        createdExam.title = `${type} ${group ? `(${group})` : ''} : ${major.name} | ${year} | ${city}`;
+        createdExam.title = `${type} ${group ? `(${group}) ` : ''}: ${major.name} | ${year} | ${city}`;
 
 
 
@@ -59,7 +59,7 @@ export class ExamAdminService {
         if (addQuiz) exam.questions += 1;
         if (deleteQuiz) exam.questions -= 1;
 
-        exam.title = `${type} ${group ? `(${group})` : ''} : ${major.name} | ${year} | ${city}`;
+        exam.title = `${type} ${group ? `(${group}) ` : ''}: ${major.name} | ${year} | ${city}`;
 
         return await exam.save();
     }
