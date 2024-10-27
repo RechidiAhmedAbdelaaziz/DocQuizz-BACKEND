@@ -20,13 +20,15 @@ async function bootstrap() {
     credentials: true, // If you need to allow credentials (cookies, authorization headers)
   });
 
-  // app.enableCors(
-  //   {
-  //     origin: 'http://localhost:8000',
-  //     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  //     credentials: true,
-  //   }
-  // )
+
+
+  app.enableCors(
+    {
+      origin: 'http://localhost:5173/',
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      credentials: true,
+    }
+  )
 
 
 
