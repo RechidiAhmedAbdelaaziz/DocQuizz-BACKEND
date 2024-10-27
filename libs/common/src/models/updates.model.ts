@@ -19,3 +19,4 @@ export class Updates extends AbstractSchema {
     date: Date
 
 }
+
