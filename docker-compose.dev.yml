@@ -1,0 +1,51 @@
+name: FenneQCM-DEV
+
+services:
+  docquizz-dev:
+    image: docquiz-app-dev
+    build:
+      context: ./
+      dockerfile: Dockerfile.dev
+    container_name: DocQuizzAPI-DEV
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./apps/quiz-app/src:/usr/src/app/src
+      - ./libs:/usr/src/app/libs
+      - ./node_modules:/usr/src/app/node_modules
+    command: npm run start:dev
+    dns:
+      - 8.8.8.8 # Google DNS
+      - 8.8.4.4 # Google DNS
+    env_file:
+      - .env
+    depends_on:
+      - db
+
+  admin-panel-dev:
+    image: admin-panel-dev
+    build:
+      context: ./
+      dockerfile: Dockerfile.dev
+    container_name: AdminPanelAPI-DEV
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./apps/admin/src:/usr/src/app/src
+      - ./libs:/usr/src/app/libs
+      - ./node_modules:/usr/src/app/node_modules
+    command: npm run start:dev
+    env_file:
+      - .env
+    dns:
+      - 8.8.8.8 # Google DNS
+      - 8.8.4.4 # Google DNS
+    depends_on:
+      - db
+
+  db:
+    image: mongo
+    container_name: DocQuizzDB-DEV
+    ports:
+      - "27017:27017"
+    attach: false

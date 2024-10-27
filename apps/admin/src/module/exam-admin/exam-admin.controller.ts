@@ -5,11 +5,13 @@ import { ParseMonogoIdPipe, SkipAdminGuard } from '@app/common';
 import { Types } from 'mongoose';
 import { UpdateExamBody } from './dto/update-exam.dto';
 import { StatisticService } from '../statistic/statistic.service';
+import { LevelsService } from '../levels/levels.service';
 
 @Controller('exam-admin')
 export class ExamAdminController {
   constructor(private readonly examAdminService: ExamAdminService,
-    private readonly statisticService: StatisticService
+    private readonly statisticService: StatisticService,
+    private readonly majorService: LevelsService,
 
   ) { }
 
@@ -18,30 +20,35 @@ export class ExamAdminController {
   async createExam(
     @Body() body: CreateExamBody
   ) {
-    const { time, city, major, year } = body;
-    const title = `Exam: ${major} | ${year} | ${city}`;
+    const { time, city, majorId, year, group, type } = body;
 
-    await this.examAdminService.checkByName(title);
+    const major = await this.majorService.getMajorById(majorId);
 
-    const exam = await this.examAdminService.createExam({ time, city, major, year });
+
+    const exam = await this.examAdminService.createExam({ time, city, major, year, type, group });
+
+    await this.majorService.updateMajor(major, { addExam: true });
 
     await this.statisticService.updateStatistic({ newExam: 1 });
 
     return exam;
   }
-  
+
   //* {"name":"EXAM | Update","request":{"method":"PATCH","header":[],"body":{"mode":"raw","raw":"{\n    \"major\": \"Math 2\",\n    \"time\": 1200, // secend\n    \"year\": 2022,\n    \"city\": \"El Bayadh\"\n}","options":{"raw":{"language":"json"}}},"url":{"raw":"{{host}}/exam-admin/:id","host":["{{host}}"],"path":["exam-admin",":id"]}},"response":[]}
   @Patch(':id')
   async updateExam(
-    @Body() body: UpdateExamBody,
+    @Body() body: CreateExamBody,
     @Param('id', ParseMonogoIdPipe) id: Types.ObjectId
   ) {
-    const { time, major, year, city } = body;
+    const { time, city, majorId, year, group, type } = body;
+
+    const major = await this.majorService.getMajorById(majorId);
 
     const exam = await this.examAdminService.getExamById(id);
-    const updatedExam = await this.examAdminService.updateExam(exam, { time, major, year, city });
 
-    return updatedExam;
+    await this.examAdminService.updateExam(exam, { time, city, major, year, type, group });
+
+    return exam;
   }
 
   @Delete(':id')

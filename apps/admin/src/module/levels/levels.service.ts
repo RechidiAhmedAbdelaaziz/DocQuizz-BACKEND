@@ -42,8 +42,15 @@ export class LevelsService {
         return level.save()
     }
 
-    updateMajor = async (major: Major, name: string) => {
-        major.name = name
+    updateMajor = async (major: Major, options: {
+        name?: string,
+        addExam?: boolean,
+        deleteExam?: boolean
+    }) => {
+        if (options.name) major.name = options.name
+        if (options.addExam) major.nbExams++
+        if (options.deleteExam) major.nbExams--
+
         return major.save()
     }
 

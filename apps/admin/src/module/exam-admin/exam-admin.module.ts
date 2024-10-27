@@ -3,13 +3,15 @@ import { ExamAdminService } from './exam-admin.service';
 import { ExamAdminController } from './exam-admin.controller';
 import { DatabaseModule } from '@app/common';
 import { Exam } from '@app/common/models';
+import { LevelsModule } from '../levels/levels.module';
 
 @Module({
   imports: [
-    DatabaseModule.forFeature([{ model: Exam }])
+    DatabaseModule.forFeature([{ model: Exam }]),
+    LevelsModule,
   ],
   controllers: [ExamAdminController],
-  providers: [ExamAdminService ],
+  providers: [ExamAdminService],
   exports: [ExamAdminService]
 })
 export class ExamAdminModule { }

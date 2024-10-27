@@ -1,9 +1,10 @@
-import { IsNumber, IsString } from "class-validator"
+import { IsEnum, IsMongoId, IsNumber, IsOptional, IsString } from "class-validator"
+import { Types } from "mongoose"
 
 export class CreateExamBody {
 
-    @IsString()
-    major: string
+    @IsMongoId()
+    majorId: Types.ObjectId
 
     @IsNumber()
     time: number
@@ -13,6 +14,13 @@ export class CreateExamBody {
 
     @IsString()
     city: string
+
+    @IsEnum(['Externat ', 'Résidanat', 'Résidanat blanc', 'Ratrappage'], { message: 'type must be one of these values: Externat, Résidanat, Résidanat blanc, Ratrappage' })
+    type: string
+
+    @IsOptional()
+    @IsString()
+    group: string
+
 }
 
- // {"major":"Math","time":120,"year":2021,"city":"Hanoi"}

@@ -1,4 +1,4 @@
-import { Exam } from '@app/common/models';
+import { Exam, Major } from '@app/common/models';
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -10,47 +10,56 @@ export class ExamAdminService {
     ) { }
 
     createExam = async (details: {
-        major: string,
+        major: Major,
         time: number,
         year: number,
-        city: string
+        city: string,
+        group?: string,
+        type: string
+
     }) => {
-        const { major, time, year, city } = details;
+        const { major, time, year, city, type, group } = details;
 
         const createdExam = new this.examModel();
 
-        createdExam.title = `Exam: ${major} | ${year} | ${city}`;
         createdExam.time = time;
         createdExam.year = year;
+        createdExam.city = city;
+        createdExam.type = type;
+        createdExam.group = group;
+
+        createdExam.title = `${type} ${group ? `(${group})` : ''} : ${major.name} | ${year} | ${city}`;
+
+
 
         return await createdExam.save();
     }
 
     updateExam = async (exam: Exam,
         details: {
-            major?: string,
+            major?: Major,
             time?: number,
             year?: number,
             city?: string,
             addQuiz?: boolean,
-            deleteQuiz?: boolean
+            deleteQuiz?: boolean,
+            group?: string
+            type?: string
+
         }) => {
 
-        const { time, addQuiz, deleteQuiz } = details;
+        const { time, addQuiz, deleteQuiz, type, city, group, major, year } = details;
 
-
-        const major = details.major || exam.title.split(' | ')[0].replace('Exam: ', '');
-        const year = details.year || exam.year;
-        const city = details.city || exam.title.split(' | ')[2]
-
-
-
-
-        exam.title = `Exam: ${major} | ${year} | ${city}`;
+        exam.time = time;
         exam.year = year;
-        if (time) exam.time = time;
+        exam.city = city;
+        exam.type = type;
+        exam.group = group;
+        exam.major = major;
         if (addQuiz) exam.questions += 1;
         if (deleteQuiz) exam.questions -= 1;
+
+        exam.title = `${type} ${group ? `(${group})` : ''} : ${major.name} | ${year} | ${city}`;
 
         return await exam.save();
     }
@@ -61,12 +70,12 @@ export class ExamAdminService {
 
     async checkByName(title: string) {
         const exam = await this.examModel.findOne({ title });
-        if (exam) throw new HttpException('Exam already exists', 400);
+        if (exam) throw new HttpException('Examen déjà existant', 400);
     }
 
     async getExamById(id: Types.ObjectId) {
         const exam = await this.examModel.findById(id);
-        if (!exam) throw new HttpException('Exam not found', 404);
+        if (!exam) throw new HttpException('Examen introuvable', 404);
         return exam;
     }
 

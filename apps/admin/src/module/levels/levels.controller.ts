@@ -112,7 +112,7 @@ export class LevelsController {
 
     const major = await this.levelsService.getMajorById(majorId)
 
-    return await this.levelsService.updateMajor(major, name)
+    return await this.levelsService.updateMajor(major, { name })
   }
 
   @Delete('majors/:majorId')  // * MAJOR | Delete ~ {{host}}/majors/:majorId

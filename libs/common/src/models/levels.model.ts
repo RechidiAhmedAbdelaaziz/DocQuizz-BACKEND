@@ -30,6 +30,9 @@ export class Major extends AbstractSchema {
     @Prop({ type: Schema.Types.ObjectId, ref: Level.name, select: false })
     level: Level
 
+    @Prop({ type: Number, default: 0 })
+    nbExams: number
+
 }
 
 @DSchema()

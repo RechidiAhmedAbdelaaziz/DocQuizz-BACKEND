@@ -5,4 +5,4 @@ apps
 README.md
 nest-cli.json
 .eslintrc.js
-node_modules
+# node_modules
