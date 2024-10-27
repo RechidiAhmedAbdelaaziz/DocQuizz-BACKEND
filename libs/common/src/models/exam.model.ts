@@ -16,22 +16,22 @@ export class Exam extends AbstractSchema {
     @Prop({ type: Schema.Types.ObjectId, ref: Major.name, select: false })
     major: Major
 
-    @Prop({ select: false })
+    @Prop()
     type: string
 
     @Prop()
     time: number
 
-    @Prop({ select: false })
+    @Prop()
     year: number
 
-    @Prop({ select: false })
+    @Prop()
     city: string
 
-    @Prop({ select: false })
+    @Prop()
     group: string
 
-   
+
 
 
 
