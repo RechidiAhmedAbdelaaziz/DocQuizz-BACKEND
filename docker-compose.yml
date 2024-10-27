@@ -16,8 +16,6 @@ services:
       - 8.8.4.4 # Google DNS
     env_file:
       - .env
-    depends_on:
-      - db
 
   admin-panel:
     image: admin-panel
@@ -34,6 +32,5 @@ services:
     dns:
       - 8.8.8.8 # Google DNS
       - 8.8.4.4 # Google DNS
-    depends_on:
-      - db
+  
 
