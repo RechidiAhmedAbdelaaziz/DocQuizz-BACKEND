@@ -33,6 +33,7 @@ export class ExamService {
         const { generate, limit, page } = new Pagination(this.examModel, { ...paginationOptions, filter }).getOptions();
 
         const exams = await this.examModel.find(filter)
+            .populate('major')
             .skip((page - 1) * limit)
             .limit(limit)
             .sort({ year: 1, title: 1 })
