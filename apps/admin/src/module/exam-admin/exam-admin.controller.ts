@@ -57,7 +57,7 @@ export class ExamAdminController {
     // type can contain a space at the end
     const type = type_.trim();
 
-    const major = await this.majorService.getMajorById(majorId);
+    const major = majorId ? await this.majorService.getMajorById(majorId) : undefined
 
     const exam = await this.examAdminService.getExamById(id);
 
