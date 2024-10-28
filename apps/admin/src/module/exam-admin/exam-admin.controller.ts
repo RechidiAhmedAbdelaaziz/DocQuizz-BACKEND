@@ -20,7 +20,10 @@ export class ExamAdminController {
   async createExam(
     @Body() body: CreateExamBody
   ) {
-    const { time, city, majorId, year, group, type } = body;
+    const { time, city, majorId, year, group, type: type_ } = body;
+
+    // type can contain a space at the end
+    const type = type_.trim();
 
     const major = await this.majorService.getMajorById(majorId);
 
@@ -40,7 +43,10 @@ export class ExamAdminController {
     @Body() body: CreateExamBody,
     @Param('id', ParseMonogoIdPipe) id: Types.ObjectId
   ) {
-    const { time, city, majorId, year, group, type } = body;
+    const { time, city, majorId, year, group, type: type_ } = body;
+
+    // type can contain a space at the end
+    const type = type_.trim();
 
     const major = await this.majorService.getMajorById(majorId);
 
