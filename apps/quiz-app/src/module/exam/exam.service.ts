@@ -37,7 +37,7 @@ export class ExamService {
         }
 
         if (major) {
-            filter.major._id = major;
+            filter['major._id'] = major;
             filter.$or = [
                 { type: 'Ratrappage' },
                 { type: 'Externat' }
