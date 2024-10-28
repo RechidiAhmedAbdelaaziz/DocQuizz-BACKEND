@@ -9,6 +9,7 @@ import { QuestionModule } from './module/question/question.module';
 import { StatisticModule } from './module/statistic/statistic.module';
 import { SourceAdminModule } from './module/source-admin/source-admin.module';
 import { UpdatesAdminModule } from './module/updates-admin/updates-admin.module';
+import { ExamRecordModule } from './module/exam-record/exam-record.module';
 
 @Module({
   imports: [
@@ -19,7 +20,8 @@ import { UpdatesAdminModule } from './module/updates-admin/updates-admin.module'
     QuestionModule,
     StatisticModule,
     SourceAdminModule,
-    UpdatesAdminModule
+    UpdatesAdminModule,
+    ExamRecordModule
   ],
   controllers: [],
   providers: [

@@ -6,12 +6,14 @@ import { Types } from 'mongoose';
 import { UpdateExamBody } from './dto/update-exam.dto';
 import { StatisticService } from '../statistic/statistic.service';
 import { LevelsService } from '../levels/levels.service';
+import { ExamRecordService } from '../exam-record/exam-record.service';
 
 @Controller('exam-admin')
 export class ExamAdminController {
   constructor(private readonly examAdminService: ExamAdminService,
     private readonly statisticService: StatisticService,
     private readonly majorService: LevelsService,
+    private readonly examRecordService: ExamRecordService
 
   ) { }
 
@@ -22,13 +24,20 @@ export class ExamAdminController {
   ) {
     const { time, city, majorId, year, group, type: type_ } = body;
 
-    // type can contain a space at the end
     const type = type_.trim();
 
     const major = await this.majorService.getMajorById(majorId);
 
 
     const exam = await this.examAdminService.createExam({ time, city, major, year, type, group });
+
+
+    if (type === 'Résidanat' || type === 'Résidanat blanc') {
+      await this.examRecordService.addExamRecord({ type, year });
+    }
+    else {
+      await this.examRecordService.addExamRecord({ major, year });
+    }
 
     await this.majorService.updateMajor(major, { addExam: true });
 

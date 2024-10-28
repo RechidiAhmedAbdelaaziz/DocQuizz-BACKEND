@@ -3,6 +3,7 @@ import { Types } from "mongoose"
 
 export class CreateExamBody {
 
+    @IsOptional()
     @IsMongoId()
     majorId: Types.ObjectId
 
