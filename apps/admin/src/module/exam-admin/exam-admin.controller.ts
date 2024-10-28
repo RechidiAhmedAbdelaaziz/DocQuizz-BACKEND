@@ -26,7 +26,7 @@ export class ExamAdminController {
 
     const type = type_.trim();
 
-    const major = await this.majorService.getMajorById(majorId);
+    const major = majorId ? await this.majorService.getMajorById(majorId) : undefined
 
 
     const exam = await this.examAdminService.createExam({ time, city, major, year, type, group });
