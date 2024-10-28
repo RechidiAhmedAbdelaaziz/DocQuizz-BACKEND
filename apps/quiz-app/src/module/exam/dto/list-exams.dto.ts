@@ -1,5 +1,5 @@
 import { PaginationQuery } from "@app/common/utils/pagination";
-import { IsMongoId, IsOptional, IsString } from "class-validator";
+import { IsMongoId, IsNumberString, IsOptional, IsString } from "class-validator";
 import { Types } from "mongoose";
 
 export class ListExamQuery extends PaginationQuery {
@@ -10,4 +10,8 @@ export class ListExamQuery extends PaginationQuery {
     @IsOptional()
     @IsMongoId()
     majorId: Types.ObjectId
+
+    @IsOptional()
+    @IsNumberString()
+    year: string
 }

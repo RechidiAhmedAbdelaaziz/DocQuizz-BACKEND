@@ -15,13 +15,14 @@ export class ExamService {
         options: {
             keywords?: string,
             major?: Major
+            year?: number
         },
         paginationOptions: {
             page?: number,
             limit?: number
         }
     ) => {
-        const { keywords, major } = options;
+        const { keywords, major, year } = options;
         const filter: FilterQuery<Exam> = {};
 
         if (keywords) {
@@ -43,6 +44,8 @@ export class ExamService {
                 { type: 'Externat' }
             ]
         }
+        if (year) filter.year = year;
+
 
         const { generate, limit, page } = new Pagination(this.examModel, { ...paginationOptions, filter }).getOptions();
 
