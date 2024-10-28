@@ -39,7 +39,7 @@ export class ExamAdminController {
       await this.examRecordService.addExamRecord({ major, year });
     }
 
-    await this.majorService.updateMajor(major, { addExam: true });
+    if (major) await this.majorService.updateMajor(major, { addExam: true });
 
     await this.statisticService.updateStatistic({ newExam: 1 });
 
