@@ -14,21 +14,29 @@ export class ExamService {
     getExams = async (
         options: {
             keywords?: string,
+            major?: Types.ObjectId,
         },
         paginationOptions: {
             page?: number,
             limit?: number
         }
     ) => {
-        const { keywords } = options;
+        const { keywords, major } = options;
         const filter: FilterQuery<Exam> = {};
 
         if (keywords) {
-            const keywordsArray = keywords.split(' ');
-            filter.$and = keywordsArray.map(keyword => ({
-                title: { $regex: keyword, $options: 'i' }
-            }));
+            if (keywords === 'Résidanat') {
+                filter.type = 'Résidanat';
+            }
+            else {
+                const keywordsArray = keywords.split(' ');
+                filter.$and = keywordsArray.map(keyword => ({
+                    title: { $regex: keyword, $options: 'i' }
+                }));
+            }
         }
+
+        if (major) filter.major = major;
 
         const { generate, limit, page } = new Pagination(this.examModel, { ...paginationOptions, filter }).getOptions();
 
@@ -36,7 +44,7 @@ export class ExamService {
             .populate('major')
             .skip((page - 1) * limit)
             .limit(limit)
-            .sort({ year: 1, title: 1 })
+            .sort({ "major.name": 1, year: -1, type: 1, group: 1, city: 1, });
 
         return await generate(exams);
     }

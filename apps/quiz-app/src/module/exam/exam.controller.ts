@@ -19,9 +19,9 @@ export class ExamController {
   async getExams(
     @Query() query: ListExamQuery
   ) {
-    const { keywords, limit, page } = query;
+    const { keywords, limit, page, major } = query;
 
-    return await this.examService.getExams({ keywords }, { limit, page });
+    return await this.examService.getExams({ keywords, major }, { limit, page });
   }
 
   @Get(":examId") //* EXAM | Get Questions ~ {{host}}/exam/:examId?page=1&limit=10
