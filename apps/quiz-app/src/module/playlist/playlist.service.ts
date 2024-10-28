@@ -172,7 +172,7 @@ export class PlaylistService {
     ) {
         const { withQuestions, populateOptions } = options || {};
         const page = populateOptions?.page || 1
-        const limit = populateOptions?.limit || 15
+        const limit = populateOptions?.limit || 10
 
         const query = this.playlistModel.findOne({ _id: playlistId, user: user });
         if (withQuestions) query.select('+questions');
