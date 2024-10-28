@@ -5,5 +5,6 @@ import { ExamRecordController } from './exam-record.controller';
 @Module({
   controllers: [ExamRecordController],
   providers: [ExamRecordService],
+  exports: [ExamRecordService]
 })
 export class ExamRecordModule {}
