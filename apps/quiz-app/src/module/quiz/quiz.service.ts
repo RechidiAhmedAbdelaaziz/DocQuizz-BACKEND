@@ -146,7 +146,7 @@ export class QuizService {
     ) {
         const { withQuestions, populateOptions } = options || {}
         const page = populateOptions?.page || 1
-        const limit = populateOptions?.limit || 15
+        const limit = populateOptions?.limit || 10
 
         const query = this.quizModel.findOne({ _id: quizId, user })
         if (withQuestions) query.select('+questions')

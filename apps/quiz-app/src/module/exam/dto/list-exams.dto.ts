@@ -9,5 +9,5 @@ export class ListExamQuery extends PaginationQuery {
 
     @IsOptional()
     @IsMongoId()
-    major: Types.ObjectId
+    majorId: Types.ObjectId
 }

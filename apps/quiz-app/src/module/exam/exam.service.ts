@@ -36,7 +36,13 @@ export class ExamService {
             }
         }
 
-        if (major) filter.major = major;
+        if (major) {
+            filter.major = major;
+            filter.$or = [
+                { type: 'Ratrappage' },
+                { type: 'Externat' }
+            ]
+        }
 
         const { generate, limit, page } = new Pagination(this.examModel, { ...paginationOptions, filter }).getOptions();
 
