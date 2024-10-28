@@ -1,4 +1,4 @@
-import { Exam } from '@app/common/models';
+import { Exam, Major } from '@app/common/models';
 import { Pagination } from '@app/common/utils/pagination';
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -14,7 +14,7 @@ export class ExamService {
     getExams = async (
         options: {
             keywords?: string,
-            major?: Types.ObjectId,
+            major?: Major
         },
         paginationOptions: {
             page?: number,
@@ -37,7 +37,7 @@ export class ExamService {
         }
 
         if (major) {
-            filter['major._id'] = major;
+            filter.major = major;
             filter.$or = [
                 { type: 'Ratrappage' },
                 { type: 'Externat' }

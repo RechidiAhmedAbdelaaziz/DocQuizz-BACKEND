@@ -5,6 +5,7 @@ import { HttpAuthGuard, ParseMonogoIdPipe, ProGuard } from '@app/common';
 import { QuestionService } from '../question/question.service';
 import { Types } from 'mongoose';
 import { PaginationQuery } from '@app/common/utils/pagination';
+import { LevelsService } from '../levels/levels.service';
 
 @Controller('exam')
 // @UseGuards(ProGuard) //TODO after implemnt payment
@@ -12,7 +13,8 @@ import { PaginationQuery } from '@app/common/utils/pagination';
 export class ExamController {
   constructor(
     private readonly examService: ExamService,
-    private readonly questionService: QuestionService
+    private readonly questionService: QuestionService,
+    private readonly majorService: LevelsService,
   ) { }
 
   @Get() //*  EXAM | Get all ~ {{host}}/exam
@@ -21,7 +23,9 @@ export class ExamController {
   ) {
     const { keywords, limit, page, majorId } = query;
 
-    return await this.examService.getExams({ keywords, major: majorId }, { limit, page });
+    const major = majorId ? await this.majorService.getMajorById(majorId) : undefined;
+
+    return await this.examService.getExams({ keywords, major }, { limit, page });
   }
 
   @Get(":examId") //* EXAM | Get Questions ~ {{host}}/exam/:examId?page=1&limit=10
