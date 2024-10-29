@@ -7,6 +7,10 @@ export class CreateExamBody {
     @IsMongoId()
     majorId: Types.ObjectId
 
+    @IsOptional()
+    @IsMongoId()
+    domainId: Types.ObjectId
+
     @IsNumber()
     time: number
 

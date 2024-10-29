@@ -3,7 +3,6 @@ import { ExamAdminService } from './exam-admin.service';
 import { CreateExamBody } from './dto/create-exam.dto';
 import { ParseMonogoIdPipe, SkipAdminGuard } from '@app/common';
 import { Types } from 'mongoose';
-import { UpdateExamBody } from './dto/update-exam.dto';
 import { StatisticService } from '../statistic/statistic.service';
 import { LevelsService } from '../levels/levels.service';
 import { ExamRecordService } from '../exam-record/exam-record.service';
@@ -22,18 +21,19 @@ export class ExamAdminController {
   async createExam(
     @Body() body: CreateExamBody
   ) {
-    const { time, city, majorId, year, group, type: type_ } = body;
+    const { time, city, majorId, year, group, type: type_, domainId } = body;
+
 
     const type = type_.trim();
 
     const major = majorId ? await this.majorService.getMajorById(majorId) : undefined
+    const domain = domainId ? await this.majorService.getDomainById(domainId) : undefined
 
-
-    const exam = await this.examAdminService.createExam({ time, city, major, year, type, group });
+    const exam = await this.examAdminService.createExam({ time, city, major, year, type, group, domain });
 
 
     if (type === 'Résidanat' || type === 'Résidanat blanc') {
-      await this.examRecordService.addExamRecord({ type, year });
+      await this.examRecordService.addExamRecord({ domain, type, year });
     }
     else {
       await this.examRecordService.addExamRecord({ major, year });
@@ -52,16 +52,19 @@ export class ExamAdminController {
     @Body() body: CreateExamBody,
     @Param('id', ParseMonogoIdPipe) id: Types.ObjectId
   ) {
-    const { time, city, majorId, year, group, type: type_ } = body;
+    const { time, city, majorId, year, group, type: type_, domainId } = body;
 
     // type can contain a space at the end
     const type = type_.trim();
 
-    const major = majorId ? await this.majorService.getMajorById(majorId) : undefined
-
     const exam = await this.examAdminService.getExamById(id);
 
-    await this.examAdminService.updateExam(exam, { time, city, major, year, type, group });
+
+    const major = majorId ? await this.majorService.getMajorById(majorId) : undefined
+    const domain = domainId ? await this.majorService.getDomainById(domainId) : undefined
+
+
+    await this.examAdminService.updateExam(exam, { time, city, major, domain, year, type, group });
 
     return exam;
   }

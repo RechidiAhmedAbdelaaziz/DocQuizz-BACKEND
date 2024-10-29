@@ -1,4 +1,4 @@
-import { ExamRecord, Major } from '@app/common/models';
+import { Domain, ExamRecord, Major } from '@app/common/models';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
@@ -11,15 +11,16 @@ export class ExamRecordService {
 
     async addExamRecord(options: {
         major?: Major,
+        domain?: Domain,
         type?: 'Résidanat' | 'Résidanat blanc',
         year: number,
     }) {
-        const { major, type, year } = options;
+        const { major, type, year, domain } = options;
 
         const checkExist = await this.examRecordModel.findOne({
             $or: [
-                { major: major },
-                { type: type }
+                { major },
+                { type, domain }
             ],
         });
 
@@ -32,13 +33,11 @@ export class ExamRecordService {
         }
 
         await this.examRecordModel.create({
-            major: major,
-            type: type,
+            major,
+            domain,
+            type,
             years: [year]
         });
-
-
-
 
 
     }

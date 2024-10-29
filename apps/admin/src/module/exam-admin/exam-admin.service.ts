@@ -1,4 +1,4 @@
-import { Exam, Major } from '@app/common/models';
+import { Exam, Major, Domain } from '@app/common/models';
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
@@ -11,6 +11,7 @@ export class ExamAdminService {
 
     createExam = async (details: {
         major: Major,
+        domain: Domain,
         time: number,
         year: number,
         city: string,
@@ -18,7 +19,7 @@ export class ExamAdminService {
         type: string
 
     }) => {
-        const { major, time, year, city, type, group } = details;
+        const { major, time, year, city, type, group, domain } = details;
 
         const createdExam = new this.examModel();
 
@@ -27,10 +28,19 @@ export class ExamAdminService {
         createdExam.city = city;
         createdExam.type = type;
         createdExam.group = group;
+        createdExam.major = major;
+        createdExam.domain = domain;
+        
 
 
 
-        createdExam.title = `${type} ${group ? `(${group}) ` : ''}:${major ? ` ${major.name} |` : ''} ${year} | ${city}`;
+        createdExam.title = `
+        ${type} 
+        ${group ? `(${group}) ` : ''}:
+        ${major ? ` ${major.name}` : domain ? ` 
+        ${domain.name}` : ''} | 
+        ${year} | 
+        ${city}`;
 
 
 
@@ -40,6 +50,7 @@ export class ExamAdminService {
     updateExam = async (exam: Exam,
         details: {
             major?: Major,
+            domain?: Domain,
             time?: number,
             year?: number,
             city?: string,
@@ -50,7 +61,7 @@ export class ExamAdminService {
 
         }) => {
 
-        const { time, addQuiz, deleteQuiz, type, city, group, major, year } = details;
+        const { time, addQuiz, deleteQuiz, type, city, group, major, year, domain } = details;
 
         exam.time = time;
         exam.year = year;
@@ -58,10 +69,17 @@ export class ExamAdminService {
         exam.type = type;
         exam.group = group;
         exam.major = major;
+        exam.domain = domain;
         if (addQuiz) exam.questions += 1;
         if (deleteQuiz) exam.questions -= 1;
 
-        exam.title = `${type} ${group ? `(${group}) ` : ''}:${major ? ` ${major.name} |` : ''} ${year} | ${city}`;
+        exam.title = `
+        ${type} 
+        ${group ? `(${group}) ` : ''}:
+        ${major ? ` ${major.name}` : domain ? ` 
+        ${domain.name}` : ''} | 
+        ${year} | 
+        ${city}`;
 
         return await exam.save();
     }
