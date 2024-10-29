@@ -74,7 +74,7 @@ export class ExamAdminController {
 
       await this.examRecordService.addExamRecord({ domain, type, years });
 
-      if (oldDomain && domainId && oldDomain._id.toHexString() !== domainId.toHexString()) {
+      if (oldDomain && domainId && oldDomain._id.equals(domainId)) {
         const years = await this.examAdminService.getExamYears({ domain: oldDomain });
         await this.examRecordService.addExamRecord({ domain: oldDomain, years });
       }
@@ -83,7 +83,7 @@ export class ExamAdminController {
       const years = await this.examAdminService.getExamYears({ major });
       await this.examRecordService.addExamRecord({ major, years });
 
-      if (oldMajor && majorId && oldMajor._id.toHexString() !== majorId.toHexString()) {
+      if (oldMajor && majorId && oldMajor._id.equals(majorId)) {
         const years = await this.examAdminService.getExamYears({ major: oldMajor });
         await this.examRecordService.addExamRecord({ major: oldMajor, years });
       }
