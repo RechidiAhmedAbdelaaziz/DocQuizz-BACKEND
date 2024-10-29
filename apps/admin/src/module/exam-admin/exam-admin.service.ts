@@ -82,7 +82,7 @@ export class ExamAdminService {
     }
 
     async getExamById(id: Types.ObjectId) {
-        const exam = await this.examModel.findById(id);
+        const exam = await this.examModel.findById(id).populate('major').populate('domain');
         if (!exam) throw new HttpException('Examen introuvable', 404);
         return exam;
     }

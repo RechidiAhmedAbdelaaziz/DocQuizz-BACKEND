@@ -61,7 +61,8 @@ export class ExamAdminController {
 
     const exam = await this.examAdminService.getExamById(id);
 
-
+    const oldMajor = exam.major;
+    const oldDomain = exam.domain;
     const major = majorId ? await this.majorService.getMajorById(majorId) : undefined
     const domain = domainId ? await this.majorService.getDomainById(domainId) : undefined
 
@@ -72,10 +73,20 @@ export class ExamAdminController {
       const years = await this.examAdminService.getExamYears({ domain, type });
 
       await this.examRecordService.addExamRecord({ domain, type, years });
+
+      if (oldDomain && domainId && oldDomain._id.toHexString() !== domainId.toHexString()) {
+        const years = await this.examAdminService.getExamYears({ domain: oldDomain });
+        await this.examRecordService.addExamRecord({ domain: oldDomain, years });
+      }
     }
     else {
       const years = await this.examAdminService.getExamYears({ major });
       await this.examRecordService.addExamRecord({ major, years });
+
+      if (oldMajor && majorId && oldMajor._id.toHexString() !== majorId.toHexString()) {
+        const years = await this.examAdminService.getExamYears({ major: oldMajor });
+        await this.examRecordService.addExamRecord({ major: oldMajor, years });
+      }
     }
 
     return exam;
