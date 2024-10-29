@@ -17,16 +17,12 @@ export class ExamRecordService {
     }) {
         const { major, type, years, domain } = options;
 
-        const checkExist = await this.examRecordModel.findOne({
-            $or: [
-                { major },
-                { type, domain }
-            ],
-        });
+        const checkExist = major ?
+            await this.examRecordModel.findOne({ major }) :
+            await this.examRecordModel.findOne({ domain, type });
 
         if (checkExist) {
             checkExist.years = years;
-            checkExist.markModified('years');
             await checkExist.save();
             return;
         }
