@@ -30,17 +30,11 @@ export class ExamAdminService {
         createdExam.group = group;
         createdExam.major = major;
         createdExam.domain = domain;
-        
 
 
 
-        createdExam.title = `
-        ${type} 
-        ${group ? `(${group}) ` : ''}:
-        ${major ? ` ${major.name}` : domain ? ` 
-        ${domain.name}` : ''} | 
-        ${year} | 
-        ${city}`;
+
+        createdExam.title = `${type}${group ? `(${group}) ` : ' '}:${major ? ` ${major.name}` : domain ? ` ${domain.name}` : ''} | ${year} |  ${city}`;
 
 
 
@@ -73,13 +67,7 @@ export class ExamAdminService {
         if (addQuiz) exam.questions += 1;
         if (deleteQuiz) exam.questions -= 1;
 
-        exam.title = `
-        ${type} 
-        ${group ? `(${group}) ` : ''}:
-        ${major ? ` ${major.name}` : domain ? ` 
-        ${domain.name}` : ''} | 
-        ${year} | 
-        ${city}`;
+        exam.title = `${type}${group ? `(${group}) ` : ' '}:${major ? ` ${major.name}` : domain ? ` ${domain.name}` : ''} | ${year} |  ${city}`;
 
         return await exam.save();
     }
