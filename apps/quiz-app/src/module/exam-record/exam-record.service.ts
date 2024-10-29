@@ -21,11 +21,11 @@ export class ExamRecordService {
         const { major, domain: domain_ } = options;
         const { domain, type } = domain_;
 
-        return await this.examRecordModel.findOne({
+        return (await this.examRecordModel.findOne({
             $or: [
                 { major },
                 { type, domain }
             ],
-        });
+        })) || { years: [] }
     }
 }

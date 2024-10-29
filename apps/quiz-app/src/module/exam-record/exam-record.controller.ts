@@ -19,7 +19,7 @@ export class ExamRecordController {
     @Query() queries: GetYearsQuery
   ) {
     const { majorId, domain: domain_ } = queries;
-    const { domainId, type } = domain_;
+    const { domainId, type } = domain_ || {};
 
 
 
