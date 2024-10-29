@@ -4,6 +4,7 @@ import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, Types } from 'mongoose';
 import { QuestionFilter } from './interface/question-filter';
+import path from 'path';
 
 @Injectable()
 export class QuestionService {
@@ -21,7 +22,10 @@ export class QuestionService {
         const questions = await this.questionModel
             .find(filter)
             .populate('sources.source')
-            .populate('exams')
+            .populate({
+                path: 'exams',
+                populate: [{ path: 'major' }, { path: 'domain' }],
+            })
             .populate('course')
             .skip((page - 1) * limit)
             .limit(limit)
@@ -64,7 +68,7 @@ export class QuestionService {
     }
 
     generateFilterQuery(filters: QuestionFilter): FilterQuery<Question> {
-        const { courses, difficulties, withoutExplanation, types, sources, year,years, exam, withExplanation, ids, keywords } = filters;
+        const { courses, difficulties, withoutExplanation, types, sources, year, years, exam, withExplanation, ids, keywords } = filters;
 
         const filter: FilterQuery<Question> = {};
 
@@ -89,7 +93,7 @@ export class QuestionService {
         } else if (withoutExplanation) {
             filter.withExplanation = false;
         }
-        
+
         // Prepare the keywords filter
         let keywordFilter = [];
         if (keywords) {
@@ -99,19 +103,19 @@ export class QuestionService {
                 { "questions.answers.text": { $regex: keywords, $options: 'i' } }
             ];
         }
-        
+
         // Combine conditions
         if (keywords) {
             filter.$and = [];
-        
+
             // Add the withExplanation filter if $or is present
             if (filter.$or && filter.$or.length > 0) {
                 filter.$and.push({ $or: filter.$or });
             }
-        
+
             // Add the keyword filter
             filter.$and.push({ $or: keywordFilter });
-        
+
             // Clean up $or since it's now moved to $and
             delete filter.$or;
         }
