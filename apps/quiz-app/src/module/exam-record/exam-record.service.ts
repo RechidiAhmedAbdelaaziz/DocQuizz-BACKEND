@@ -23,8 +23,8 @@ export class ExamRecordService {
 
         return (
             major
-                ? await this.examRecordModel.find({ major })
-                : await this.examRecordModel.find({ domain, type })
+                ? await this.examRecordModel.findOne({ major })
+                : await this.examRecordModel.findOne({ domain, type })
         ) || { years: [] }
     }
 }
