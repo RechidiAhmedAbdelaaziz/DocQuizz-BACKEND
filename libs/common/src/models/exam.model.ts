@@ -13,10 +13,10 @@ export class Exam extends AbstractSchema {
     @Prop({ default: 0 })
     questions: number
 
-    @Prop({ type: Schema.Types.ObjectId, ref: Major.name, select: false })
+    @Prop({ type: Schema.Types.ObjectId, ref: Major.name })
     major: Major
 
-    @Prop({ type: Schema.Types.ObjectId, ref: Domain.name, select: false })
+    @Prop({ type: Schema.Types.ObjectId, ref: Domain.name })
     domain: Domain
 
 

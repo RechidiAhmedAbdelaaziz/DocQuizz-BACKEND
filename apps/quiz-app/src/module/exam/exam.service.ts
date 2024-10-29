@@ -51,6 +51,7 @@ export class ExamService {
 
         const exams = await this.examModel.find(filter)
             .populate('major')
+            .populate('domain')
             .skip((page - 1) * limit)
             .limit(limit)
             .sort({ "major.name": 1, year: -1, type: 1, group: 1, city: 1, });
