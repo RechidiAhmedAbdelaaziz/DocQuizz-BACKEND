@@ -21,10 +21,9 @@ export class ExamAdminController {
   async createExam(
     @Body() body: CreateExamBody
   ) {
-    const { time, city, majorId, year, group, type: type_, domainId } = body;
+    const { time, city, majorId, year, group, type: type, domainId } = body;
 
 
-    const type = type_.trim();
 
     const major = majorId ? await this.majorService.getMajorById(majorId) : undefined
     const domain = domainId ? await this.majorService.getDomainById(domainId) : undefined
@@ -52,10 +51,9 @@ export class ExamAdminController {
     @Body() body: CreateExamBody,
     @Param('id', ParseMonogoIdPipe) id: Types.ObjectId
   ) {
-    const { time, city, majorId, year, group, type: type_, domainId } = body;
+    const { time, city, majorId, year, group, type, domainId } = body;
 
-    // type can contain a space at the end
-    const type = type_.trim();
+
 
     const exam = await this.examAdminService.getExamById(id);
 

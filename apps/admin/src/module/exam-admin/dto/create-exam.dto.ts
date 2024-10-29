@@ -20,7 +20,7 @@ export class CreateExamBody {
     @IsString()
     city: string
 
-    @IsEnum(['Externat ', 'Résidanat', 'Résidanat blanc', 'Ratrappage'], { message: 'type must be one of these values: Externat, Résidanat, Résidanat blanc, Ratrappage' })
+    @IsEnum(['Externat', 'Résidanat', 'Résidanat blanc', 'Ratrappage'], { message: 'type must be one of these values: Externat, Résidanat, Résidanat blanc, Ratrappage' })
     type: string
 
     @IsOptional()
