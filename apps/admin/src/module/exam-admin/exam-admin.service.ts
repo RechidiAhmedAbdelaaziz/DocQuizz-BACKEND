@@ -94,6 +94,21 @@ export class ExamAdminService {
     }
 
 
+    async getExamYears(
+        filter?: {
+
+            major?: Major,
+            domain?: Domain,
+            type?: string
+
+        }) {
+        const exams = await this.examModel.find(filter ? filter : {}).select('year').sort({ year: -1 });
+
+        // get unique years
+        return [...new Set(exams.map(exam => exam.year))];
+
+    }
+
 
 
 

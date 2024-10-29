@@ -13,9 +13,9 @@ export class ExamRecordService {
         major?: Major,
         domain?: Domain,
         type?: 'Résidanat' | 'Résidanat blanc',
-        year: number,
+        years: number[],
     }) {
-        const { major, type, year, domain } = options;
+        const { major, type, years, domain } = options;
 
         const checkExist = await this.examRecordModel.findOne({
             $or: [
@@ -25,10 +25,9 @@ export class ExamRecordService {
         });
 
         if (checkExist) {
-            if (!checkExist.years.includes(year)) {
-                checkExist.years.push(year);
-                await checkExist.save();
-            }
+            checkExist.years = years;
+            checkExist.markModified('years');
+            await checkExist.save();
             return;
         }
 
@@ -36,7 +35,7 @@ export class ExamRecordService {
             major,
             domain,
             type,
-            years: [year]
+            years,
         });
 
 

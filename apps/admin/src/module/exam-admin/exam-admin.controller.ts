@@ -31,11 +31,15 @@ export class ExamAdminController {
     const exam = await this.examAdminService.createExam({ time, city, major, year, type, group, domain });
 
 
+
     if (type === 'Résidanat' || type === 'Résidanat blanc') {
-      await this.examRecordService.addExamRecord({ domain, type, year });
+      const years = await this.examAdminService.getExamYears({ domain, type });
+
+      await this.examRecordService.addExamRecord({ domain, type, years });
     }
     else {
-      await this.examRecordService.addExamRecord({ major, year });
+      const years = await this.examAdminService.getExamYears({ major });
+      await this.examRecordService.addExamRecord({ major, years });
     }
 
     if (major) await this.majorService.updateMajor(major, { addExam: true });
@@ -64,6 +68,16 @@ export class ExamAdminController {
 
     await this.examAdminService.updateExam(exam, { time, city, major, domain, year, type, group });
 
+    if (type === 'Résidanat' || type === 'Résidanat blanc') {
+      const years = await this.examAdminService.getExamYears({ domain, type });
+
+      await this.examRecordService.addExamRecord({ domain, type, years });
+    }
+    else {
+      const years = await this.examAdminService.getExamYears({ major });
+      await this.examRecordService.addExamRecord({ major, years });
+    }
+
     return exam;
   }
 
@@ -72,9 +86,24 @@ export class ExamAdminController {
     @Param('id', ParseMonogoIdPipe) id: Types.ObjectId
   ) {
     const exam = await this.examAdminService.getExamById(id);
+
+    const type = exam.type;
+    const major = exam.major;
+    const domain = exam.domain;
+
     await this.examAdminService.deleteExam(exam);
 
     await this.statisticService.updateStatistic({ newExam: -1 });
+
+    if (type === 'Résidanat' || type === 'Résidanat blanc') {
+      const years = await this.examAdminService.getExamYears({ domain, type });
+
+      await this.examRecordService.addExamRecord({ domain, type, years });
+    }
+    else {
+      const years = await this.examAdminService.getExamYears({ major });
+      await this.examRecordService.addExamRecord({ major, years });
+    }
 
     return { message: 'Exam deleted successfully' };
   }
