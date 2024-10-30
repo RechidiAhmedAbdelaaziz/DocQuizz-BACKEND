@@ -72,8 +72,23 @@ export class QuestionService {
 
         const filter: FilterQuery<Question> = {};
 
+        const ids: Types.ObjectId[] = [];
 
-        const ids = ids_ ? ids_.reduce((acc, val) => acc.filter(x => val.includes(x))) : undefined;
+        console.log(ids);
+
+        for (const id of ids_) {
+            for (const _id of id) {
+                // add unique ids
+                if (!ids.includes(_id)) {
+                    ids.push(_id);
+                }
+            }
+        }
+        console.log('-------------------');
+
+        console.log(ids);
+
+
 
         if (ids) filter._id = { $in: ids };
         if (courses) filter.course = { $in: courses };
