@@ -72,19 +72,23 @@ export class QuestionService {
 
         const filter: FilterQuery<Question> = {};
 
-        const ids: Types.ObjectId[] = [];
+        let ids: Types.ObjectId[];
 
 
-
-        for (const id of ids_) {
-            console.log('LENGTH > ', id.length);
-            for (const _id of id) {
-                // add unique ids
-                if (!ids.includes(_id)) {
-                    ids.push(_id);
-                }
+        // get items that in all arrays of ids_
+        if (ids_) {
+            const tmp: Types.ObjectId[] = [];
+            for (const id of ids_) {
+                console.log('ID > ', id.length);
+                tmp.push(...id);
             }
+
+            // get items that in all arrays of ids_
+            ids = tmp.filter((id) => ids_.every((ids) => ids.includes(id)));
+
         }
+
+
         console.log('-------------------');
 
         console.log('IDS > ', ids.length);
