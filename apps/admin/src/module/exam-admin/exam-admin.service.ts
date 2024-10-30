@@ -64,6 +64,7 @@ export class ExamAdminService {
         if (domain) exam.domain = domain;
         if (changeGroup) exam.group = group;
         if (type) exam.type = type;
+        if (year) exam.year = year;
         if (addQuiz) exam.questions += 1;
         if (deleteQuiz) exam.questions -= 1;
 
