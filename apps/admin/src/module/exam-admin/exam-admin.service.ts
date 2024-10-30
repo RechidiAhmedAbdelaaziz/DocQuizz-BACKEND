@@ -52,22 +52,23 @@ export class ExamAdminService {
             deleteQuiz?: boolean,
             group?: string
             type?: string
+            changeGroup?: boolean
 
         }) => {
 
-        const { time, addQuiz, deleteQuiz, type, city, group, major, year, domain } = details;
+        const { time, addQuiz, deleteQuiz, type, city, group, major, year, domain, changeGroup } = details;
 
-        exam.time = time;
-        exam.year = year;
-        exam.city = city;
-        exam.type = type;
-        exam.group = group;
-        exam.major = major;
-        exam.domain = domain;
+        if (time) exam.time = time;
+        if (city) exam.city = city;
+        if (major) exam.major = major;
+        if (domain) exam.domain = domain;
+        if (changeGroup) exam.group = group;
+        if (type) exam.type = type;
         if (addQuiz) exam.questions += 1;
         if (deleteQuiz) exam.questions -= 1;
 
-        exam.title = `${type}${group ? `(${group}) ` : ' '}:${major ? ` ${major.name}` : domain ? ` ${domain.name}` : ''} | ${year} |  ${city}`;
+        if (time || city || major || domain || group || type)
+            exam.title = `${type}${group ? `(${group}) ` : ' '}:${major ? ` ${major.name}` : domain ? ` ${domain.name}` : ''} | ${year} |  ${city}`;
 
         return await exam.save();
     }

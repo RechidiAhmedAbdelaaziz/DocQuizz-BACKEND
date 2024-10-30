@@ -67,7 +67,7 @@ export class ExamAdminController {
     const domain = domainId ? await this.majorService.getDomainById(domainId) : undefined
 
 
-    await this.examAdminService.updateExam(exam, { time, city, major, domain, year, type, group });
+    await this.examAdminService.updateExam(exam, { time, changeGroup: true, city, major, domain, year, type, group });
 
     if (type === 'Résidanat' || type === 'Résidanat blanc') {
       const years = await this.examAdminService.getExamYears({ domain, type });
