@@ -91,7 +91,7 @@ export class QuestionService {
             .populate('sources.source')
             .populate({
                 path: 'exams',
-                
+                populate: [{ path: 'major' }, { path: 'domain' }],
             })
             .populate('course');
 
