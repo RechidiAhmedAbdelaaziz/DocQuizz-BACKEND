@@ -88,15 +88,12 @@ export class QuestionService {
         const { withExam } = options || { withExam: false }
 
         const question = await this.questionModel.findById(id)
+            .populate('sources.source')
             .populate({
                 path: 'exams',
-                populate: [
-                    { path: 'major' },
-                    { path: 'domain' }
-                ]
+                populate: [{ path: 'major' }, { path: 'domain' }],
             })
-            .populate('sources.source')
-            .populate('course')
+            .populate('course');
 
 
         if (!question) throw new HttpException('Question not found', 404)
