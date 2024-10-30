@@ -91,7 +91,7 @@ export class ExamAdminService {
     async getExams(options?: {
         ids?: Types.ObjectId[];
     }) {
-        return await this.examModel.find(options.ids ? { _id: { $in: options.ids } } : {});
+        return await this.examModel.find(options.ids ? { _id: { $in: options.ids } } : {}).populate('major').populate('domain')
     }
 
 

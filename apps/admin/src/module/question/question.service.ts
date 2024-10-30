@@ -16,7 +16,7 @@ export class QuestionService {
     createOrUpdateQuestion = async (
         details: QuestionDetails, questionToUpdate?: Question
     ) => {
-        const { caseText, year, questions, exams, sources, course } = details
+        const { caseText, questions, exams, sources, course } = details
         const question = questionToUpdate || new this.questionModel({ difficulties: [] })
 
 
@@ -87,13 +87,8 @@ export class QuestionService {
     async getQuestionById(id: Types.ObjectId, options?: { withExam: boolean }) {
         const { withExam } = options || { withExam: false }
 
-        const question = await this.questionModel.findOne({ _id: id })
-            .populate('sources.source')
-            .populate({
-                path: 'exams',
-                populate: [{ path: 'major' }, { path: 'domain' }],
-            })
-            .populate('course');
+        const question = await this.questionModel.findById(id)
+            
 
 
         if (!question) throw new HttpException('Question not found', 404)
