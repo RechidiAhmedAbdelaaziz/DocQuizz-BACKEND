@@ -8,10 +8,10 @@ import { Domain } from "domain";
 
 @DSchema()
 export class ExamRecord extends AbstractSchema {
-    @Prop({ type: Schema.Types.ObjectId, ref: Major.name, unique: true })
+    @Prop({ type: Schema.Types.ObjectId, ref: Major.name  })
     major?: Major
 
-    @Prop({ type: Schema.Types.ObjectId, ref: Domain.name, unique: true })
+    @Prop({ type: Schema.Types.ObjectId, ref: Domain.name })
     domain?: Domain
 
     @Prop()
