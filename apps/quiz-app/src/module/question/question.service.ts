@@ -74,9 +74,10 @@ export class QuestionService {
 
         const ids: Types.ObjectId[] = [];
 
-        console.log(ids);
+
 
         for (const id of ids_) {
+            console.log('LENGTH > ', id.length);
             for (const _id of id) {
                 // add unique ids
                 if (!ids.includes(_id)) {
@@ -86,7 +87,7 @@ export class QuestionService {
         }
         console.log('-------------------');
 
-        console.log(ids);
+        console.log('IDS > ', ids.length);
 
 
 
