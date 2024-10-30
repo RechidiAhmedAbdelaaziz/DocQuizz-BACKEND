@@ -87,9 +87,9 @@ export class QuestionService {
     async getQuestionById(id: Types.ObjectId, options?: { withExam: boolean }) {
         const { withExam } = options || { withExam: false }
 
-        const query = this.questionModel.findById(id)
+        const question =await  this.questionModel.findById(id)
             .populate({
-                path: 'exams', // populating each item in the exams array
+                path: 'exams', 
                 populate: [
                     { path: 'major' },
                     { path: 'domain' },
@@ -99,7 +99,6 @@ export class QuestionService {
             .populate('course')
 
 
-        const question = await query.exec()
         if (!question) throw new HttpException('Question not found', 404)
 
         return question
