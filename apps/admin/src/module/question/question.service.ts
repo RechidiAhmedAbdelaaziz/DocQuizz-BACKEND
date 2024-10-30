@@ -90,6 +90,9 @@ export class QuestionService {
         const query = this.questionModel.findById(id)
 
         query.populate('exams')
+        query.populate('sources.source')
+        query.populate('course')
+        
 
         const question = await query.exec()
         if (!question) throw new HttpException('Question not found', 404)
