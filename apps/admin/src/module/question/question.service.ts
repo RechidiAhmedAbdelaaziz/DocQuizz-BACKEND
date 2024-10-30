@@ -90,7 +90,7 @@ export class QuestionService {
         const question = await this.questionModel.findById(id)
             .populate({
                 path: 'exams',
-                select: '_id'
+                select: '_id title'
             })
             .populate('sources.source')
             .populate('course')
