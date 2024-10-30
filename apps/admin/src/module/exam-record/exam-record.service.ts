@@ -15,7 +15,16 @@ export class ExamRecordService {
         type?: 'Résidanat' | 'Résidanat blanc',
         years: number[],
     }) {
-        const { major, type, years, domain } = options;
+        const { major, type, years: years_, domain } = options;
+
+        // check if years contain null or undefined or NaN and put it in a new array without them 
+        const years = []
+        for (let i = 0; i < years_.length; i++) {
+            if (years_[i] && years_[i] !== null && !isNaN(years_[i])) {
+                years.push(years_[i])
+            }
+        }
+
 
         const checkExist = major ?
             await this.examRecordModel.findOne({ major }) :
