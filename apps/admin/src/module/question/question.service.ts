@@ -87,13 +87,10 @@ export class QuestionService {
     async getQuestionById(id: Types.ObjectId, options?: { withExam: boolean }) {
         const { withExam } = options || { withExam: false }
 
-        const question =await  this.questionModel.findById(id)
+        const question = await this.questionModel.findById(id)
             .populate({
-                path: 'exams', 
-                populate: [
-                    { path: 'major' },
-                    { path: 'domain' },
-                ],
+                path: 'exams',
+                select: 'title'
             })
             .populate('sources.source')
             .populate('course')
