@@ -89,8 +89,11 @@ export class QuestionService {
 
         const query = this.questionModel.findById(id)
             .populate({
-                path: 'exams',
-                populate: [{ path: 'major' }, { path: 'domain' }],
+                path: 'exams', // populating each item in the exams array
+                populate: [
+                    { path: 'major' },
+                    { path: 'domain' },
+                ],
             })
             .populate('sources.source')
             .populate('course')
