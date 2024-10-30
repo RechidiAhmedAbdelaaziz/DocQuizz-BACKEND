@@ -114,18 +114,32 @@ export class QuizService {
 
     async getAlreadyAnswerWrongQuestions(user: User) {
         const filter: FilterQuery<Quiz> = {
-            user,
+            user: user._id,
             // isCompleted: true,
             //questions.result.isCorrect is an array of booleans 
             //if the question is answered wrong, all the elements in the array will be false
             //so we need get only the quizes that have at least one false in the array
-            'questions.result.isCorrect': { $in: [false] }
+            // 'questions.result.isCorrect': { $in: [false] }
 
 
         }
 
-        const quizes = await this.quizModel
-            .find(filter).select('questions')
+        const quizes = await this.quizModel.aggregate([
+            { $match: filter },
+            {
+                $project: {
+                    questions: {
+                        $filter: {
+                            input: "$questions",
+                            as: "question",
+                            cond: {
+                                $in: [false, "$$question.result.isCorrect"]
+                            }
+                        }
+                    }
+                }
+            }
+        ]);
 
         const questionsStatus = quizes.map(quiz => quiz.questions)
         const questions = questionsStatus.map(questions => questions.map(q => q.question._id))

@@ -85,8 +85,11 @@ export class QuestionService {
 
             // get items that in all arrays of ids_
             ids = tmp.filter((id) => {
+
+                for (const id_ of ids_) {
+                    console.log('ID INCCC > ', id_.includes(id));
+                }
                 const includes = ids_.every((ids) => ids.includes(id));
-                if (includes) console.log('ID INC > ', id);
                 return includes;
             });
 
