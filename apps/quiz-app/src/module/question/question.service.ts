@@ -82,10 +82,9 @@ export class QuestionService {
                 tmp.push(...id);
             }
 
-            // get items that in all arrays of ids_
             ids = tmp.filter((id) => {
 
-            
+        
                 const includes = ids_.every((ids) => {
                     for (const id_ of ids) {
                         if (id_.equals(id)) return true;

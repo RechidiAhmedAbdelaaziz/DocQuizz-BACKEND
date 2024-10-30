@@ -1,4 +1,4 @@
-import { Exam, Major } from '@app/common/models';
+import { Domain, Exam, Major } from '@app/common/models';
 import { Pagination } from '@app/common/utils/pagination';
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
@@ -15,25 +15,25 @@ export class ExamService {
         options: {
             keywords?: string,
             major?: Major
-            year?: number
+            year?: number,
+            domain?: Domain
         },
         paginationOptions: {
             page?: number,
             limit?: number
         }
     ) => {
-        const { keywords, major, year } = options;
+        const { keywords, major, year, domain } = options;
         const filter: FilterQuery<Exam> = {};
 
         if (keywords) {
+            filter.domain = domain;
+
             if (keywords === 'Résidanat') {
                 filter.type = 'Résidanat';
             }
             else {
-                const keywordsArray = keywords.split(' ');
-                filter.$and = keywordsArray.map(keyword => ({
-                    title: { $regex: keyword, $options: 'i' }
-                }));
+                filter.type = 'Résidanat blanc';
             }
         }
 
