@@ -79,7 +79,6 @@ export class QuestionService {
         if (ids_) {
             const tmp: Types.ObjectId[] = [];
             for (const id of ids_) {
-                console.log('ID > ', id.length);
                 tmp.push(...id);
             }
 
@@ -98,9 +97,7 @@ export class QuestionService {
         }
 
 
-        console.log('-------------------');
 
-        if (ids) console.log('IDS > ', ids.length);
 
 
 
