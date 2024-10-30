@@ -68,9 +68,12 @@ export class QuestionService {
     }
 
     generateFilterQuery(filters: QuestionFilter): FilterQuery<Question> {
-        const { courses, difficulties, withoutExplanation, types, sources, year, years, exam, withExplanation, ids, keywords } = filters;
+        const { courses, difficulties, withoutExplanation, types, sources, year, years, exam, withExplanation, ids: ids_, keywords } = filters;
 
         const filter: FilterQuery<Question> = {};
+
+
+        const ids = ids_ ? ids_.reduce((acc, val) => acc.filter(x => val.includes(x))) : undefined;
 
         if (ids) filter._id = { $in: ids };
         if (courses) filter.course = { $in: courses };

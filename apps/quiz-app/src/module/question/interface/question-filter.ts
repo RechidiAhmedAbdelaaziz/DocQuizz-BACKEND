@@ -8,7 +8,7 @@ export interface QuestionFilter {
     exam?: Exam,
     withExplanation?: boolean,
     withoutExplanation?: boolean,
-    ids?: Types.ObjectId[],
+    ids?: Types.ObjectId[][],
     keywords?: string,
     sources?: Types.ObjectId[],
     year?: number

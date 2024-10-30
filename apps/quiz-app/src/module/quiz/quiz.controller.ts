@@ -31,23 +31,27 @@ export class QuizController {
   ) {
     const { title, courses, difficulties, types, sources, year, alreadyAnsweredFalse, withExplanation, withNotes } = body
 
-    const ids = []
-    let sendIds: boolean = false
+    let ids: Types.ObjectId[][];
 
     const user = await this.userService.getUserById(userId)
 
     if (alreadyAnsweredFalse) {
       const answeredQuestions = await this.quizService.getAlreadyAnswerWrongQuestions(user)
-      ids.push(...answeredQuestions); sendIds = true
+      ids = [answeredQuestions]
 
     }
     if (withNotes) {
       const notes = await this.notesService.getNotedQuestions(user)
-      ids.push(...notes); sendIds = true
+      if (ids) {
+        ids.push(notes)
+      }
+      else {
+        ids = [notes]
+      }
 
     }
 
-    const questionFilter = this.questionService.generateFilterQuery({ courses, difficulties, types, withExplanation, ids: sendIds ? ids : undefined, sources, year })
+    const questionFilter = this.questionService.generateFilterQuery({ courses, difficulties, types, withExplanation, ids, sources, year })
 
 
     const { data: questions } = await this.questionService.getQuestions(questionFilter, { limit: 500, min: 1 })
@@ -79,25 +83,28 @@ export class QuizController {
     const year = yearString ? parseInt(yearString) : undefined
 
 
-    const ids: Types.ObjectId[] = [];
-    let sendIds: boolean = false;
+    let ids: Types.ObjectId[][];
 
     const user = await this.userService.getUserById(userId)
 
     if (alreadyAnsweredFalse) {
       const answeredQuestions = await this.quizService.getAlreadyAnswerWrongQuestions(user)
-      ids.push(...answeredQuestions)
-      sendIds = true
+
+      ids = [answeredQuestions]
+
     }
     if (withNotes) {
       const notes = await this.notesService.getNotedQuestions(user)
-      ids.push(...notes)
-      sendIds = true
-
+      if (ids) {
+        ids.push(notes)
+      }
+      else {
+        ids = [notes]
+      }
     }
 
     const questionFilter = this.questionService.generateFilterQuery({
-      courses, difficulties, types, withExplanation, ids: sendIds ? ids : undefined, sources, year
+      courses, difficulties, types, withExplanation, ids, sources, year
     })
 
     const questions = await this.questionService.getQuestionsNumber(questionFilter);
