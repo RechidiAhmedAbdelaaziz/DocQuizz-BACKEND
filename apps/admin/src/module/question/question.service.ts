@@ -88,13 +88,12 @@ export class QuestionService {
         const { withExam } = options || { withExam: false }
 
         const query = this.questionModel.findById(id)
-
-        query.populate({
-            path: 'exams',
-            populate: [{ path: 'major' }, { path: 'domain' }],
-        })
-        query.populate('sources.source')
-        query.populate('course')
+            .populate({
+                path: 'exams',
+                populate: [{ path: 'major' }, { path: 'domain' }],
+            })
+            .populate('sources.source')
+            .populate('course')
 
 
         const question = await query.exec()
