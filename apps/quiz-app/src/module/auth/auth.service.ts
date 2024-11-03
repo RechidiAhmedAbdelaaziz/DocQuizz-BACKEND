@@ -50,7 +50,11 @@ export class AuthService {
         const { email, password } = data
         const { isOAuth, asAdmin } = options || {}
 
-        const user = await this.userModel.findOne({ email }).select('+password')
+        const user = await this.userModel.findOne({ email })
+            .select('+password')
+            .populate('domain')
+            .populate('level')
+
         if (!user) throw new HttpException('Email non trouvé', 404)
 
         if (isOAuth) return user
