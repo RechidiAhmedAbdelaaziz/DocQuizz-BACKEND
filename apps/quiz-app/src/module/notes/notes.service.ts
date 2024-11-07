@@ -64,7 +64,10 @@ export class NotesService {
     }
 
     getNotedQuestions = async (user: User) => {
-        const notedQuestions = await this.noteModel.find({ user }).select('question')
+        // match user the notes array not empty 
+        const notedQuestions = await this.noteModel.find({ user, notes: { $ne: [] } })
+            .select('question')
+
         return notedQuestions.map(n => n.question._id)
     }
 
