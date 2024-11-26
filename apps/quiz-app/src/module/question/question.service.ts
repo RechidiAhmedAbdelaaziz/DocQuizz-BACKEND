@@ -119,7 +119,7 @@ export class QuestionService {
         } else if (withExplanation) {
             filter.withExplanation = true;
         } else if (withoutExplanation) {
-            filter.withExplanation = false;
+            filter.withExplanation != true;
         }
 
         // Prepare the keywords filter
