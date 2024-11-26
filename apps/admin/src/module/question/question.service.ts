@@ -24,7 +24,8 @@ export class QuestionService {
             const correctAnswers = questions[i].answers.filter(answer => answer.isCorrect).length
             questions[i].type = correctAnswers > 1 ? QuestionType.QCM : QuestionType.QCU
             question.difficulties.push(questions[i].difficulty)
-            if (questions[i].explanation) question.withExplanation = true
+            if (questions[i].explanation && questions[i].explanation.length > 0) question.withExplanation = true
+            else question.withExplanation = false
         }
 
 
