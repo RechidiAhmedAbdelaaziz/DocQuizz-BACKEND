@@ -14,6 +14,7 @@ export class ExamService {
     getExams = async (
         options: {
             keywords?: string,
+            search?: string,
             major?: Major
             year?: number,
             domain?: Domain
@@ -23,7 +24,7 @@ export class ExamService {
             limit?: number
         }
     ) => {
-        const { keywords, major, year, domain } = options;
+        const { keywords, major, year, domain, search } = options;
         const filter: FilterQuery<Exam> = {};
 
         if (keywords) {
@@ -45,6 +46,12 @@ export class ExamService {
             ]
         }
         if (year) filter.year = year;
+
+        
+        if (search) {
+            const keys = search.split(' ');
+            filter.$and = keys.map(key => ({ title: { $regex: key, $options: 'i' } }))
+        }
 
 
         const { generate, limit, page } = new Pagination(this.examModel, { ...paginationOptions, filter }).getOptions();

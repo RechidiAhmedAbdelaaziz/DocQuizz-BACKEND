@@ -18,13 +18,12 @@ export class ListExamQuery extends PaginationQuery {
     @IsOptional()
     @IsMongoId()
     domainId: Types.ObjectId
+
+    @IsOptional()
+    @IsString()
+    search : string
+
+
 }
 
-/* 
-    {
-        "keywords": "string", // 
-        "majorId": "string", 
-        "year": "2024",
-        "domainId": "string"
-        }
-**/
+

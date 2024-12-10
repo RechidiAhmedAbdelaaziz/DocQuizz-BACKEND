@@ -21,13 +21,13 @@ export class ExamController {
   async getExams(
     @Query() query: ListExamQuery
   ) {
-    const { keywords, limit, page, majorId, year: yearString, domainId } = query;
+    const { keywords, limit, page, majorId, year: yearString, domainId ,search} = query;
     const year = yearString ? parseInt(yearString) : undefined;
 
     const major = majorId ? await this.majorService.getMajorById(majorId) : undefined;
     const domain = domainId ? await this.majorService.getDomainById(domainId) : undefined;
 
-    return await this.examService.getExams({ keywords, major, year, domain }, { limit, page });
+    return await this.examService.getExams({ keywords, major, year, domain,search }, { limit, page });
   }
 
   @Get(":examId") //* EXAM | Get Questions ~ {{host}}/exam/:examId?page=1&limit=10
