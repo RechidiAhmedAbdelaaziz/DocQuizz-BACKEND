@@ -50,6 +50,7 @@ export class ExamService {
         
         if (search) {
             const keys = search.split(' ');
+            console.log(keys);
             filter.$and = keys.map(key => ({ title: { $regex: key, $options: 'i' } }))
         }
 
