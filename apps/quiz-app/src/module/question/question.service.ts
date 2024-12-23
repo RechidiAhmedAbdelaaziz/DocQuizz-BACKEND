@@ -19,16 +19,81 @@ export class QuestionService {
     ) => {
         const { generate, limit, page } = new Pagination(this.questionModel, { filter, ...pagination }).getOptions();
 
-        const questions = await this.questionModel
-            .find(filter)
-            .populate('sources.source')
-            .populate({
-                path: 'exams',
-                populate: [{ path: 'major' }, { path: 'domain' }],
-            })
-            .populate('course')
-            .skip((page - 1) * limit)
-            .limit(limit)
+        const questions = await this.questionModel.aggregate([
+            // Match the filter
+            { $match: filter },
+        
+            // Populate `sources.source`
+            {
+                $lookup: {
+                    from: 'sources',
+                    localField: 'sources.source',
+                    foreignField: '_id',
+                    as: 'sources.source',
+                },
+            },
+        
+            // Populate `exams` and their nested fields
+            {
+                $lookup: {
+                    from: 'exams',
+                    localField: 'exams',
+                    foreignField: '_id',
+                    as: 'exams',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'majors',
+                    localField: 'exams.major',
+                    foreignField: '_id',
+                    as: 'exams.major',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'domains',
+                    localField: 'exams.domain',
+                    foreignField: '_id',
+                    as: 'exams.domain',
+                },
+            },
+        
+            // Populate `course`
+            {
+                $lookup: {
+                    from: 'courses',
+                    localField: 'course',
+                    foreignField: '_id',
+                    as: 'course',
+                },
+            },
+        
+            // Add a field for sorting
+            {
+                $addFields: {
+                    sortField: {
+                        $cond: {
+                            if: { $ifNull: ["$caseText", false] }, // If `caseText` exists
+                            then: "$caseText",                    // Use `caseText`
+                            else: { $arrayElemAt: ["$questions.text", 0] }, // Otherwise, use the `text` of the first question
+                        },
+                    },
+                },
+            },
+        
+            // Sort by the calculated `sortField`
+            {
+                $sort: {
+                    sortField: 1, // Ascending order (change to -1 for descending)
+                },
+            },
+        
+            // Pagination: Skip and limit results
+            { $skip: (page - 1) * limit },
+            { $limit: limit },
+        ]);
+        
 
         if (pagination.min && questions.length < pagination.min) throw new HttpException(`Il n'y a pas assez de questions`, 404);
 
