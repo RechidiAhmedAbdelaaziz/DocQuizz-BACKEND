@@ -33,9 +33,7 @@ export class QuestionService {
             })
             .populate('course') // Populating the 'course' field
             .sort({
-                caseText: 1, // Sort by `caseText` (ascending)
-                // Add a fallback for sorting by `questions.text` if `caseText` is not available
-                'questions.text': 1,
+                'sortField': 1,
             })
             .skip((page - 1) * limit)
             .limit(limit);
