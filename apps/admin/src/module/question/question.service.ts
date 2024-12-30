@@ -33,9 +33,19 @@ export class QuestionService {
         if (caseText) {
             question.caseText = caseText
             question.type = QuestionType.CAS_CLINIQUE
+
         } else {
             question.type = questions[0].type
         }
+
+        question.sortField = (caseText || questions[0].text)
+            .trim()
+            .toLowerCase()
+            .normalize('NFD') // Normalize accented characters
+            .replace(/[\u0300-\u036f]/g, '') // Remove diacritics
+            .replace(/[^a-z0-9\s-]/g, '') // Remove non-alphanumeric characters except spaces and dashes
+            .replace(/\s+/g, '-') // Replace spaces with dashes
+            .replace(/-+/g, '-') // Replace multiple dashes with a single dash
 
         question.questions = questions
         question.exams = exams

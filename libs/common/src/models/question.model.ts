@@ -57,6 +57,8 @@ export class Question extends AbstractSchema {
     @Prop()
     difficulties: Difficulty[]
 
+    @Prop()
+    sortField : string
 
 }
 
