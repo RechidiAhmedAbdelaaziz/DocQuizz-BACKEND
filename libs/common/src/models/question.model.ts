@@ -22,17 +22,19 @@ export class Question extends AbstractSchema {
         text: string,
         answers: {
             text: string,
+            images?: string[],
             isCorrect: boolean,
         }[],
         difficulty: Difficulty,
         type?: QuestionType,
-        explanation?: string
+        explanation?: string,
+        images?: string[],
     }[]
 
     @Prop()
     type: QuestionType;
 
-    @Prop([{ type: Schema.Types.ObjectId, ref: Exam.name , default: []}])
+    @Prop([{ type: Schema.Types.ObjectId, ref: Exam.name, default: [] }])
     exams?: Exam[]
 
     @Prop({ type: Schema.Types.ObjectId, ref: Course.name })
@@ -58,7 +60,7 @@ export class Question extends AbstractSchema {
     difficulties: Difficulty[]
 
     @Prop()
-    sortField : string
+    sortField: string
 
 }
 

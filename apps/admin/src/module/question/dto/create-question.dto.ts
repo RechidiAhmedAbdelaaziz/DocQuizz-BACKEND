@@ -1,6 +1,6 @@
 import { Difficulty } from "@app/common";
 import { Type } from "class-transformer";
-import { IsString, IsMongoId, IsEnum, IsOptional, ArrayNotEmpty, ValidateNested, IsNumber, IsBoolean } from "class-validator";
+import { IsString, IsMongoId, IsEnum, IsOptional, ArrayNotEmpty, ValidateNested, IsNumber, IsBoolean, IsArray } from "class-validator";
 import { Types } from "mongoose";
 
 
@@ -10,6 +10,10 @@ export class Answer {
 
     @IsBoolean()
     isCorrect: boolean
+
+    @IsOptional()
+    @IsString({ each: true })
+    images?: string[]
 }
 
 export class SubQuestion {
@@ -27,6 +31,10 @@ export class SubQuestion {
     @IsOptional()
     @IsString()
     explanation?: string
+
+    @IsOptional()
+    @IsString({ each: true })
+    images?: string[]
 }
 
 class Source_Year {
@@ -57,7 +65,7 @@ export class CreateOrUpdateQuestionBody {
     @ArrayNotEmpty()
     @ValidateNested({ each: true })
     @Type(() => Source_Year)
-    sources: Source_Year[] 
+    sources: Source_Year[]
 
 
 

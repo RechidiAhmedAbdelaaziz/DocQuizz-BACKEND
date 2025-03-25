@@ -3,7 +3,8 @@ import { Difficulty, QuestionType } from "@app/common";
 
 export interface QuestionAnswer {
     text: string,
-    isCorrect: boolean
+    isCorrect: boolean,
+    images?: string[]
 }
 
 export interface SubQuestion {
@@ -12,6 +13,7 @@ export interface SubQuestion {
     difficulty: Difficulty,
     type?: QuestionType,
     explanation?: string
+    images?: string[]
 }
 
 export interface QuestionDetails {
@@ -24,4 +26,5 @@ export interface QuestionDetails {
         year: number
     }[],
     year?: number,
+
 }
