@@ -51,7 +51,7 @@ export class QuestionController {
     @Body() body: CreateOrUpdateQuestionBody,
     @Param('questionId', ParseMonogoIdPipe) questionId: Types.ObjectId,
   ) {
-    const { courseId, questions, caseText, examIds, sources: sourceIds } = body
+    const { courseId, questions, caseText, examIds, sources: sourceIds  } = body
 
 
 
