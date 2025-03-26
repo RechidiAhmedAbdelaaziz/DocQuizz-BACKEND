@@ -14,5 +14,6 @@ import { SubscriptionRequest } from '@app/common/models/subscription.model';
   ],
   controllers: [SubscriptionController, SubscriptionRequestController, SubscriptionOfferController],
   providers: [SubscriptionRequestService, SubscriptionOfferService, SubscriptionService],
+  exports: [SubscriptionService],
 })
 export class SubscriptionModule { }

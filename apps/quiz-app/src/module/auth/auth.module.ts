@@ -5,6 +5,7 @@ import { DatabaseModule } from '@app/common';
 import { RefreshToken, RestPassworToken, User } from '@app/common/models';
 import { StatisticModule } from '../statistic/statistic.module';
 import { MailerModule } from '@app/common/module/mailer/mailer.module';
+import { SubscriptionModule } from '../subscription/subscription.module';
 
 
 
@@ -22,6 +23,7 @@ import { MailerModule } from '@app/common/module/mailer/mailer.module';
     ),
     StatisticModule,
     MailerModule,
+    SubscriptionModule
   ],
   controllers: [AuthController],
   providers: [AuthService],

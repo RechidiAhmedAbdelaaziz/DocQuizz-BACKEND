@@ -31,8 +31,8 @@ export class Subscription extends AbstractSchema {
     @Prop({ type: Date, index: { expireAfterSeconds: 2 } })
     endDate: Date
 
-    @Prop({ type: [Schema.Types.ObjectId], ref: SubscriptionOffer.name })
-    offer: SubscriptionOffer[]
+    @Prop({ type: Schema.Types.ObjectId, ref: SubscriptionOffer.name })
+    offer: SubscriptionOffer
 }
 
 @DSchema()

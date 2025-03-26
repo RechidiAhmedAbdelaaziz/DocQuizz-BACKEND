@@ -107,6 +107,8 @@ export class SubscriptionService {
             .limit(limit)
             .populate('user')
             .populate('offer')
+            .populate('offer.domain')
+            .populate('offer.levels')
             .sort({ 'createdAt': -1 });
 
         return await generate(subscriptions);
