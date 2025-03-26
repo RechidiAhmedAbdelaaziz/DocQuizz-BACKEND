@@ -6,4 +6,5 @@ export type JwtPayload = {
     role: UserRoles,
     isPro: boolean,
     domain?: Types.ObjectId,
+    paidLevels?: Types.ObjectId[]
 }
