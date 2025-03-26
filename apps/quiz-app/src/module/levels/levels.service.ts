@@ -1,7 +1,7 @@
 import { Level, Major, Domain, Course } from '@app/common/models';
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, Type } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { FilterQuery, Model, Types } from 'mongoose';
 
 @Injectable()
 export class LevelsService {
@@ -22,18 +22,31 @@ export class LevelsService {
         return await this.levelModel.find(filter)
     }
 
-    getMajors = async (level?: Level, domain?: Domain) => {
-        if (level) return await this.majorModel.find({ level })
-            .sort('name')
+    getMajors = async (level?: Level, domain?: Domain, paidLevels?: Types.ObjectId[]) => {
+        const filter: FilterQuery<Major> = {};
 
 
-        if (domain) return await this.majorModel
-            .find({ level: { $in: await this.levelModel.find({ domain }) } })
-            .sort('name')
+        if (domain) filter.level = { $in: await this.levelModel.find({ domain }) }
+        if (level) filter.level = level
 
 
-        return await this.majorModel.find()
-            .sort('name')
+
+        const majors = await this.majorModel.find(filter).sort('name')
+
+        if (paidLevels && paidLevels.length > 0) {
+
+            for (const major of majors) {
+                if (paidLevels.includes(major.level._id)) {
+                    major.isOpen = true
+                }
+            }
+
+        }
+
+
+
+
+        return majors
 
 
     }

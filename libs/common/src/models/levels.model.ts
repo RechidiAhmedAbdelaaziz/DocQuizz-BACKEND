@@ -27,14 +27,14 @@ export class Major extends AbstractSchema {
     @Prop()
     name: string
 
-    @Prop({ type: Schema.Types.ObjectId, ref: Level.name, select: false })
+    @Prop({ type: Schema.Types.ObjectId, ref: Level.name })
     level: Level
 
     @Prop({ type: Number, default: 0 })
     nbExams: number
 
-    @Prop({ type: Boolean, default: false })
-    isPro: boolean
+    @Prop({ type: Boolean, default: true })
+    isOpen: boolean
 
 
 }
