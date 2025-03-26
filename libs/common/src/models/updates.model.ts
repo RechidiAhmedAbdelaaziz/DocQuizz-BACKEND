@@ -1,8 +1,3 @@
-
-
-
-
-
 import { Schema as DSchema, Prop } from "@nestjs/mongoose";
 import { AbstractSchema } from "../shared";
 
