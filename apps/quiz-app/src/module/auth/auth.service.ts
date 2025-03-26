@@ -124,12 +124,7 @@ export class AuthService {
     }
 
     async generateTokens(user: User) {
-        const payload: JwtPayload = {
-            role: user.role,
-            id: user._id,
-            isPro: user.isPro,
-            domain: user.domain?._id,
-        }
+        const payload = user.toJwtPayload();
 
         const accessToken = this.jwtService.sign(payload)
         const refreshToken = v4()
