@@ -18,7 +18,7 @@ services:
       - 8.8.8.8 # Google DNS
       - 8.8.4.4 # Google DNS
     env_file:
-      - .env
+      - .env.dev
     depends_on:
       - db
 
