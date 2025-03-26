@@ -33,6 +33,10 @@ export class Major extends AbstractSchema {
     @Prop({ type: Number, default: 0 })
     nbExams: number
 
+    @Prop({ type: Boolean, default: false })
+    isPro: boolean
+
+
 }
 
 @DSchema()

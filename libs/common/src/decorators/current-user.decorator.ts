@@ -13,3 +13,8 @@ export const CurrentDomain = createParamDecorator((data: any, context: Execution
     return request.user.domain;
 });
 
+
+export const PaidLevels = createParamDecorator((data: any, context: ExecutionContext): Types.ObjectId[] => {
+    const request = context.switchToHttp().getRequest<Request>();
+    return request.user.paidLevels ?? [];
+});
