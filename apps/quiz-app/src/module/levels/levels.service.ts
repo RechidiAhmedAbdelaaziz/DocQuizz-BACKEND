@@ -2,6 +2,7 @@ import { Level, Major, Domain, Course } from '@app/common/models';
 import { HttpException, Injectable, Type } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, Types } from 'mongoose';
+import { SubscriptionService } from '../subscription/subscription.service';
 
 @Injectable()
 export class LevelsService {
@@ -10,6 +11,7 @@ export class LevelsService {
         @InjectModel(Major.name) private readonly majorModel: Model<Major>,
         @InjectModel(Domain.name) private readonly domainModel: Model<Domain>,
         @InjectModel(Course.name) private readonly courseModel: Model<Course>,
+        private readonly subscriptionService: SubscriptionService
     ) { }
 
     getDomains = async () => {
@@ -22,7 +24,7 @@ export class LevelsService {
         return await this.levelModel.find(filter)
     }
 
-    getMajors = async (level?: Level, domain?: Domain, paidLevels?: Types.ObjectId[]) => {
+    getMajors = async (level?: Level, domain?: Domain, userId?: Types.ObjectId) => {
         const filter: FilterQuery<Major> = {};
 
 
@@ -33,16 +35,20 @@ export class LevelsService {
 
         const majors = await this.majorModel.find(filter).sort('name')
 
-        console.log("PAIS LEVELS >>> ", paidLevels)
+        const levels = (await this.subscriptionService.getSubscriptions({ user: userId }, {}))
+            .data.map((sub) => sub.offer.levels)
+            .flatMap((level) => level.map((l) => l._id))
 
-        if (paidLevels && paidLevels.length > 0) {
 
-            for (const major of majors) {
-                if (paidLevels.some((paidLevel) => paidLevel.toString() === major.level.toString())) {
-                    major.isOpen = true
-                }
-            }
+        console.log("PAIS LEVELS >>> ", levels)
 
+        // if major's level in levels , make mojor.isOpen = true
+        for (const major of majors) {
+            const isOpen = levels.some((level) => level.toString() === major.level.toString());
+            console.log("MAJOR >>> ", major.isOpen)
+            major.isOpen = isOpen;
+            console.log("MAJOR >>> ", major.isOpen)
+            console.log("===========================================")
         }
 
 
