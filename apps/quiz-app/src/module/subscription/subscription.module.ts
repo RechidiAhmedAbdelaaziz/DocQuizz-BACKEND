@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { SubscriptionRequestService, SubscriptionOfferService, SubscriptionService } from './subscription.service';
 import { SubscriptionController, SubscriptionRequestController, SubscriptionOfferController } from './subscription.controller';
 import { DatabaseModule } from '@app/common';
@@ -13,7 +13,7 @@ import { UserModule } from '../user/user.module';
       { model: SubscriptionOffer }
 
     ]),
-    UserModule,
+    forwardRef(() => UserModule),
   ],
   controllers: [SubscriptionController, SubscriptionRequestController, SubscriptionOfferController],
   providers: [SubscriptionRequestService, SubscriptionOfferService, SubscriptionService],
