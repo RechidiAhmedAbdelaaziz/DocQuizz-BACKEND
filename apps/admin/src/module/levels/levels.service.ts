@@ -22,8 +22,8 @@ export class LevelsService {
         return level.save()
     }
 
-    createMajor = async (name: string, level: Level) => {
-        const major = new this.majorModel({ name, level })
+    createMajor = async (name: string, level: Level, isOpen: boolean) => {
+        const major = new this.majorModel({ name, level, isOpen })
         return major.save()
     }
 
@@ -44,12 +44,14 @@ export class LevelsService {
 
     updateMajor = async (major: Major, options: {
         name?: string,
+        isOpen?: boolean,
         addExam?: boolean,
         deleteExam?: boolean
     }) => {
         if (options.name) major.name = options.name
         if (options.addExam) major.nbExams++
         if (options.deleteExam) major.nbExams--
+        if (options.isOpen !== undefined) major.isOpen = options.isOpen
 
         return major.save()
     }

@@ -3,7 +3,7 @@ import { LevelsService } from './levels.service';
 
 import { CloudinaryService } from '@app/common/module/cloudinary/cloudinary.service';
 import { StatisticService } from '../statistic/statistic.service';
-import { NameBody } from './dto/add-course.dto';
+import { NameBody, NameBodyWithIsOpen } from './dto/add-course.dto';
 import { Types } from 'mongoose';
 import { ParseMonogoIdPipe } from '@app/common';
 
@@ -89,14 +89,14 @@ export class LevelsController {
 
   @Post('majors/:levelId')  // * MAJOR | Create ~ {{host}}/majors/:levelId
   async createMajor(
-    @Body() body: NameBody,
+    @Body() body: NameBodyWithIsOpen,
     @Param('levelId', ParseMonogoIdPipe) levelId: Types.ObjectId,
   ) {
-    const { name } = body
+    const { name, isOpen } = body
 
     const level = await this.levelsService.getLevelById(levelId)
 
-    const major = await this.levelsService.createMajor(name, level)
+    const major = await this.levelsService.createMajor(name, level, isOpen)
 
     await this.statisticService.updateStatistic({ newMajor: 1 })
 
@@ -105,14 +105,14 @@ export class LevelsController {
 
   @Patch('majors/:majorId')  // * MAJOR | Update ~ {{host}}/majors/:majorId
   async updateMajor(
-    @Body() body: NameBody,
+    @Body() body: NameBodyWithIsOpen,
     @Param('majorId', ParseMonogoIdPipe) majorId: Types.ObjectId,
   ) {
-    const { name } = body
+    const { name, isOpen } = body
 
     const major = await this.levelsService.getMajorById(majorId)
 
-    return await this.levelsService.updateMajor(major, { name })
+    return await this.levelsService.updateMajor(major, { name, isOpen })
   }
 
   @Delete('majors/:majorId')  // * MAJOR | Delete ~ {{host}}/majors/:majorId
