@@ -5,12 +5,16 @@ import { AdminGuard, CurrentUser, HttpAuthGuard, ParseMonogoIdPipe } from '@app/
 import { Types } from 'mongoose';
 import { CreateSubDTO as CreateSubBody } from './dto/create-sub.dto';
 import { CreateSubscriptionRequestBody } from './dto/create-request';
-import { CreateOfferBody } from './dto/create-offer.dto';
+import { CreateOfferBody, updateSubscriptionOfferBody } from './dto/create-offer.dto';
+import { UserService } from '../user/user.service';
 
 @Controller('subscription')
 
 export class SubscriptionController {
-  constructor(private readonly subscriptionService: SubscriptionService) { }
+  constructor(private readonly subscriptionService: SubscriptionService,
+    private readonly userService: UserService
+
+  ) { }
 
   @UseGuards(AdminGuard)
   @Get()
@@ -35,7 +39,7 @@ export class SubscriptionController {
       { user: userId }, {}
     );
 
-    return { data, }
+    return data
   }
 
   @UseGuards(AdminGuard)
@@ -43,7 +47,9 @@ export class SubscriptionController {
   async createSubscription(
     @Body() body: CreateSubBody,
   ) {
-    const { offerId, userId } = body;
+    const { offerId, email } = body;
+
+    const { _id: userId } = await this.userService.getUserByEmail(email)
 
     const data = await this.subscriptionService.createSubscription(
       {
@@ -122,11 +128,11 @@ export class SubscriptionRequestController {
   async approveSubscriptionRequest(
     @Param('requestId', ParseMonogoIdPipe) requestId: Types.ObjectId,
   ) {
-    const data = await this.subscriptionRequestService.approveSubscriptionRequest(
+    await this.subscriptionRequestService.approveSubscriptionRequest(
       requestId
     );
 
-    return { data }
+    return { message: 'Subscription request approved successfully' }
   }
 
 }
@@ -148,6 +154,24 @@ export class SubscriptionOfferController {
         limit, page
       }
     );
+  }
+
+  @Get(':domainId')
+  async getSubscriptionOffersByDomain(
+    @Param('domainId', ParseMonogoIdPipe) domainId: Types.ObjectId,
+    @Query() query: PaginationQuery
+  ) {
+    const data = await this.subscriptionOfferService.getSubscriptionOffers(
+
+      {
+        limit: query.limit,
+        page: query.page,
+
+      }, { domain: domainId }
+
+    );
+
+    return data
   }
 
   @Post()
@@ -172,7 +196,7 @@ export class SubscriptionOfferController {
   @Patch(':offerId')
   async updateSubscriptionOffer(
     @Param('offerId', ParseMonogoIdPipe) offerId: Types.ObjectId,
-    @Body() body: CreateOfferBody,
+    @Body() body: updateSubscriptionOfferBody,
   ) {
     const { description, domainId, levels, price, title } = body;
 

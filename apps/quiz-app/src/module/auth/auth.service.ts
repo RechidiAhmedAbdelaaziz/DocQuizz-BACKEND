@@ -127,13 +127,16 @@ export class AuthService {
     }
 
     async generateTokens(user: User) {
-        const payload = user.toJwtPayload();
+        const payload = new JwtPayload(user).toPlainObject()
 
         const { data: subscription } = await this.subscriptionService.getSubscriptions({ user: user._id }, {})
 
         if (subscription.length > 0) {
             const levels = subscription.map((sub) => sub.offer.levels)
-            payload.paidLevels = levels.map((level) => level.map((l) => l._id)).flat()
+            console.log(levels)
+            if (levels)
+                payload.paidLevels =
+                    levels.map((level) => level.map((l) => l._id)).flat()
         }
 
         const accessToken = this.jwtService.sign(payload)
@@ -160,10 +163,10 @@ export class AuthService {
         return token.user
     }
 
-    generateAdminToken() {
-        const payload: JwtPayload = { role: UserRoles.ADMIN, id: new Types.ObjectId(), isPro: true, domain: new Types.ObjectId() }
-        return this.jwtService.sign(payload)
-    }
+    // generateAdminToken() {
+    //     const payload: JwtPayload = { role: UserRoles.ADMIN, id: new Types.ObjectId(), isPro: true, domain: new Types.ObjectId() }
+    //     return this.jwtService.sign(payload)
+    // }
 
 
 }

@@ -3,6 +3,7 @@ import { SubscriptionRequestService, SubscriptionOfferService, SubscriptionServi
 import { SubscriptionController, SubscriptionRequestController, SubscriptionOfferController } from './subscription.controller';
 import { DatabaseModule } from '@app/common';
 import { SubscriptionRequest, Subscription, SubscriptionOffer } from '@app/common/models/subscription.model';
+import { UserModule } from '../user/user.module';
 
 @Module({
   imports: [
@@ -11,7 +12,8 @@ import { SubscriptionRequest, Subscription, SubscriptionOffer } from '@app/commo
       { model: SubscriptionRequest },
       { model: SubscriptionOffer }
 
-    ])
+    ]),
+    UserModule,
   ],
   controllers: [SubscriptionController, SubscriptionRequestController, SubscriptionOfferController],
   providers: [SubscriptionRequestService, SubscriptionOfferService, SubscriptionService],

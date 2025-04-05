@@ -1,3 +1,4 @@
+import { PartialType } from "@nestjs/mapped-types";
 import { IsMongoId, IsNumber, IsString } from "class-validator";
 import { Types } from "mongoose";
 
@@ -16,4 +17,8 @@ export class CreateOfferBody {
 
     @IsNumber()
     price: number;
+}
+
+export class updateSubscriptionOfferBody extends PartialType(CreateOfferBody) {
+   
 }

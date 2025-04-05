@@ -2,7 +2,8 @@ import { Subscription, SubscriptionRequest, SubscriptionOffer } from '@app/commo
 import { Pagination } from '@app/common/utils/pagination';
 import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model, Types } from 'mongoose';
+import { FilterQuery, Model, Types } from 'mongoose';
+import path from 'path';
 
 @Injectable()
 export class SubscriptionRequestService {
@@ -68,7 +69,6 @@ export class SubscriptionRequestService {
             subscription.save(),
         ]);
 
-        return subscription;
 
     }
 
@@ -105,10 +105,17 @@ export class SubscriptionService {
             .find(filter)
             .skip((page - 1) * limit)
             .limit(limit)
-            .populate('user')
-            .populate('offer')
-            .populate('offer.domain')
-            .populate('offer.levels')
+            .populate({
+                path: 'user',
+                select: 'name'
+            })
+            .populate(
+                {
+                    path: 'offer',
+                    select: 'title price levels domain',
+                    populate: 'domain levels'
+                }
+            )
             .sort({ 'createdAt': -1 });
 
         return await generate(subscriptions);
@@ -138,7 +145,20 @@ export class SubscriptionService {
             endDate: new Date(new Date().getFullYear() + (new Date().getMonth() > 8 ? 1 : 0), 8, 1),
         });
 
-        return subscription.save();
+        await subscription.save();
+
+        return this.subscriptionModel.findById(subscription._id)
+            .populate({
+                path: 'user',
+                select: 'name'
+            })
+            .populate(
+                {
+                    path: 'offer',
+                    select: 'title price',
+                }
+            )
+
     }
 
 
@@ -153,15 +173,27 @@ export class SubscriptionOfferService {
     ) { }
 
     async getSubscriptionOffers(
+
+
         pagination: {
             page?: number;
             limit?: number;
-        }
+        },
+        filter?: {
+            domain?: Types.ObjectId;
+        },
     ) {
+        const { domain } = filter || {};
+
+        const filters: FilterQuery<SubscriptionOffer> = {};
+
+        if (domain) filters.domain = domain;
+
+
         const { generate, limit, page } = new Pagination(this.subscriptionModel, { ...pagination }).getOptions();
 
         const subscriptions = await this.subscriptionModel
-            .find()
+            .find(filters)
             .skip((page - 1) * limit)
             .limit(limit)
             .populate('domain')
@@ -190,7 +222,12 @@ export class SubscriptionOfferService {
             price
         });
 
-        return subscriptionOffer.save();
+        await subscriptionOffer.save();
+
+        return this.subscriptionModel.findById(subscriptionOffer._id)
+            .populate('domain')
+            .populate('levels');
+
     }
 
     async updateSubscriptionOffer(

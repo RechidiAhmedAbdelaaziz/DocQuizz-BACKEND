@@ -41,15 +41,7 @@ export class User extends AbstractSchema {
 
 
 
-    toJwtPayload(): JwtPayload {
-        return {
-            id: this._id,
-            role: this.role,
-            isPro: this.isPro,
-            paidLevels: this.paidLevels ? this.paidLevels.map((level) => level._id) : undefined,
-            domain: this.domain ? this.domain._id : undefined
-        }
-    }
+  
 
 
 

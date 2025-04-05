@@ -103,11 +103,11 @@ export class AuthController {
     return { message: 'Mot de passe réinitialisé avec succès' }
   }
 
-  @Put('getAdmin') //*  ADMIN | Get Admin  {{host}}/auth/getAdmin
-  getAdmin() {
-    const adminToken = this.authService.generateAdminToken()
-    return { data: adminToken }
-  }
+  // @Put('getAdmin') //*  ADMIN | Get Admin  {{host}}/auth/getAdmin
+  // getAdmin() {
+  //   const adminToken = this.authService.generateAdminToken()
+  //   return { data: adminToken }
+  // }
 
 
 }

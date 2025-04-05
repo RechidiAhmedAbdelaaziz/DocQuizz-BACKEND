@@ -40,7 +40,7 @@ export class SubscriptionRequest extends AbstractSchema {
     @Prop({ type: Schema.Types.ObjectId, ref: User.name })
     user: User
 
-    @Prop({ type: [Schema.Types.ObjectId], ref: SubscriptionOffer.name })
+    @Prop({ type: Schema.Types.ObjectId, ref: SubscriptionOffer.name })
     offer: SubscriptionOffer
 
     @Prop()
