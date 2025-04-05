@@ -35,8 +35,10 @@ export class LevelsService {
 
         const majors = await this.majorModel.find(filter).sort('name')
 
-        const levels = (await this.subscriptionService.getSubscriptions({ user: userId }, {}))
-            .data.map((sub) => sub.offer.levels)
+        const subs = (await this.subscriptionService.getSubscriptions({ user: userId }, {}))
+        console.log("SUBS >>> ", subs)
+
+        const levels = subs.data.map((sub) => sub.offer.levels)
             .flatMap((level) => level.map((l) => l._id))
 
 
