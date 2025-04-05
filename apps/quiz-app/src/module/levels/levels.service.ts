@@ -33,17 +33,17 @@ export class LevelsService {
 
         const majors = await this.majorModel.find(filter).sort('name')
 
+        console.log("PAIS LEVELS >>> ", paidLevels)
+
         if (paidLevels && paidLevels.length > 0) {
 
             for (const major of majors) {
-                if (paidLevels.includes(major.level._id)) {
+                if (paidLevels.some((paidLevel) => paidLevel.toString() === major.level.toString())) {
                     major.isOpen = true
                 }
             }
 
         }
-
-
 
 
         return majors
