@@ -36,21 +36,20 @@ export class LevelsService {
         const majors = await this.majorModel.find(filter).sort('name')
 
         const subs = (await this.subscriptionService.getSubscriptions({ user: userId }, {}))
-        console.log("SUBS >>> ", subs)
+      
 
         const levels = subs.data.map((sub) => sub.offer.levels)
             .flatMap((level) => level.map((l) => l._id))
 
 
-        console.log("PAIS LEVELS >>> ", levels)
+    
 
         // if major's level in levels , make mojor.isOpen = true
         for (const major of majors) {
             const isOpen = levels.some((level) => level.toString() === major.level.toString());
-            console.log("MAJOR >>> ", major.isOpen)
+         
             major.isOpen = isOpen;
-            console.log("MAJOR >>> ", major.isOpen)
-            console.log("===========================================")
+                   
         }
 
 
