@@ -12,7 +12,10 @@ export interface SubQuestion {
     answers: QuestionAnswer[],
     difficulty: Difficulty,
     type?: QuestionType,
-    explanation?: string
+    explanation?: {
+        text: string,
+        images?: string[]
+    }
     images?: string[]
 }
 

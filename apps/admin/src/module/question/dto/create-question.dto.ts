@@ -16,6 +16,15 @@ export class Answer {
     images?: string[]
 }
 
+export class Explanation {
+    @IsString()
+    text: string
+
+    @IsOptional()
+    @IsString({ each: true })
+    images?: string[]
+}
+
 export class SubQuestion {
     @IsString()
     text: string
@@ -29,8 +38,9 @@ export class SubQuestion {
     difficulty: Difficulty
 
     @IsOptional()
-    @IsString()
-    explanation?: string
+    @ValidateNested()
+    @Type(() => Explanation)
+    explanation?: Explanation
 
     @IsOptional()
     @IsString({ each: true })

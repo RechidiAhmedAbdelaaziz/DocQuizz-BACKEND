@@ -27,7 +27,10 @@ export class Question extends AbstractSchema {
         }[],
         difficulty: Difficulty,
         type?: QuestionType,
-        explanation?: string,
+        explanation?: {
+            text: string,
+            images?: string[],
+        },
         images?: string[],
     }[]
 

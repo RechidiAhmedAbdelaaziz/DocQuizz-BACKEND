@@ -24,11 +24,10 @@ export class QuestionService {
             const correctAnswers = questions[i].answers.filter(answer => answer.isCorrect).length
             questions[i].type = correctAnswers > 1 ? QuestionType.QCM : QuestionType.QCU
             question.difficulties.push(questions[i].difficulty)
-            if (questions[i].explanation && questions[i].explanation.length > 0) question.withExplanation = true
-            else question.withExplanation = false
         }
 
-
+        question.withExplanation = questions.some(q => q.explanation && (q.explanation.text || q.explanation.images?.length > 0))
+        question.difficulties = [...new Set(question.difficulties)]
 
         if (caseText) {
             question.caseText = caseText
@@ -51,7 +50,7 @@ export class QuestionService {
         question.exams = exams
         question.course = course
         question.sources = sources
-        
+
 
         return question.save()
     }
