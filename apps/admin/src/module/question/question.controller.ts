@@ -21,7 +21,7 @@ export class QuestionController {
   @SkipAdminGuard()
   @Post() //* QUESTION | Create ~ {{host}}/question
   async createQuestion(@Body() body: CreateOrUpdateQuestionBody) {
-    const { courseId, questions, caseText, examIds, sources: sourceIds } = body
+    const { courseId, questions, caseText, examIds, sources: sourceIds, images } = body
 
     // await this.questionService.checkQuestionExists(questionText)
 
@@ -35,7 +35,7 @@ export class QuestionController {
     if (exams) await Promise.all(exams.map(async exam => { await this.examService.updateExam(exam, { addQuiz: true }) }))
 
     const question = await this.questionService.createOrUpdateQuestion({
-      questions, caseText, course, exams, sources
+      questions, caseText, course, exams, sources, images
     })
 
     await this.statisticService.updateStatistic({
@@ -51,7 +51,7 @@ export class QuestionController {
     @Body() body: CreateOrUpdateQuestionBody,
     @Param('questionId', ParseMonogoIdPipe) questionId: Types.ObjectId,
   ) {
-    const { courseId, questions, caseText, examIds, sources: sourceIds } = body
+    const { courseId, questions, caseText, examIds, sources: sourceIds, images } = body
 
 
 
@@ -79,6 +79,7 @@ export class QuestionController {
       exams,
       course,
       sources,
+      images,
     }, question);
 
   }

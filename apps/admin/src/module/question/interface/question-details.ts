@@ -29,5 +29,6 @@ export interface QuestionDetails {
         year: number
     }[],
     year?: number,
+    images?: string[]
 
 }
