@@ -26,8 +26,16 @@ export class SubscriptionRequestService {
             .find()
             .skip((page - 1) * limit)
             .limit(limit)
-            .populate('user')
-            .populate('offer');
+            .populate(
+                {
+                    path : 'user',
+                    select: 'name email'
+                }
+            )
+            .populate({
+                path : 'offer',
+                select: 'title price',
+            })
 
 
 

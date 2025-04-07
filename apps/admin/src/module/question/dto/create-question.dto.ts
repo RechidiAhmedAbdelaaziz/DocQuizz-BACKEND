@@ -77,6 +77,10 @@ export class CreateOrUpdateQuestionBody {
     @Type(() => Source_Year)
     sources: Source_Year[]
 
+    @IsOptional()
+    @IsString({each: true})
+    images?: string[]
+
 
 
 }

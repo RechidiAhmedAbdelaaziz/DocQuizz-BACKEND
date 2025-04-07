@@ -35,6 +35,9 @@ export class Question extends AbstractSchema {
     }[]
 
     @Prop()
+    images?: string[]
+
+    @Prop()
     type: QuestionType;
 
     @Prop([{ type: Schema.Types.ObjectId, ref: Exam.name, default: [] }])
