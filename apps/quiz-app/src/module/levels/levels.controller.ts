@@ -30,13 +30,13 @@ export class LevelsController {
   }
 
   @Get('majors') // * LEVELS | Get ~ {{host}}/levels/60f7b3b3b3b3b3b3b3b3
-  async getMajors(@Query() query: ListMajorsQuery, @CurrentUser() userId : Types.ObjectId) {
+  async getMajors(@Query() query: ListMajorsQuery) {
     const { levelId, domainId } = query;
 
     const level = levelId ? await this.levelsService.getLevelById(levelId) : undefined;
     const domain = domainId ? await this.levelsService.getDomainById(domainId) : undefined;
 
-    return await this.levelsService.getMajors(level, domain, userId);
+    return await this.levelsService.getMajors(level, domain);
   }
 
   @Get('majors/me') // * LEVELS | Get ~ {{host}}/levels/60f7b3b3b3b3b3b3b3b3
@@ -56,12 +56,12 @@ export class LevelsController {
 
 
   @Get('courses') // * LEVELS | Get ~ {{host}}/levels/60f7b3b3b3b3b3b3b3b3b3
-  async getCourses(@Query() query: ListCoursesQuery) {
+  async getCourses(@Query() query: ListCoursesQuery, @CurrentUser() userId: Types.ObjectId) {
     const { majorId } = query;
 
     const major = majorId ? await this.levelsService.getMajorById(majorId) : undefined;
 
-    return await this.levelsService.getCourses(major);
+    return await this.levelsService.getCourses(major, userId);
   }
 
 
