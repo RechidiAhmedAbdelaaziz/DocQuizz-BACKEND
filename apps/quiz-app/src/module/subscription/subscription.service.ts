@@ -265,11 +265,13 @@ export class SubscriptionOfferService {
         if (description) subscriptionOffer.description = description;
         if (price) subscriptionOffer.price = price;
         if (endDate) {
+
             subscriptionOffer.endDate = endDate;
+            console.log('endDate', subscriptionOffer.endDate);
             subscriptionOffer.markModified('endDate');
         }
 
-        
+
 
         await subscriptionOffer.save()
 
