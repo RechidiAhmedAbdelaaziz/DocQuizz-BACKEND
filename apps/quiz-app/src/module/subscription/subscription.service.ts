@@ -114,7 +114,6 @@ export class SubscriptionService {
         const subscriptions = await this.subscriptionModel
             .find({
                 ...filter,
-                "offer.endDate": { $gt: new Date() },
             })
             .skip((page - 1) * limit)
             .limit(limit)
