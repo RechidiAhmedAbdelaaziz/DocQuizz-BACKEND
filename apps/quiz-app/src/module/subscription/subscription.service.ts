@@ -251,11 +251,11 @@ export class SubscriptionOfferService {
             subscriptionOfferId: Types.ObjectId;
         }
     ) {
-        const { title, domainId, levels, description, price, subscriptionOfferId,endDate } = args;
+        const { title, domainId, levels, description, price, subscriptionOfferId, endDate } = args;
 
         const subscriptionOffer = await this.subscriptionModel.findById(subscriptionOfferId)
 
-
+        console.log(endDate);
 
         if (!subscriptionOffer) throw new HttpException('Subscription offer not found', HttpStatus.NOT_FOUND);
 
