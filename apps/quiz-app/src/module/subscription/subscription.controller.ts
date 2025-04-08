@@ -178,7 +178,7 @@ export class SubscriptionOfferController {
   async createSubscriptionOffer(
     @Body() body: CreateOfferBody,
   ) {
-    const { description, domainId, levels, price, title } = body;
+    const { description, domainId, levels, price, title, endDate } = body;
 
     const data = await this.subscriptionOfferService.createSubscriptionOffer(
       {
@@ -186,7 +186,7 @@ export class SubscriptionOfferController {
         domainId,
         levels,
         price,
-        title
+        title, endDate
       }
     );
 

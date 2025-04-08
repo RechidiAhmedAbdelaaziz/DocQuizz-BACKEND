@@ -28,12 +28,12 @@ export class SubscriptionRequestService {
             .limit(limit)
             .populate(
                 {
-                    path : 'user',
+                    path: 'user',
                     select: 'name email'
                 }
             )
             .populate({
-                path : 'offer',
+                path: 'offer',
                 select: 'title price',
             })
 
@@ -69,7 +69,7 @@ export class SubscriptionRequestService {
         const subscription = new this.subscriptionModel({
             user: subscriptionRequest.user,
             offer: subscriptionRequest.offer,
-            endDate: new Date(new Date().getFullYear() + (new Date().getMonth() > 8 ? 1 : 0), 8, 1),
+
         });
 
         await Promise.all([
@@ -107,15 +107,20 @@ export class SubscriptionService {
             limit?: number;
         }
     ) {
+
+
         const { generate, limit, page } = new Pagination(this.subscriptionModel, { filter, ...pagination }).getOptions();
 
         const subscriptions = await this.subscriptionModel
-            .find(filter)
+            .find({
+                ...filter,
+                "offer.endDate": { $gt: new Date() },
+            })
             .skip((page - 1) * limit)
             .limit(limit)
             .populate({
                 path: 'user',
-                select: 'name'
+                select: 'name email'
             })
             .populate(
                 {
@@ -150,7 +155,6 @@ export class SubscriptionService {
         const subscription = new this.subscriptionModel({
             user: userId,
             offer: offerId,
-            endDate: new Date(new Date().getFullYear() + (new Date().getMonth() > 8 ? 1 : 0), 8, 1),
         });
 
         await subscription.save();
@@ -181,8 +185,6 @@ export class SubscriptionOfferService {
     ) { }
 
     async getSubscriptionOffers(
-
-
         pagination: {
             page?: number;
             limit?: number;
@@ -218,16 +220,18 @@ export class SubscriptionOfferService {
             levels: Types.ObjectId[];
             description: string;
             price: number;
+            endDate: Date;
         }
     ) {
-        const { title, domainId, levels, description, price } = args;
+        const { title, domainId, levels, description, price, endDate } = args;
 
         const subscriptionOffer = new this.subscriptionModel({
             title,
             domain: domainId,
             levels,
             description,
-            price
+            price,
+            endDate,
         });
 
         await subscriptionOffer.save();
@@ -245,6 +249,7 @@ export class SubscriptionOfferService {
             levels?: Types.ObjectId[];
             description?: string;
             price?: number;
+            endDate?: Date;
             subscriptionOfferId: Types.ObjectId;
         }
     ) {
@@ -261,6 +266,7 @@ export class SubscriptionOfferService {
         if (levels) subscriptionOffer.levels = levels;
         if (description) subscriptionOffer.description = description;
         if (price) subscriptionOffer.price = price;
+        if (subscriptionOffer.endDate) subscriptionOffer.endDate = subscriptionOffer.endDate;
 
 
         await subscriptionOffer.save()
