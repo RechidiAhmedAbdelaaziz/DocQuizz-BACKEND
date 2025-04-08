@@ -21,7 +21,7 @@ export class StatisticService {
         newQuestion?: -1 | 1,
         newMajor?: -1 | 1,
         newUser?: -1 | 1,
-        newSubscribedUser?: -1 | 1,
+        newSubscribedUser?: -1 | 1 | number,
         newSubscribtionRequest?: -1 | 1,
     }) {
 

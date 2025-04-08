@@ -158,6 +158,7 @@ export class SubscriptionRequestController {
 export class SubscriptionOfferController {
   constructor(private readonly subscriptionOfferService: SubscriptionOfferService,
     private readonly subscriptionService: SubscriptionService,
+    private readonly statisticService: StatisticService,
 
   ) { }
 
@@ -243,7 +244,9 @@ export class SubscriptionOfferController {
       offerId
     );
 
-    await this.subscriptionService.cancelOfferSubscription(offerId)
+   const numSub = await this.subscriptionService.cancelOfferSubscription(offerId)
+
+    await this.statisticService.updateStatistic({ newSubscribedUser: -numSub })
 
     return { message: 'Subscription offer deleted successfully' }
   }

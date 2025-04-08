@@ -87,6 +87,7 @@ export class SubscriptionRequestService {
         if (!subscriptionRequest) throw new HttpException('Subscription request not found', HttpStatus.NOT_FOUND);
 
         await subscriptionRequest.deleteOne();
+
     }
 
 }
@@ -177,7 +178,9 @@ export class SubscriptionService {
 
         if (!subscriptions) throw new HttpException('Subscription not found', HttpStatus.NOT_FOUND);
 
-        await Promise.all(subscriptions.map((subscription) => subscription.deleteOne()));
+       const {length} =  await Promise.all(subscriptions.map((subscription) => subscription.deleteOne()));
+
+        return length;
     }
 
 
@@ -273,7 +276,6 @@ export class SubscriptionOfferService {
         if (description) subscriptionOffer.description = description;
         if (price) subscriptionOffer.price = price;
         if (endDate) {
-
             subscriptionOffer.endDate = endDate;
             subscriptionOffer.markModified('endDate');
         }
