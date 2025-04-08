@@ -264,8 +264,12 @@ export class SubscriptionOfferService {
         if (levels) subscriptionOffer.levels = levels;
         if (description) subscriptionOffer.description = description;
         if (price) subscriptionOffer.price = price;
-        if (endDate) subscriptionOffer.endDate = subscriptionOffer.endDate;
+        if (endDate) {
+            subscriptionOffer.endDate = endDate;
+            subscriptionOffer.markModified('endDate');
+        }
 
+        
 
         await subscriptionOffer.save()
 
