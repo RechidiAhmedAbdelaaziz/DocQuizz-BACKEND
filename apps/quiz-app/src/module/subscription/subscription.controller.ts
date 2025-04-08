@@ -213,14 +213,14 @@ export class SubscriptionOfferController {
     @Param('offerId', ParseMonogoIdPipe) offerId: Types.ObjectId,
     @Body() body: updateSubscriptionOfferBody,
   ) {
-    const { description, domainId, levels, price, title } = body;
+    const { description, domainId, levels, price, title, endDate } = body;
 
     const data = await this.subscriptionOfferService.updateSubscriptionOffer(
       {
         description,
         domainId,
         levels,
-        price,
+        price, endDate,
         title,
         subscriptionOfferId: offerId
       },
