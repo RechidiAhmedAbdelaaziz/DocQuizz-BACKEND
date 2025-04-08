@@ -244,7 +244,7 @@ export class SubscriptionOfferController {
       offerId
     );
 
-   const numSub = await this.subscriptionService.cancelOfferSubscription(offerId)
+    const numSub = await this.subscriptionService.cancelOfferSubscription(offerId)
 
     await this.statisticService.updateStatistic({ newSubscribedUser: -numSub })
 
