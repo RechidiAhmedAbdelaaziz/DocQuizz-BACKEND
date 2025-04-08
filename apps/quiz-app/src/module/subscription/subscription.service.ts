@@ -112,9 +112,7 @@ export class SubscriptionService {
         const { generate, limit, page } = new Pagination(this.subscriptionModel, { filter, ...pagination }).getOptions();
 
         const subscriptions = await this.subscriptionModel
-            .find({
-                ...filter,
-            })
+            .find(filter)
             .skip((page - 1) * limit)
             .limit(limit)
             .populate({
@@ -124,7 +122,7 @@ export class SubscriptionService {
             .populate(
                 {
                     path: 'offer',
-                    select: 'title price levels domain',
+                    select: 'title price levels domain endDate',
                     populate: 'domain levels'
                 }
             )
