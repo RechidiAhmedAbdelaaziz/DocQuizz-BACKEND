@@ -97,11 +97,13 @@ export class LevelsService {
             },
 
             // Remove helper field
-            { $project: { isLevelMatched: 0 } }
+            { $project: { isLevelMatched: 0 } },
+
+            // return only course name and id and isOpen
+            { $project: { name: 1, _id: 1, isOpen: 1 } },
         ]);
 
         return courses;
-
     }
 
     getDomainById = async (id: Types.ObjectId) => {
