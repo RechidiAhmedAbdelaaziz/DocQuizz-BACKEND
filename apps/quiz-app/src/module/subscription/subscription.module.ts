@@ -15,7 +15,7 @@ import { StatisticModule } from '../statistic/statistic.module';
 
     ]),
     forwardRef(() => UserModule),
-    StatisticModule,
+    forwardRef(() => StatisticModule),
   ],
   controllers: [SubscriptionController, SubscriptionRequestController, SubscriptionOfferController],
   providers: [SubscriptionRequestService, SubscriptionOfferService, SubscriptionService],
