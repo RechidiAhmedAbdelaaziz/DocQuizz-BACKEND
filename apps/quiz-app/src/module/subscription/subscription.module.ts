@@ -4,6 +4,7 @@ import { SubscriptionController, SubscriptionRequestController, SubscriptionOffe
 import { DatabaseModule } from '@app/common';
 import { SubscriptionRequest, Subscription, SubscriptionOffer } from '@app/common/models/subscription.model';
 import { UserModule } from '../user/user.module';
+import { StatisticModule } from '../statistic/statistic.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UserModule } from '../user/user.module';
 
     ]),
     forwardRef(() => UserModule),
+    StatisticModule,
   ],
   controllers: [SubscriptionController, SubscriptionRequestController, SubscriptionOfferController],
   providers: [SubscriptionRequestService, SubscriptionOfferService, SubscriptionService],

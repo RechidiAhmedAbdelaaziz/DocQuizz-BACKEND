@@ -31,4 +31,8 @@ export class Statistic extends AbstractSchema {
     @Prop({ type: Number, default: 0 })
     totalSources: number
 
+    @Prop({ type: Number, default: 0 })
+    totalSubscriptionRequest: number
+
+
 }

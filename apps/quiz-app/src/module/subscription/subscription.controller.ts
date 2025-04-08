@@ -7,12 +7,14 @@ import { CreateSubDTO as CreateSubBody } from './dto/create-sub.dto';
 import { CreateSubscriptionRequestBody } from './dto/create-request';
 import { CreateOfferBody, updateSubscriptionOfferBody } from './dto/create-offer.dto';
 import { UserService } from '../user/user.service';
+import { StatisticService } from '../statistic/statistic.service';
 
 @Controller('subscription')
 
 export class SubscriptionController {
   constructor(private readonly subscriptionService: SubscriptionService,
-    private readonly userService: UserService
+    private readonly userService: UserService,
+    private readonly statisticService: StatisticService
 
   ) { }
 
@@ -58,6 +60,8 @@ export class SubscriptionController {
       }
     );
 
+    await this.statisticService.updateStatistic({ newSubscribedUser: 1 })
+
     return { data }
   }
 
@@ -70,6 +74,8 @@ export class SubscriptionController {
       subscriptionId
     );
 
+    await this.statisticService.updateStatistic({ newSubscribedUser: -1 })
+
     return { message: 'Subscription cancelled successfully' }
   }
 
@@ -78,7 +84,10 @@ export class SubscriptionController {
 
 @Controller('subscription-request')
 export class SubscriptionRequestController {
-  constructor(private readonly subscriptionRequestService: SubscriptionRequestService) { }
+  constructor(private readonly subscriptionRequestService: SubscriptionRequestService,
+    private readonly statisticService: StatisticService,
+
+  ) { }
 
   @UseGuards(AdminGuard)
   @Get()
@@ -101,6 +110,8 @@ export class SubscriptionRequestController {
       requestId
     );
 
+    await this.statisticService.updateStatistic({ newSubscribtionRequest: -1 })
+
     return { message: 'Subscription request cancelled successfully' }
   }
 
@@ -120,6 +131,8 @@ export class SubscriptionRequestController {
       }
     );
 
+    await this.statisticService.updateStatistic({ newSubscribtionRequest: 1 })
+
     return { data }
   }
 
@@ -131,6 +144,8 @@ export class SubscriptionRequestController {
     await this.subscriptionRequestService.approveSubscriptionRequest(
       requestId
     );
+
+    await this.statisticService.updateStatistic({ newSubscribtionRequest: -1, newSubscribedUser: 1 })
 
     return { message: 'Subscription request approved successfully' }
   }
