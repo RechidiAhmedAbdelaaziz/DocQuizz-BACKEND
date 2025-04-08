@@ -8,6 +8,7 @@ import { CreateSubscriptionRequestBody } from './dto/create-request';
 import { CreateOfferBody, updateSubscriptionOfferBody } from './dto/create-offer.dto';
 import { UserService } from '../user/user.service';
 import { StatisticService } from '../statistic/statistic.service';
+import { of } from 'rxjs';
 
 @Controller('subscription')
 
@@ -155,7 +156,10 @@ export class SubscriptionRequestController {
 @UseGuards(AdminGuard)
 @Controller('subscription-offer')
 export class SubscriptionOfferController {
-  constructor(private readonly subscriptionOfferService: SubscriptionOfferService) { }
+  constructor(private readonly subscriptionOfferService: SubscriptionOfferService,
+    private readonly subscriptionService: SubscriptionService,
+
+  ) { }
 
 
   @Get()
@@ -234,9 +238,12 @@ export class SubscriptionOfferController {
   async deleteSubscriptionOffer(
     @Param('offerId', ParseMonogoIdPipe) offerId: Types.ObjectId,
   ) {
+
     await this.subscriptionOfferService.deleteSubscriptionOffer(
       offerId
     );
+
+    await this.subscriptionService.cancelOfferSubscription(offerId)
 
     return { message: 'Subscription offer deleted successfully' }
   }

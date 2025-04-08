@@ -172,6 +172,14 @@ export class SubscriptionService {
     }
 
 
+    async cancelOfferSubscription(offerId: Types.ObjectId) {
+        const subscriptions = await this.subscriptionModel.find({ offer: offerId });
+
+        if (!subscriptions) throw new HttpException('Subscription not found', HttpStatus.NOT_FOUND);
+
+        await Promise.all(subscriptions.map((subscription) => subscription.deleteOne()));
+    }
+
 
 }
 
@@ -255,7 +263,7 @@ export class SubscriptionOfferService {
 
         const subscriptionOffer = await this.subscriptionModel.findById(subscriptionOfferId)
 
-        console.log(endDate);
+        
 
         if (!subscriptionOffer) throw new HttpException('Subscription offer not found', HttpStatus.NOT_FOUND);
 
@@ -267,7 +275,6 @@ export class SubscriptionOfferService {
         if (endDate) {
 
             subscriptionOffer.endDate = endDate;
-            console.log('endDate', subscriptionOffer.endDate);
             subscriptionOffer.markModified('endDate');
         }
 
@@ -290,6 +297,7 @@ export class SubscriptionOfferService {
         if (!subscriptionOffer) throw new HttpException('Subscription offer not found', HttpStatus.NOT_FOUND);
 
         await subscriptionOffer.deleteOne();
+        
     }
 
 }

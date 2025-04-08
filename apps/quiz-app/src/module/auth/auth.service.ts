@@ -133,7 +133,7 @@ export class AuthService {
 
         if (subscription.length > 0) {
             const levels = subscription.map((sub) => sub.offer.levels)
-            console.log(levels)
+            
             if (levels)
                 payload.paidLevels =
                     levels.map((level) => level.map((l) => l._id)).flat()
