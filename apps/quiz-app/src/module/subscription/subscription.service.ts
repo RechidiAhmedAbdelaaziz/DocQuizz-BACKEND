@@ -159,12 +159,13 @@ export class SubscriptionService {
         return this.subscriptionModel.findById(subscription._id)
             .populate({
                 path: 'user',
-                select: 'name'
+                select: 'name email'
             })
             .populate(
                 {
                     path: 'offer',
-                    select: 'title price',
+                    select: 'title price levels domain endDate',
+                    populate: 'domain levels'
                 }
             )
 
@@ -250,7 +251,7 @@ export class SubscriptionOfferService {
             subscriptionOfferId: Types.ObjectId;
         }
     ) {
-        const { title, domainId, levels, description, price, subscriptionOfferId } = args;
+        const { title, domainId, levels, description, price, subscriptionOfferId,endDate } = args;
 
         const subscriptionOffer = await this.subscriptionModel.findById(subscriptionOfferId)
 
@@ -263,7 +264,7 @@ export class SubscriptionOfferService {
         if (levels) subscriptionOffer.levels = levels;
         if (description) subscriptionOffer.description = description;
         if (price) subscriptionOffer.price = price;
-        if (subscriptionOffer.endDate) subscriptionOffer.endDate = subscriptionOffer.endDate;
+        if (endDate) subscriptionOffer.endDate = subscriptionOffer.endDate;
 
 
         await subscriptionOffer.save()
