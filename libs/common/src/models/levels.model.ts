@@ -33,10 +33,6 @@ export class Major extends AbstractSchema {
     @Prop({ type: Number, default: 0 })
     nbExams: number
 
-    @Prop({ type: Boolean, default: false })
-    isOpen: boolean
-
-
 }
 
 @DSchema()
@@ -48,5 +44,7 @@ export class Course extends AbstractSchema {
     @Prop({ type: Schema.Types.ObjectId, ref: Major.name, select: false })
     major: Major
 
+    @Prop({ type: Boolean, default: false })
+    isOpen: boolean
 }
 

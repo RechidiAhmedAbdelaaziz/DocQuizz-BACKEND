@@ -24,7 +24,7 @@ export class LevelsService {
         return await this.levelModel.find(filter)
     }
 
-    getMajors = async (level?: Level, domain?: Domain, userId?: Types.ObjectId) => {
+    getMajors = async (level?: Level, domain?: Domain,) => {
         const filter: FilterQuery<Major> = {};
 
 
@@ -35,35 +35,72 @@ export class LevelsService {
 
         const majors = await this.majorModel.find(filter).sort('name')
 
-        const subs = (await this.subscriptionService.getSubscriptions({ user: userId }, {}))
-
-
-        const levels = subs.data.map((sub) => sub.offer.levels)
-            .flatMap((level) => level.map((l) => l._id))
-
-
-
-
-        for (const major of majors) {
-            if (!major.isOpen) {
-                const isOpen = levels.some((level) => level.toString() === major.level.toString());
-
-                major.isOpen = isOpen;
-            }
-
-
-        }
-
 
         return majors
 
 
     }
 
-    getCourses = async (major?: Major) => {
-        const filter = major ? { major } : {};
-        return await this.courseModel.find(filter)
-            .sort('name')
+    getCourses = async (major?: Major, userId?: Types.ObjectId) => {
+        const subs = (await this.subscriptionService.getSubscriptions({ user: userId }, {}))
+
+
+        const levels = subs.data.map((sub) => sub.offer.levels)
+            .flatMap((level) => level.map((l) => l._id))
+
+        const matchStage = major ? { major: new Types.ObjectId(major._id) } : {};
+
+
+        const courses = await this.courseModel.aggregate([
+            { $match: matchStage },
+
+            // Join with Major
+            {
+                $lookup: {
+                    from: 'majors', // collection name (usually lowercase plural)
+                    localField: 'major',
+                    foreignField: '_id',
+                    as: 'major',
+                }
+            },
+            { $unwind: '$major' },
+
+            // Join with Level
+            {
+                $lookup: {
+                    from: 'levels',
+                    localField: 'major.level',
+                    foreignField: '_id',
+                    as: 'major.level',
+                }
+            },
+            { $unwind: '$major.level' },
+
+            // Add isLevelMatched field
+            {
+                $addFields: {
+                    isLevelMatched: { $in: ['$major.level._id', levels] }
+                }
+            },
+
+            // Conditionally override isOpen
+            {
+                $addFields: {
+                    isOpen: {
+                        $cond: {
+                            if: '$isLevelMatched',
+                            then: true,
+                            else: '$isOpen'
+                        }
+                    }
+                }
+            },
+
+            // Remove helper field
+            { $project: { isLevelMatched: 0 } }
+        ]);
+
+        return courses;
 
     }
 

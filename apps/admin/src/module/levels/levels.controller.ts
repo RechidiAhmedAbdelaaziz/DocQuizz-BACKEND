@@ -89,14 +89,14 @@ export class LevelsController {
 
   @Post('majors/:levelId')  // * MAJOR | Create ~ {{host}}/majors/:levelId
   async createMajor(
-    @Body() body: NameBodyWithIsOpen,
+    @Body() body: NameBody,
     @Param('levelId', ParseMonogoIdPipe) levelId: Types.ObjectId,
   ) {
-    const { name, isOpen } = body
+    const { name } = body
 
     const level = await this.levelsService.getLevelById(levelId)
 
-    const major = await this.levelsService.createMajor(name, level, isOpen)
+    const major = await this.levelsService.createMajor(name, level)
 
     await this.statisticService.updateStatistic({ newMajor: 1 })
 
@@ -105,14 +105,14 @@ export class LevelsController {
 
   @Patch('majors/:majorId')  // * MAJOR | Update ~ {{host}}/majors/:majorId
   async updateMajor(
-    @Body() body: NameBodyWithIsOpen,
+    @Body() body: NameBody,
     @Param('majorId', ParseMonogoIdPipe) majorId: Types.ObjectId,
   ) {
-    const { name, isOpen } = body
+    const { name } = body
 
     const major = await this.levelsService.getMajorById(majorId)
 
-    return await this.levelsService.updateMajor(major, { name, isOpen })
+    return await this.levelsService.updateMajor(major, { name })
   }
 
   @Delete('majors/:majorId')  // * MAJOR | Delete ~ {{host}}/majors/:majorId
@@ -130,28 +130,28 @@ export class LevelsController {
 
   @Post('courses/:majorId')  // * COURSE | Create ~ {{host}}/courses/:majorId
   async createCourse(
-    @Body() body: NameBody,
+    @Body() body: NameBodyWithIsOpen,
     @Param('majorId', ParseMonogoIdPipe) majorId: Types.ObjectId,
   ) {
-    const { name } = body
+    const { name, isOpen } = body
 
     const major = await this.levelsService.getMajorById(majorId)
 
-    const course = await this.levelsService.createCourse(name, major)
+    const course = await this.levelsService.createCourse(name, major, isOpen)
 
     return course
   }
 
   @Patch('courses/:courseId')  // * COURSE | Update ~ {{host}}/courses/:courseId
   async updateCourse(
-    @Body() body: NameBody,
+    @Body() body: NameBodyWithIsOpen,
     @Param('courseId', ParseMonogoIdPipe) courseId: Types.ObjectId,
   ) {
     const { name } = body
 
     const course = await this.levelsService.getCourseById(courseId)
 
-    return await this.levelsService.updateCourse(course, name)
+    return await this.levelsService.updateCourse(course, name, body.isOpen)
   }
 
   @Delete('courses/:courseId')  // * COURSE | Delete ~ {{host}}/courses/:courseId

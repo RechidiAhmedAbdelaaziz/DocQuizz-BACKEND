@@ -22,13 +22,13 @@ export class LevelsService {
         return level.save()
     }
 
-    createMajor = async (name: string, level: Level, isOpen: boolean) => {
-        const major = new this.majorModel({ name, level, isOpen })
+    createMajor = async (name: string, level: Level) => {
+        const major = new this.majorModel({ name, level })
         return major.save()
     }
 
-    createCourse = async (name: string, major: Major) => {
-        const course = new this.courseModel({ name, major })
+    createCourse = async (name: string, major: Major, isOpen?: boolean,) => {
+        const course = new this.courseModel({ name, major, isOpen })
         return course.save()
     }
 
@@ -44,26 +44,25 @@ export class LevelsService {
 
     updateMajor = async (major: Major, options: {
         name?: string,
-        isOpen?: boolean,
+
         addExam?: boolean,
         deleteExam?: boolean
     }) => {
         if (options.name) major.name = options.name
         if (options.addExam) major.nbExams++
         if (options.deleteExam) major.nbExams--
-        if (options.isOpen !== undefined) major.isOpen = options.isOpen
 
         return major.save()
     }
 
-    updateCourse = async (course: Course, name: string) => {
+    updateCourse = async (course: Course, name: string, isOpen?: boolean,) => {
         course.name = name
+        if (isOpen !== undefined) course.isOpen = isOpen
         return course.save()
     }
 
     deleteDomain = async (domain: Domain) => {
         await domain.deleteOne()
-
     }
 
     deleteLevel = async (level: Level) => {
