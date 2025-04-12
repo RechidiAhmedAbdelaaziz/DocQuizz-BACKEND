@@ -45,6 +45,7 @@ class ModeratorGuard extends HttpAuthGuard implements CanActivate {
   ): boolean | Promise<boolean> | Observable<boolean> {
 
 
+    super.canActivate(context)
 
     const request = context.switchToHttp().getRequest<Request>()
 
@@ -61,6 +62,8 @@ export class SuperAdminGuard extends HttpAuthGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
+
+    super.canActivate(context)
 
     const request = context.switchToHttp().getRequest<Request>()
 
