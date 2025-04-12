@@ -1,5 +1,5 @@
-import { IsName } from "@app/common";
-import { IsEmail, IsMongoId, IsOptional } from "class-validator";
+import { IsName, UserRoles } from "@app/common";
+import { IsEmail, IsEnum, IsMongoId, IsOptional } from "class-validator";
 import { Types } from "mongoose";
 
 export class UpdateUserBody {
@@ -20,3 +20,13 @@ export class UpdateUserBody {
     domainId: Types.ObjectId
 }
 
+
+export class UpdateUserRoleBody {
+    @IsEmail()
+    userEmail: string;
+
+    @IsEnum(UserRoles)
+    role: UserRoles;
+
+
+}

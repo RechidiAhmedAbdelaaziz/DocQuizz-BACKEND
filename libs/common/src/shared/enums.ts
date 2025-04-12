@@ -1,7 +1,8 @@
 export enum UserRoles {
     USER = "User",
     ADMIN = "Admin",
-    MODERATOR = "Moderator"
+    MODERATOR = "Moderator",
+    SUPER_ADMIN = "SuperAdmin",
 }
 
 export enum Difficulty {

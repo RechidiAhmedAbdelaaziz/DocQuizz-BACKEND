@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, HttpException, Param, ParseBoolPipe, Pat
 import { UserService } from './user.service';
 import { AdminGuard, CurrentUser, HttpAuthGuard, ParseMonogoIdPipe, UserRoles } from '@app/common';
 import { Types } from 'mongoose';
-import { UpdateUserBody } from './dto/update-user.dto';
+import { UpdateUserBody, UpdateUserRoleBody } from './dto/update-user.dto';
 import { UpdatePasswordBody } from './dto/update-password.dto';
 import { UpdateAnalyseBody } from './dto/update-analyse.dto';
 import { LevelsService } from '../levels/levels.service';
@@ -52,7 +52,7 @@ export class UserController {
 
     await this.userService.updatePassword(user, info)
 
-    return { message: 'mot de passe mis à jour avec succès' } 
+    return { message: 'mot de passe mis à jour avec succès' }
   }
 
   @Delete('me') //* USER | Delete account ~ {{host}}/user/me
@@ -89,12 +89,13 @@ export class AdminUserController {
 
   @Post() //* ADMIN | Update moderator ~ {{host}}/admins/
   async updateUser(
-    @Body('userEmail') userEmail: string,
-    @Body('admin') admin?: boolean
+    @Body() body: UpdateUserRoleBody
   ) {
+    const { userEmail, role } = body;
+
     const user = await this.userService.getUserByEmail(userEmail);
 
-    return await this.userService.updateUser(user, { role: admin ? UserRoles.ADMIN : UserRoles.MODERATOR })
+    return await this.userService.updateUser(user, { role: role })
   }
 
   @Delete(':userId') //* ADMIN | Delete moderator ~ {{host}}/admins/:userId
