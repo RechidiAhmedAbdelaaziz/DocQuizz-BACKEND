@@ -63,7 +63,8 @@ export class AuthService {
         if (isOAuth) return user
         if (asAdmin &&
             user.role !== UserRoles.ADMIN &&
-            user.role !== UserRoles.MODERATOR
+            user.role !== UserRoles.MODERATOR &&
+            user.role !== UserRoles.SUPER_ADMIN
         ) throw new HttpException('Tu n\'as pas les droits pour accéder à cette ressource', 403)
 
         const isPasswordMatch = compareHash(password, user.password)
