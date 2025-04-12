@@ -84,11 +84,11 @@ export class ExamService {
             console.log('levels', levels);
 
             exams.forEach((exam) => {
-                console.log('major', exam.major);
-                exam.isOpen = levels.some((level) => {
-                    return exam.major.level._id.toString() === level.toString();
-                }
-                );
+                if (exam.major)
+                    exam.isOpen = levels.some((level) => {
+                        return exam.major.level._id.toString() === level.toString();
+                    }
+                    );
             }
             );
         }
