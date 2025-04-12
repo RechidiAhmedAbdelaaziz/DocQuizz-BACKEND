@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import { ExamService } from './exam.service';
 import { ListExamQuery } from './dto/list-exams.dto';
-import { HttpAuthGuard, ParseMonogoIdPipe, ProGuard } from '@app/common';
+import { CurrentUser, HttpAuthGuard, ParseMonogoIdPipe, ProGuard } from '@app/common';
 import { QuestionService } from '../question/question.service';
 import { Types } from 'mongoose';
 import { PaginationQuery } from '@app/common/utils/pagination';
@@ -19,7 +19,8 @@ export class ExamController {
 
   @Get() //*  EXAM | Get all ~ {{host}}/exam
   async getExams(
-    @Query() query: ListExamQuery
+    @Query() query: ListExamQuery,
+    @CurrentUser() userId: Types.ObjectId
   ) {
     const { keywords, limit, page, majorId, year: yearString, domainId ,search} = query;
     const year = yearString ? parseInt(yearString) : undefined;
@@ -27,7 +28,7 @@ export class ExamController {
     const major = majorId ? await this.majorService.getMajorById(majorId) : undefined;
     const domain = domainId ? await this.majorService.getDomainById(domainId) : undefined;
 
-    return await this.examService.getExams({ keywords, major, year, domain,search }, { limit, page });
+    return await this.examService.getExams({ keywords, major, year, domain,search,userId }, { limit, page });
   }
 
   @Get(":examId") //* EXAM | Get Questions ~ {{host}}/exam/:examId?page=1&limit=10
