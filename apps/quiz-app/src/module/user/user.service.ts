@@ -86,8 +86,8 @@ export class UserService {
     }
 
     async getModeratorsAndAdmins(options?: { you: Types.ObjectId }) {
-        const filter : FilterQuery<User> = {
-            role: { $in: [UserRoles.ADMIN, UserRoles.MODERATOR] },
+        const filter: FilterQuery<User> = {
+            role: { $in: [UserRoles.ADMIN, UserRoles.MODERATOR, UserRoles.SUPER_ADMIN] },
             email: { $ne: process.env.SUPER_ADMIN_EMAIL }
         }
 
