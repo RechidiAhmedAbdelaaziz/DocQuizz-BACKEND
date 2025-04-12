@@ -81,7 +81,10 @@ export class ExamService {
 
         if (levels && levels.length > 0) {
             // if level is in levels make exam.isOpen = true
+            console.log('levels', levels);
+
             exams.forEach((exam) => {
+                console.log('major', exam.major);
                 exam.isOpen = levels.some((level) => {
                     return exam.major.level._id.toString() === level.toString();
                 }
