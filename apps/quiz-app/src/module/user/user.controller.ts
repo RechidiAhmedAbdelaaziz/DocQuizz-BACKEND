@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Get, HttpException, Param, ParseBoolPipe, Patch, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { AdminGuard, CurrentUser, HttpAuthGuard, ParseMonogoIdPipe, UserRoles } from '@app/common';
+import { AdminGuard, CurrentUser, HttpAuthGuard, ParseMonogoIdPipe, SuperAdminGuard, UserRoles } from '@app/common';
 import { Types } from 'mongoose';
 import { UpdateUserBody, UpdateUserRoleBody } from './dto/update-user.dto';
 import { UpdatePasswordBody } from './dto/update-password.dto';
@@ -71,7 +71,7 @@ export class UserController {
 }
 
 
-@UseGuards(AdminGuard)
+@UseGuards(SuperAdminGuard)
 @Controller('admins')
 export class AdminUserController {
   constructor(private readonly userService: UserService,

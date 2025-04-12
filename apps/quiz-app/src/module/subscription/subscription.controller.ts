@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { SubscriptionRequestService, SubscriptionOfferService, SubscriptionService } from './subscription.service';
 import { PaginationQuery } from '@app/common/utils/pagination';
-import { AdminGuard, CurrentUser, HttpAuthGuard, ParseMonogoIdPipe } from '@app/common';
+import { AdminGuard, CurrentUser, HttpAuthGuard, ParseMonogoIdPipe, SuperAdminGuard } from '@app/common';
 import { Types } from 'mongoose';
 import { CreateSubDTO as CreateSubBody } from './dto/create-sub.dto';
 import { CreateSubscriptionRequestBody } from './dto/create-request';
@@ -19,7 +19,7 @@ export class SubscriptionController {
 
   ) { }
 
-  @UseGuards(AdminGuard)
+ @UseGuards(SuperAdminGuard)
   @Get()
   async getSubscriptions(
     @Query() query: PaginationQuery
@@ -45,7 +45,7 @@ export class SubscriptionController {
     return data
   }
 
-  @UseGuards(AdminGuard)
+ @UseGuards(SuperAdminGuard)
   @Post()
   async createSubscription(
     @Body() body: CreateSubBody,
@@ -66,7 +66,7 @@ export class SubscriptionController {
     return { data }
   }
 
-  @UseGuards(AdminGuard)
+ @UseGuards(SuperAdminGuard)
   @Delete(':subscriptionId')
   async deleteSubscription(
     @Param('subscriptionId', ParseMonogoIdPipe) subscriptionId: Types.ObjectId,
@@ -90,7 +90,7 @@ export class SubscriptionRequestController {
 
   ) { }
 
-  @UseGuards(AdminGuard)
+ @UseGuards(SuperAdminGuard)
   @Get()
   async getSubscriptionRequests(
     @Query() query: PaginationQuery
@@ -137,7 +137,7 @@ export class SubscriptionRequestController {
     return { data }
   }
 
-  @UseGuards(AdminGuard)
+ @UseGuards(SuperAdminGuard)
   @Patch(':requestId')
   async approveSubscriptionRequest(
     @Param('requestId', ParseMonogoIdPipe) requestId: Types.ObjectId,
@@ -153,7 +153,7 @@ export class SubscriptionRequestController {
 
 }
 
-@UseGuards(AdminGuard)
+@UseGuards(SuperAdminGuard)
 @Controller('subscription-offer')
 export class SubscriptionOfferController {
   constructor(private readonly subscriptionOfferService: SubscriptionOfferService,

@@ -35,6 +35,9 @@ export class Exam extends AbstractSchema {
     @Prop()
     group: string
 
+    @Prop({ default: false })
+    isOpen: boolean
+
 }
 
 
