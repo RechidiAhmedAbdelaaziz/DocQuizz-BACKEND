@@ -130,15 +130,6 @@ export class AuthService {
     async generateTokens(user: User) {
         const payload = new JwtPayload(user).toPlainObject()
 
-        const { data: subscription } = await this.subscriptionService.getSubscriptions({ user: user._id }, {})
-
-        if (subscription.length > 0) {
-            const levels = subscription.map((sub) => sub.offer.levels)
-            
-            if (levels)
-                payload.paidLevels =
-                    levels.map((level) => level.map((l) => l._id)).flat()
-        }
 
         const accessToken = this.jwtService.sign(payload)
         const refreshToken = v4()
