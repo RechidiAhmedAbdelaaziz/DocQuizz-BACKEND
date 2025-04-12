@@ -70,7 +70,7 @@ export class ExamService {
         const exams = await this.examModel.find(filter)
             .populate({
                 path: 'major',
-                select: 'name level',
+                select: 'name +level',
                 populate: 'level',
             })
             .populate('domain')
