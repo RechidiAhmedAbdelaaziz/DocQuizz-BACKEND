@@ -80,8 +80,7 @@ export class ExamService {
 
 
         if (levels && levels.length > 0) {
-            // if level is in levels make exam.isOpen = true
-            console.log('levels', levels);
+           
 
             exams.forEach((exam) => {
                 if (exam.major)
