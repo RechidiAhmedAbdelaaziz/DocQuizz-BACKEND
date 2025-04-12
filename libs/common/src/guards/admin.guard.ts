@@ -8,22 +8,15 @@ import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AdminGuard extends HttpAuthGuard implements CanActivate {
-
-
-
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-
-
 
     super.canActivate(context)
 
     const reflector = new Reflector();
     const skipAdminGuard = reflector.get<boolean>('skipAdminGuard', context.getHandler());
     if (skipAdminGuard) return ModeratorGuard.prototype.canActivate(context)
-
-
 
 
     const request = context.switchToHttp().getRequest<Request>()
@@ -44,8 +37,6 @@ class ModeratorGuard extends HttpAuthGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
 
-
-    super.canActivate(context)
 
     const request = context.switchToHttp().getRequest<Request>()
 
