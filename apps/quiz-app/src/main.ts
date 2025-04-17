@@ -15,14 +15,11 @@ async function bootstrap() {
   }))
 
   app.enableCors({
-    origin: /https?:\/\/(.+\.)?docquizz\.top$/, // Allow all subdomains of example.com
+    origin: [/https?:\/\/(.+\.)?docquizz\.top$/, 'http://localhost:5137'], // Allow all subdomains of example.com
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, // If you need to allow credentials (cookies, authorization headers)
   });
 
-
-
-  
 
 
 
