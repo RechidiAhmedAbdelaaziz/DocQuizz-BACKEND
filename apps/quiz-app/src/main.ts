@@ -14,22 +14,12 @@ async function bootstrap() {
     }
   }))
 
-  // app.enableCors({
-  //   origin: (origin, callback) => {
-  //     const allowedOrigins = [/^https?:\/\/(.+\.)?docquizz\.top$/, 'http://localhost:5137'];
-      
-  //     if (!origin || allowedOrigins.some(o =>
-  //       typeof o === 'string' ? o === origin : o.test(origin)
-  //     )) {
-  //       callback(null, true);
-  //     } else {
-  //       callback(new Error('Not allowed by CORS'));
-  //     }
-  //   },
-  //   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  //   credentials: true,
-  // });
-  
+  app.enableCors({
+    origin: [/https?:\/\/(.+\.)?docquizz\.top$/, /localhost/], // Allow all subdomains of example.com
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, // If you need to allow credentials (cookies, authorization headers)
+  });
+
 
 
 
