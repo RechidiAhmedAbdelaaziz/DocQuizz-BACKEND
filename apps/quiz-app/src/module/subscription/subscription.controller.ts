@@ -19,7 +19,7 @@ export class SubscriptionController {
 
   ) { }
 
- @UseGuards(SuperAdminGuard)
+  @UseGuards(SuperAdminGuard)
   @Get()
   async getSubscriptions(
     @Query() query: PaginationQuery
@@ -45,7 +45,7 @@ export class SubscriptionController {
     return data
   }
 
- @UseGuards(SuperAdminGuard)
+  @UseGuards(SuperAdminGuard)
   @Post()
   async createSubscription(
     @Body() body: CreateSubBody,
@@ -66,7 +66,7 @@ export class SubscriptionController {
     return { data }
   }
 
- @UseGuards(SuperAdminGuard)
+  @UseGuards(SuperAdminGuard)
   @Delete(':subscriptionId')
   async deleteSubscription(
     @Param('subscriptionId', ParseMonogoIdPipe) subscriptionId: Types.ObjectId,
@@ -90,7 +90,7 @@ export class SubscriptionRequestController {
 
   ) { }
 
- @UseGuards(SuperAdminGuard)
+  @UseGuards(SuperAdminGuard)
   @Get()
   async getSubscriptionRequests(
     @Query() query: PaginationQuery
@@ -137,7 +137,7 @@ export class SubscriptionRequestController {
     return { data }
   }
 
- @UseGuards(SuperAdminGuard)
+  @UseGuards(SuperAdminGuard)
   @Patch(':requestId')
   async approveSubscriptionRequest(
     @Param('requestId', ParseMonogoIdPipe) requestId: Types.ObjectId,
@@ -153,7 +153,7 @@ export class SubscriptionRequestController {
 
 }
 
-@UseGuards(SuperAdminGuard)
+
 @Controller('subscription-offer')
 export class SubscriptionOfferController {
   constructor(private readonly subscriptionOfferService: SubscriptionOfferService,
@@ -194,6 +194,7 @@ export class SubscriptionOfferController {
     return data
   }
 
+  @UseGuards(SuperAdminGuard)
   @Post()
   async createSubscriptionOffer(
     @Body() body: CreateOfferBody,
@@ -213,6 +214,7 @@ export class SubscriptionOfferController {
     return { data }
   }
 
+  @UseGuards(SuperAdminGuard)
   @Patch(':offerId')
   async updateSubscriptionOffer(
     @Param('offerId', ParseMonogoIdPipe) offerId: Types.ObjectId,
@@ -235,6 +237,7 @@ export class SubscriptionOfferController {
     return { data }
   }
 
+  @UseGuards(SuperAdminGuard)
   @Delete(':offerId')
   async deleteSubscriptionOffer(
     @Param('offerId', ParseMonogoIdPipe) offerId: Types.ObjectId,
