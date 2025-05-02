@@ -9,10 +9,10 @@ import { Question } from "./question.model";
 @DSchema()
 export class Note extends AbstractSchema {
 
-    @Prop({ type: Schema.Types.ObjectId, ref: User.name, select: false })
+    @Prop({ type: Schema.Types.ObjectId, ref: User.name, select: false , index: true})
     user: User
 
-    @Prop({ type: Schema.Types.ObjectId, ref: Question.name })
+    @Prop({ type: Schema.Types.ObjectId, ref: Question.name , index: true })
     question: Question
 
     @Prop({

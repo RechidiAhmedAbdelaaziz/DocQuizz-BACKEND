@@ -43,7 +43,7 @@ export class Question extends AbstractSchema {
     @Prop([{ type: Schema.Types.ObjectId, ref: Exam.name, default: [] }])
     exams?: Exam[]
 
-    @Prop({ type: Schema.Types.ObjectId, ref: Course.name })
+    @Prop({ type: Schema.Types.ObjectId, ref: Course.name , index: true })
     course: Course
 
     @Prop({

@@ -9,7 +9,7 @@ export class SubscriptionOffer extends AbstractSchema {
     @Prop()
     title: string
 
-    @Prop({ type: Schema.Types.ObjectId, ref: Domain.name })
+    @Prop({ type: Schema.Types.ObjectId, ref: Domain.name  })
     domain: Domain | Types.ObjectId
 
     @Prop({ type: [Schema.Types.ObjectId], ref: Level.name })
@@ -27,7 +27,7 @@ export class SubscriptionOffer extends AbstractSchema {
 
 @DSchema()
 export class Subscription extends AbstractSchema {
-    @Prop({ type: Schema.Types.ObjectId, ref: User.name })
+    @Prop({ type: Schema.Types.ObjectId, ref: User.name , index: true })
     user: User
 
 

@@ -9,7 +9,7 @@ import { User } from "./user.model";
 @DSchema()
 export class RefreshToken extends AbstractSchema {
 
-    @Prop({ type: Schema.Types.ObjectId, ref: User.name })
+    @Prop({ type: Schema.Types.ObjectId, ref: User.name , index: true })
     user: User
 
     @Prop()

@@ -16,7 +16,7 @@ export class Quiz extends AbstractSchema {
     @Prop({ default: 0 })
     totalQuestions: number
 
-    @Prop({ type: Schema.Types.ObjectId, ref: User.name, select: false })
+    @Prop({ type: Schema.Types.ObjectId, ref: User.name, select: false , index: true })
     user: User
 
     @Prop({

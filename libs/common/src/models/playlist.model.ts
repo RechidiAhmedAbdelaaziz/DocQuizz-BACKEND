@@ -18,7 +18,7 @@ export class Playlist extends AbstractSchema {
     @Prop([{ type: Schema.Types.ObjectId, ref: Question.name, select: false, default: [] }])
     questions: Question[]
 
-    @Prop({ type: Schema.Types.ObjectId, ref: User.name, select: false })
+    @Prop({ type: Schema.Types.ObjectId, ref: User.name, select: false , index: true })
     user: User
 
 }
