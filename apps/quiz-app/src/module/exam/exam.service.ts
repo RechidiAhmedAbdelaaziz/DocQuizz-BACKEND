@@ -80,12 +80,14 @@ export class ExamService {
 
 
         if (levels && levels.length > 0) {
-           
+
 
             exams.forEach((exam) => {
                 if (exam.major)
                     exam.isOpen = levels.some((level) => {
-                        return exam.major.level._id.toString() === level.toString();
+                        return exam.major.level._id.toString() === level.toString() ||
+                            (levels.length > 1 && (exam.type === 'Résidanat' || exam.type === 'Résidanat blanc'))
+
                     }
                     );
             }
