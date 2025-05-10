@@ -85,8 +85,8 @@ export class ExamService {
             exams.forEach((exam) => {
                 if (exam.major)
                     exam.isOpen = levels.some((level) => {
-                        return exam.major.level._id.toString() === level.toString() ||
-                            (levels.length > 1 && (exam.type === 'Résidanat' || exam.type === 'Résidanat blanc'))
+                        return (exam.major.level._id.toString() === level.toString()) ||
+                            (levels.length > 1 && (keywords == 'Résidanat' || keywords == 'Résidanat blanc'))
 
                     }
                     );
