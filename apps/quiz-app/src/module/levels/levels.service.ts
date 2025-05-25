@@ -56,44 +56,44 @@ export class LevelsService {
 
             // Join with Major
             {
-                $lookup: {
-                    from: 'majors', // collection name (usually lowercase plural)
-                    localField: 'major',
-                    foreignField: '_id',
-                    as: 'major',
-                }
+            $lookup: {
+                from: 'majors',
+                localField: 'major',
+                foreignField: '_id',
+                as: 'major',
+            }
             },
             { $unwind: '$major' },
 
             // Join with Level
             {
-                $lookup: {
-                    from: 'levels',
-                    localField: 'major.level',
-                    foreignField: '_id',
-                    as: 'major.level',
-                }
+            $lookup: {
+                from: 'levels',
+                localField: 'major.level',
+                foreignField: '_id',
+                as: 'major.level',
+            }
             },
             { $unwind: '$major.level' },
 
             // Add isLevelMatched field
             {
-                $addFields: {
-                    isLevelMatched: { $in: ['$major.level._id', levels] }
-                }
+            $addFields: {
+                isLevelMatched: { $in: ['$major.level._id', levels] }
+            }
             },
 
             // Conditionally override isOpen
             {
-                $addFields: {
-                    isOpen: {
-                        $cond: {
-                            if: '$isLevelMatched',
-                            then: true,
-                            else: '$isOpen'
-                        }
-                    }
+            $addFields: {
+                isOpen: {
+                $cond: {
+                    if: '$isLevelMatched',
+                    then: true,
+                    else: '$isOpen'
                 }
+                }
+            }
             },
 
             // Remove helper field
@@ -101,6 +101,9 @@ export class LevelsService {
 
             // return only course name and id and isOpen
             { $project: { name: 1, _id: 1, isOpen: 1 } },
+
+            // Sort by name
+            { $sort: { name: 1 } },
         ]);
 
         return courses;
