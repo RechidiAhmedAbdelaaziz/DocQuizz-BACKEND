@@ -115,6 +115,15 @@ export class QuestionService {
                     as: 'course',
                 },
             },
+            // course is one object, not an array
+            // so make it object
+            {
+                $addFields: {
+                    course: { $arrayElemAt: ['$course', 0] },
+                },
+            },
+
+            
             {
                 $lookup: {
                     from: 'exams',
