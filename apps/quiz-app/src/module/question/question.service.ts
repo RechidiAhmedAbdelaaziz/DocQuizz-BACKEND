@@ -83,7 +83,7 @@ export class QuestionService {
         }
     ) => {
         // question : {exams : Exam[]} so exam should be in the exams array
-        const filter: FilterQuery<Question> = { exams: { $in: [new Types.ObjectId(exam._id)] } };
+        const filter: FilterQuery<Question> = { exams: { $in: [exam] } };
 
         const { generate, limit, page } = new Pagination(this.questionModel, { filter, ...options }).getOptions();
 
