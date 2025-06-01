@@ -90,51 +90,73 @@ export class QuestionService {
 
         const questions = await this.questionModel.aggregate([
             { $match: filter },
-            // Add a computed field 'isCasClinique' to determine the sort priority
             {
-                $addFields: {
-                    isCasClinique: {
-                        $cond: { if: { $eq: ['$type', QuestionType.CAS_CLINIQUE] }, then: 1, else: 0 },
+            $addFields: {
+                isCasClinique: {
+                $cond: { if: { $eq: ['$type', QuestionType.CAS_CLINIQUE] }, then: 1, else: 0 },
+                },
+            },
+            },
+            {
+            $lookup: {
+                from: 'sources',
+                localField: 'sources.source',
+                foreignField: '_id',
+                as: 'populatedSources',
+            },
+            },
+            {
+            $addFields: {
+                sources: {
+                $map: {
+                    input: '$sources',
+                    as: 'src',
+                    in: {
+                    source: {
+                        $arrayElemAt: [
+                        {
+                            $filter: {
+                            input: '$populatedSources',
+                            as: 'popSrc',
+                            cond: { $eq: ['$$popSrc._id', '$$src.source'] }
+                            }
+                        },
+                        0
+                        ]
                     },
-                },
-            },
-            // Populate related fields using $lookup
-            {
-                $lookup: {
-                    from: 'sources', // collection name
-                    localField: 'sources.source',
-                    foreignField: '_id',
-                    as: 'sources.source',
-                },
+                    year: '$$src.year'
+                    }
+                }
+                }
+            }
             },
             {
-                $lookup: {
-                    from: 'courses',
-                    localField: 'course',
-                    foreignField: '_id',
-                    as: 'course',
-                },
+            $project: {
+                populatedSources: 0
+            }
             },
-            // course is one object, not an array
-            // so make it object
             {
-                $addFields: {
-                    course: { $arrayElemAt: ['$course', 0] },
-                },
+            $lookup: {
+                from: 'courses',
+                localField: 'course',
+                foreignField: '_id',
+                as: 'course',
             },
-
-            
+            },
             {
-                $lookup: {
-                    from: 'exams',
-                    localField: 'exams',
-                    foreignField: '_id',
-                    as: 'exams',
-                },
+            $addFields: {
+                course: { $arrayElemAt: ['$course', 0] },
             },
-            // Sort by isCasClinique first, then sortField
+            },
+            {
+            $lookup: {
+                from: 'exams',
+                localField: 'exams',
+                foreignField: '_id',
+                as: 'exams',
+            },
+            },
             { $sort: { isCasClinique: 1, sortField: 1 } },
-            // Skip and limit for pagination
             { $skip: (page - 1) * limit },
             { $limit: limit },
         ]);
