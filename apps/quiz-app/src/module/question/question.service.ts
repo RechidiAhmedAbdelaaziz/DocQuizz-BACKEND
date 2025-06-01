@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, Types } from 'mongoose';
 import { QuestionFilter } from './interface/question-filter';
 import path from 'path';
+import { QuestionType } from '@app/common';
 
 @Injectable()
 export class QuestionService {
@@ -19,24 +20,50 @@ export class QuestionService {
     ) => {
         const { generate, limit, page } = new Pagination(this.questionModel, { filter, ...pagination }).getOptions();
 
-        const questions = await this.questionModel
-            .find(filter)
-            .populate({
-                path: 'sources.source', // Populating the 'sources.source' field
-            })
-            .populate({
-                path: 'exams',
-                populate: [
-                    { path: 'major' }, // Populating nested fields in 'exams'
-                    { path: 'domain' },
-                ],
-            })
-            .populate('course') // Populating the 'course' field
-            .sort({
-                'sortField': 1,
-            })
-            .skip((page - 1) * limit)
-            .limit(limit);
+        const questions = await this.questionModel.aggregate([
+            { $match: filter },
+            // Add a computed field 'isCasClinique' to determine the sort priority
+            {
+                $addFields: {
+                    isCasClinique: {
+                        $cond: { if: { $eq: ['$type', QuestionType.CAS_CLINIQUE] }, then: 1, else: 0 },
+                    },
+                },
+            },
+            // Populate related fields using $lookup
+            {
+                $lookup: {
+                    from: 'sources', // collection name
+                    localField: 'sources.source',
+                    foreignField: '_id',
+                    as: 'sources.source',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'courses',
+                    localField: 'course',
+                    foreignField: '_id',
+                    as: 'course',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'exams',
+                    localField: 'exams',
+                    foreignField: '_id',
+                    as: 'exams',
+                },
+            },
+            // Sort by isCasClinique first, then sortField
+            { $sort: { isCasClinique: 1, sortField: 1 } },
+            // Skip and limit for pagination
+            { $skip: (page - 1) * limit },
+            { $limit: limit },
+        ]);
+
+        // If necessary, you can also handle nested populates manually by performing additional lookups or programmatically.
+
 
 
         if (pagination.min && questions.length < pagination.min) throw new HttpException(`Il n'y a pas assez de questions`, 404);
@@ -56,14 +83,51 @@ export class QuestionService {
         }
     ) => {
         // question : {exams : Exam[]} so exam should be in the exams array
-        const filter: FilterQuery<Question> = { exams: { $in: [exam] } };
+        const filter: FilterQuery<Question> = { exams: { $in: [new Types.ObjectId(exam._id)] } };
 
         const { generate, limit, page } = new Pagination(this.questionModel, { filter, ...options }).getOptions();
 
-        const questions = await this.questionModel
-            .find(filter)
-            .skip((page - 1) * limit)
-            .limit(limit).populate(['sources.source', 'course', 'exams'])
+        const questions = await this.questionModel.aggregate([
+            { $match: filter },
+            // Add a computed field 'isCasClinique' to determine the sort priority
+            {
+                $addFields: {
+                    isCasClinique: {
+                        $cond: { if: { $eq: ['$type', QuestionType.CAS_CLINIQUE] }, then: 1, else: 0 },
+                    },
+                },
+            },
+            // Populate related fields using $lookup
+            {
+                $lookup: {
+                    from: 'sources', // collection name
+                    localField: 'sources.source',
+                    foreignField: '_id',
+                    as: 'sources.source',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'courses',
+                    localField: 'course',
+                    foreignField: '_id',
+                    as: 'course',
+                },
+            },
+            {
+                $lookup: {
+                    from: 'exams',
+                    localField: 'exams',
+                    foreignField: '_id',
+                    as: 'exams',
+                },
+            },
+            // Sort by isCasClinique first, then sortField
+            { $sort: { isCasClinique: 1, sortField: 1 } },
+            // Skip and limit for pagination
+            { $skip: (page - 1) * limit },
+            { $limit: limit },
+        ]);
 
         return await generate(questions);
     }
@@ -109,19 +173,18 @@ export class QuestionService {
 
 
 
-        if (ids) filter._id = { $in: ids };
-        if (courses) filter.course = { $in: courses };
+        if (ids) filter._id = { $in: ids.map(id => new Types.ObjectId(id)) };
+        if (courses) filter.course = { $in: courses.map(id => new Types.ObjectId(id)) };
         if (difficulties) filter.difficulties = { $in: difficulties };
         if (types) filter.type = { $in: types };
-        if (exam) filter.exams = { $in: [exam] };
+        if (exam) filter.exams = { $in: [new Types.ObjectId(exam._id)] };
 
-        const sourcesFilter: any = {}
-        if (year) sourcesFilter.year = { $gte: year }
-        if (sources) sourcesFilter.source = { $in: sources }
+        const sourcesFilter: any = {};
+        if (year) sourcesFilter.year = { $gte: year };
+        if (sources) sourcesFilter.source = { $in: sources.map(id => new Types.ObjectId(id)) };
         if (year || sources) filter.sources = { $elemMatch: sourcesFilter };
 
         if (years) filter.sources = { $elemMatch: { year: { $in: years } } };
-
 
         if (withExplanation && withoutExplanation) {
             filter.$or = [{ withExplanation: true }, { withExplanation: false }];
