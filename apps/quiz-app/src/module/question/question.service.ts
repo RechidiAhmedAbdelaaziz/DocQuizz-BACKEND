@@ -6,6 +6,7 @@ import { FilterQuery, Model, Types } from 'mongoose';
 import { QuestionFilter } from './interface/question-filter';
 import path from 'path';
 import { QuestionType } from '@app/common';
+import { Type } from 'class-transformer';
 
 @Injectable()
 export class QuestionService {
@@ -83,7 +84,7 @@ export class QuestionService {
         }
     ) => {
         // question : {exams : Exam[]} so exam should be in the exams array
-        const filter: FilterQuery<Question> = { exams: { $in: [exam] } };
+        const filter: FilterQuery<Question> = { exams: { $in: [new Types.ObjectId(exam._id)] } };
 
         const { generate, limit, page } = new Pagination(this.questionModel, { filter, ...options }).getOptions();
 
