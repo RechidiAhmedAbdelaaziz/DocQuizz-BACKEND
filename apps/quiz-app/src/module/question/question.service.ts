@@ -31,7 +31,6 @@ export class QuestionService {
                     },
                 },
             },
-            // Populate related fields using $lookup
             {
                 $lookup: {
                     from: 'sources', // collection name
@@ -40,6 +39,33 @@ export class QuestionService {
                     as: 'sources.source',
                 },
             },
+            {
+                $addFields: {
+                    sources: {
+                        $map: {
+                            input: '$sources',
+                            as: 'src',
+                            in: {
+                                source: {
+                                    $arrayElemAt: [
+                                        {
+                                            $filter: {
+                                                input: '$sources.source',
+                                                as: 'popSrc',
+                                                cond: { $eq: ['$$popSrc._id', '$$src.source'] }
+                                            }
+                                        },
+                                        0
+                                    ]
+                                },
+                                year: '$$src.year'
+                            }
+                        }
+                    }
+                }
+            },
+            //populate major
+
             {
                 $lookup: {
                     from: 'courses',
@@ -61,6 +87,19 @@ export class QuestionService {
             // Skip and limit for pagination
             { $skip: (page - 1) * limit },
             { $limit: limit },
+            //unselect major from course (course.major)
+            {
+                $addFields: {
+                    course: {
+                        $arrayElemAt: ['$course', 0],
+                    },
+                },
+            },
+            {
+                $project: {
+                    'course.major': 0,
+                },
+            },
         ]);
 
         // If necessary, you can also handle nested populates manually by performing additional lookups or programmatically.
@@ -91,70 +130,70 @@ export class QuestionService {
         const questions = await this.questionModel.aggregate([
             { $match: filter },
             {
-            $addFields: {
-                isCasClinique: {
-                $cond: { if: { $eq: ['$type', QuestionType.CAS_CLINIQUE] }, then: 1, else: 0 },
+                $addFields: {
+                    isCasClinique: {
+                        $cond: { if: { $eq: ['$type', QuestionType.CAS_CLINIQUE] }, then: 1, else: 0 },
+                    },
                 },
             },
+            {
+                $lookup: {
+                    from: 'sources',
+                    localField: 'sources.source',
+                    foreignField: '_id',
+                    as: 'populatedSources',
+                },
             },
             {
-            $lookup: {
-                from: 'sources',
-                localField: 'sources.source',
-                foreignField: '_id',
-                as: 'populatedSources',
-            },
-            },
-            {
-            $addFields: {
-                sources: {
-                $map: {
-                    input: '$sources',
-                    as: 'src',
-                    in: {
-                    source: {
-                        $arrayElemAt: [
-                        {
-                            $filter: {
-                            input: '$populatedSources',
-                            as: 'popSrc',
-                            cond: { $eq: ['$$popSrc._id', '$$src.source'] }
+                $addFields: {
+                    sources: {
+                        $map: {
+                            input: '$sources',
+                            as: 'src',
+                            in: {
+                                source: {
+                                    $arrayElemAt: [
+                                        {
+                                            $filter: {
+                                                input: '$populatedSources',
+                                                as: 'popSrc',
+                                                cond: { $eq: ['$$popSrc._id', '$$src.source'] }
+                                            }
+                                        },
+                                        0
+                                    ]
+                                },
+                                year: '$$src.year'
                             }
-                        },
-                        0
-                        ]
-                    },
-                    year: '$$src.year'
+                        }
                     }
                 }
+            },
+            {
+                $project: {
+                    populatedSources: 0
                 }
-            }
             },
             {
-            $project: {
-                populatedSources: 0
-            }
+                $lookup: {
+                    from: 'courses',
+                    localField: 'course',
+                    foreignField: '_id',
+                    as: 'course',
+                },
             },
             {
-            $lookup: {
-                from: 'courses',
-                localField: 'course',
-                foreignField: '_id',
-                as: 'course',
-            },
+                $addFields: {
+                    course: { $arrayElemAt: ['$course', 0] },
+                },
             },
             {
-            $addFields: {
-                course: { $arrayElemAt: ['$course', 0] },
-            },
-            },
-            {
-            $lookup: {
-                from: 'exams',
-                localField: 'exams',
-                foreignField: '_id',
-                as: 'exams',
-            },
+                $lookup: {
+                    from: 'exams',
+                    localField: 'exams',
+                    foreignField: '_id',
+                    as: 'exams',
+                },
             },
             { $sort: { isCasClinique: 1, sortField: 1 } },
             { $skip: (page - 1) * limit },
