@@ -22,85 +22,92 @@ export class QuestionService {
         const { generate, limit, page } = new Pagination(this.questionModel, { filter, ...pagination }).getOptions();
 
         const questions = await this.questionModel.aggregate([
-            { $match: filter },
-            // Add a computed field 'isCasClinique' to determine the sort priority
-            {
-                $addFields: {
-                    isCasClinique: {
-                        $cond: { if: { $eq: ['$type', QuestionType.CAS_CLINIQUE] }, then: 1, else: 0 },
-                    },
-                },
+    { $match: filter },
+    {
+        $addFields: {
+            isCasClinique: {
+                $cond: { if: { $eq: ['$type', QuestionType.CAS_CLINIQUE] }, then: 1, else: 0 },
             },
-            {
-                $lookup: {
-                    from: 'sources', // collection name
-                    localField: 'sources.source',
-                    foreignField: '_id',
-                    as: 'sources.source',
-                },
-            },
-            {
-                $addFields: {
-                    sources: {
-                        $map: {
-                            input: '$sources',
-                            as: 'src',
-                            in: {
-                                source: {
-                                    $arrayElemAt: [
-                                        {
-                                            $filter: {
-                                                input: '$sources.source',
-                                                as: 'popSrc',
-                                                cond: { $eq: ['$$popSrc._id', '$$src.source'] }
-                                            }
-                                        },
-                                        0
-                                    ]
+        },
+    },
+    {
+        $lookup: {
+            from: 'sources',
+            localField: 'sources.source',
+            foreignField: '_id',
+            as: 'populatedSources',
+        },
+    },
+    {
+        $addFields: {
+            sources: {
+                $map: {
+                    input: '$sources',
+                    as: 'src',
+                    in: {
+                        source: {
+                            $arrayElemAt: [
+                                {
+                                    $filter: {
+                                        input: '$populatedSources',
+                                        as: 'popSrc',
+                                        cond: { $eq: ['$$popSrc._id', '$$src.source'] }
+                                    }
                                 },
-                                year: '$$src.year'
-                            }
-                        }
+                                0
+                            ]
+                        },
+                        year: '$$src.year'
                     }
                 }
-            },
-            //populate major
+            }
+        }
+    },
+    {
+        $project: {
+            populatedSources: 0
+        }
+    },
+    {
+        $lookup: {
+            from: 'courses',
+            localField: 'course',
+            foreignField: '_id',
+            as: 'course',
+        },
+    },
+    {
+        $addFields: {
+            course: { $arrayElemAt: ['$course', 0] },
+        },
+    },
+    // Populate course.major
+    {
+        $lookup: {
+            from: 'majors',
+            localField: 'course.major',
+            foreignField: '_id',
+            as: 'course.major'
+        }
+    },
+    {
+        $addFields: {
+            'course.major': { $arrayElemAt: ['$course.major', 0] },
+        },
+    },
+    {
+        $lookup: {
+            from: 'exams',
+            localField: 'exams',
+            foreignField: '_id',
+            as: 'exams',
+        },
+    },
+    { $sort: { isCasClinique: 1, sortField: 1 } },
+    { $skip: (page - 1) * limit },
+    { $limit: limit },
+]);
 
-            {
-                $lookup: {
-                    from: 'courses',
-                    localField: 'course',
-                    foreignField: '_id',
-                    as: 'course',
-                },
-            },
-            {
-                $lookup: {
-                    from: 'exams',
-                    localField: 'exams',
-                    foreignField: '_id',
-                    as: 'exams',
-                },
-            },
-            // Sort by isCasClinique first, then sortField
-            { $sort: { isCasClinique: 1, sortField: 1 } },
-            // Skip and limit for pagination
-            { $skip: (page - 1) * limit },
-            { $limit: limit },
-            //unselect major from course (course.major)
-            {
-                $addFields: {
-                    course: {
-                        $arrayElemAt: ['$course', 0],
-                    },
-                },
-            },
-            {
-                $project: {
-                    'course.major': 0,
-                },
-            },
-        ]);
 
         // If necessary, you can also handle nested populates manually by performing additional lookups or programmatically.
 
@@ -126,79 +133,93 @@ export class QuestionService {
         const filter: FilterQuery<Question> = { exams: { $in: [new Types.ObjectId(exam._id)] } };
 
         const { generate, limit, page } = new Pagination(this.questionModel, { filter, ...options }).getOptions();
-
-        const questions = await this.questionModel.aggregate([
-            { $match: filter },
-            {
-                $addFields: {
-                    isCasClinique: {
-                        $cond: { if: { $eq: ['$type', QuestionType.CAS_CLINIQUE] }, then: 1, else: 0 },
-                    },
-                },
+const questions = await this.questionModel.aggregate([
+    { $match: filter },
+    {
+        $addFields: {
+            isCasClinique: {
+                $cond: { if: { $eq: ['$type', QuestionType.CAS_CLINIQUE] }, then: 1, else: 0 },
             },
-            {
-                $lookup: {
-                    from: 'sources',
-                    localField: 'sources.source',
-                    foreignField: '_id',
-                    as: 'populatedSources',
-                },
-            },
-            {
-                $addFields: {
-                    sources: {
-                        $map: {
-                            input: '$sources',
-                            as: 'src',
-                            in: {
-                                source: {
-                                    $arrayElemAt: [
-                                        {
-                                            $filter: {
-                                                input: '$populatedSources',
-                                                as: 'popSrc',
-                                                cond: { $eq: ['$$popSrc._id', '$$src.source'] }
-                                            }
-                                        },
-                                        0
-                                    ]
+        },
+    },
+    {
+        $lookup: {
+            from: 'sources',
+            localField: 'sources.source',
+            foreignField: '_id',
+            as: 'populatedSources',
+        },
+    },
+    {
+        $addFields: {
+            sources: {
+                $map: {
+                    input: '$sources',
+                    as: 'src',
+                    in: {
+                        source: {
+                            $arrayElemAt: [
+                                {
+                                    $filter: {
+                                        input: '$populatedSources',
+                                        as: 'popSrc',
+                                        cond: { $eq: ['$$popSrc._id', '$$src.source'] }
+                                    }
                                 },
-                                year: '$$src.year'
-                            }
-                        }
+                                0
+                            ]
+                        },
+                        year: '$$src.year'
                     }
                 }
-            },
-            {
-                $project: {
-                    populatedSources: 0
-                }
-            },
-            {
-                $lookup: {
-                    from: 'courses',
-                    localField: 'course',
-                    foreignField: '_id',
-                    as: 'course',
-                },
-            },
-            {
-                $addFields: {
-                    course: { $arrayElemAt: ['$course', 0] },
-                },
-            },
-            {
-                $lookup: {
-                    from: 'exams',
-                    localField: 'exams',
-                    foreignField: '_id',
-                    as: 'exams',
-                },
-            },
-            { $sort: { isCasClinique: 1, sortField: 1 } },
-            { $skip: (page - 1) * limit },
-            { $limit: limit },
-        ]);
+            }
+        }
+    },
+    {
+        $project: {
+            populatedSources: 0
+        }
+    },
+    {
+        $lookup: {
+            from: 'courses',
+            localField: 'course',
+            foreignField: '_id',
+            as: 'course',
+        },
+    },
+    {
+        $addFields: {
+            course: { $arrayElemAt: ['$course', 0] },
+        },
+    },
+    // Populate course.major
+    {
+        $lookup: {
+            from: 'majors',
+            localField: 'course.major',
+            foreignField: '_id',
+            as: 'course.major'
+        }
+    },
+    {
+        $addFields: {
+            'course.major': { $arrayElemAt: ['$course.major', 0] },
+        },
+    },
+    {
+        $lookup: {
+            from: 'exams',
+            localField: 'exams',
+            foreignField: '_id',
+            as: 'exams',
+        },
+    },
+    { $sort: { isCasClinique: 1, sortField: 1 } },
+    { $skip: (page - 1) * limit },
+    { $limit: limit },
+]);
+
 
         return await generate(questions);
     }
