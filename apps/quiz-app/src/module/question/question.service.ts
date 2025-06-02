@@ -93,7 +93,8 @@ export class QuestionService {
             {
                 $project: {
                     'course.major': 0,
-                    'exams.major': 0
+                    'exams.major': 0,
+                    'exam.domain': 0,
                 }
             },
             { $sort: { isCasClinique: 1, sortField: 1 } },
@@ -199,7 +200,8 @@ export class QuestionService {
             {
                 $project: {
                     'course.major': 0,
-                    'exams.major': 0
+                    'exams.major': 0,
+                    'exam.domain': 0,
                 }
             },
             { $sort: { isCasClinique: 1, sortField: 1 } },
