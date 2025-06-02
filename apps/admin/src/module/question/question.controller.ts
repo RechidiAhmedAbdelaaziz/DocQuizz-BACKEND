@@ -32,11 +32,14 @@ export class QuestionController {
       return { source: sourceE, year: source.year }
     })) : undefined;
 
-    if (exams) await Promise.all(exams.map(async exam => { await this.examService.updateExam(exam, { addQuiz: true }) }))
+
 
     const question = await this.questionService.createOrUpdateQuestion({
       questions, caseText, course, exams, sources, images
     })
+
+
+    if (exams) await Promise.all(exams.map(async exam => { await this.examService.updateExam(exam, { addQuiz: questions.length }) }))
 
     await this.statisticService.updateStatistic({
       newQuestion: 1,
@@ -69,9 +72,9 @@ export class QuestionController {
     const examsNotInQuestion = exams.filter(exam => !question.exams.find(e => e.id == exam.id))
     const examsNotInExams = question.exams.filter(exam => !exams.find(e => e.id == exam.id))
 
-    for (const exam of examsNotInQuestion) await this.examService.updateExam(exam, { addQuiz: true })
+    for (const exam of examsNotInQuestion) await this.examService.updateExam(exam, { addQuiz: questions.length })
 
-    for (const exam of examsNotInExams) await this.examService.updateExam(exam, { deleteQuiz: true })
+    for (const exam of examsNotInExams) await this.examService.updateExam(exam, { addQuiz: -questions.length })
 
     return await this.questionService.createOrUpdateQuestion({
       questions,
@@ -92,7 +95,7 @@ export class QuestionController {
 
     await this.questionService.deleteQuestionById(question)
     for (const exam of question.exams) {
-      await this.examService.updateExam(exam, { deleteQuiz: true })
+      await this.examService.updateExam(exam, { addQuiz : -question.questions.length })
     }
 
     await this.statisticService.updateStatistic({

@@ -48,15 +48,14 @@ export class ExamAdminService {
             time?: number,
             year?: number,
             city?: string,
-            addQuiz?: boolean,
-            deleteQuiz?: boolean,
+            addQuiz?: number,
             group?: string
             type?: string
             changeGroup?: boolean
 
         }) => {
 
-        const { time, addQuiz, deleteQuiz, type, city, group, major, year, domain, changeGroup } = details;
+        const { time, addQuiz, type, city, group, major, year, domain, changeGroup } = details;
 
         if (time) exam.time = time;
         if (city) exam.city = city;
@@ -65,8 +64,7 @@ export class ExamAdminService {
         if (changeGroup) exam.group = group;
         if (type) exam.type = type;
         if (year) exam.year = year;
-        if (addQuiz) exam.questions += 1;
-        if (deleteQuiz) exam.questions -= 1;
+        if (addQuiz) exam.questions += addQuiz;
 
         if (time || city || major || domain || group || type)
             exam.title = `${type}${group ? `(${group}) ` : ' '}:${major ? ` ${major.name}` : domain ? ` ${domain.name}` : ''} | ${year} |  ${city}`;
