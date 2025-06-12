@@ -118,11 +118,8 @@ export class SubscriptionService {
         const { generate, limit, page } = new Pagination(this.subscriptionModel, { filter, ...pagination }).getOptions();
 
         const subscriptions = await this.subscriptionModel.aggregate([
-            // Match your filter
-            {
-                $match: (filter.user || filter.offer) ? filters : {}
-
-            },
+            // Match your filter if any
+            ...((filter.user || filter.offer) ? [{ $match: filters }] : []),
 
             // Join with 'users' collection
             {
