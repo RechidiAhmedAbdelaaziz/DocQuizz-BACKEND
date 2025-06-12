@@ -109,12 +109,20 @@ export class SubscriptionService {
         }
     ) {
 
+        const filters: FilterQuery<Subscription> = {};
+
+        if (filter?.user) filters.user = new Types.ObjectId(filter.user);
+        if (filter?.offer) filters.offer = new Types.ObjectId(filter.offer);
+
 
         const { generate, limit, page } = new Pagination(this.subscriptionModel, { filter, ...pagination }).getOptions();
 
         const subscriptions = await this.subscriptionModel.aggregate([
             // Match your filter
-            { $match: filter },
+            {
+                $match: (filter.user || filter.offer) ? filters : undefined
+
+            },
 
             // Join with 'users' collection
             {
@@ -142,7 +150,7 @@ export class SubscriptionService {
             {
                 $project: {
                     _id: 1,
-                    
+
                     user: {
                         _id: 1,
                         name: 1,
