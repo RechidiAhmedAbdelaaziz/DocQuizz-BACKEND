@@ -127,7 +127,7 @@ export class SubscriptionService {
 
                 }
             )
-            .sort({ 'user.email': 1, 'offer.title': 1 });
+            .sort('user.email');
 
         return await generate(subscriptions);
     }
