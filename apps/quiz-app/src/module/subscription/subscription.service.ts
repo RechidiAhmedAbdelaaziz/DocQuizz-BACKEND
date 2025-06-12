@@ -142,7 +142,7 @@ export class SubscriptionService {
             {
                 $project: {
                     _id: 1,
-                    createdAt: 1,
+                    
                     user: {
                         _id: 1,
                         name: 1,
