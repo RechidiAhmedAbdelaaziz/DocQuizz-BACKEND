@@ -124,10 +124,10 @@ export class SubscriptionService {
                 {
                     path: 'offer',
                     select: 'title price endDate',
-                   
+
                 }
             )
-            // .sort({ 'createdAt': -1 });
+            .sort({ 'user.email': 1, 'offer.title': 1 });
 
         return await generate(subscriptions);
     }
@@ -178,7 +178,7 @@ export class SubscriptionService {
 
         if (!subscriptions) throw new HttpException('Subscription not found', HttpStatus.NOT_FOUND);
 
-       const {length} =  await Promise.all(subscriptions.map((subscription) => subscription.deleteOne()));
+        const { length } = await Promise.all(subscriptions.map((subscription) => subscription.deleteOne()));
 
         return length;
     }
@@ -217,7 +217,7 @@ export class SubscriptionOfferService {
             .limit(limit)
             .populate('domain')
             .populate('levels')
-            // .sort({ 'createdAt': -1 });
+        // .sort({ 'createdAt': -1 });
 
         return await generate(subscriptions);
     }
@@ -266,7 +266,7 @@ export class SubscriptionOfferService {
 
         const subscriptionOffer = await this.subscriptionModel.findById(subscriptionOfferId)
 
-        
+
 
         if (!subscriptionOffer) throw new HttpException('Subscription offer not found', HttpStatus.NOT_FOUND);
 
@@ -299,7 +299,7 @@ export class SubscriptionOfferService {
         if (!subscriptionOffer) throw new HttpException('Subscription offer not found', HttpStatus.NOT_FOUND);
 
         await subscriptionOffer.deleteOne();
-        
+
     }
 
 }
