@@ -123,8 +123,8 @@ export class SubscriptionService {
             .populate(
                 {
                     path: 'offer',
-                    select: 'title price levels domain endDate',
-                    populate: 'domain levels'
+                    select: 'title price endDate',
+                   
                 }
             )
             // .sort({ 'createdAt': -1 });
