@@ -135,7 +135,7 @@ export class SubscriptionService {
             // Join with 'offers' collection
             {
                 $lookup: {
-                    from: 'offers',
+                    from: 'subscriptionoffers',
                     localField: 'offer',
                     foreignField: '_id',
                     as: 'offer',
