@@ -112,22 +112,61 @@ export class SubscriptionService {
 
         const { generate, limit, page } = new Pagination(this.subscriptionModel, { filter, ...pagination }).getOptions();
 
-        const subscriptions = await this.subscriptionModel
-            .find(filter)
-            .skip((page - 1) * limit)
-            .limit(limit)
-            .populate({
-                path: 'user',
-                select: 'name email'
-            })
-            .populate(
-                {
-                    path: 'offer',
-                    select: 'title price endDate',
+        const subscriptions = await this.subscriptionModel.aggregate([
+            // Match your filter
+            { $match: filter },
 
-                }
-            )
-            .sort('user.email');
+            // Join with 'users' collection
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'user',
+                    foreignField: '_id',
+                    as: 'user',
+                },
+            },
+            { $unwind: '$user' }, // Flatten the array
+
+            // Join with 'offers' collection
+            {
+                $lookup: {
+                    from: 'offers',
+                    localField: 'offer',
+                    foreignField: '_id',
+                    as: 'offer',
+                },
+            },
+            { $unwind: '$offer' }, // Flatten the array
+
+            // Project only required fields
+            {
+                $project: {
+                    _id: 1,
+                    createdAt: 1,
+                    user: {
+                        _id: 1,
+                        name: 1,
+                        email: 1,
+                    },
+                    offer: {
+                        _id: 1,
+                        title: 1,
+                        price: 1,
+                        endDate: 1,
+                    },
+                },
+            },
+
+            // Sort by user.email
+            {
+                $sort: { 'user.email': 1 }, // 1 = ascending, -1 = descending
+            },
+
+            // Pagination
+            { $skip: (page - 1) * limit },
+            { $limit: limit },
+        ]);
+
 
         return await generate(subscriptions);
     }
