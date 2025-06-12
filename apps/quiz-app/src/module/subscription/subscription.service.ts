@@ -120,7 +120,7 @@ export class SubscriptionService {
         const subscriptions = await this.subscriptionModel.aggregate([
             // Match your filter
             {
-                $match: (filter.user || filter.offer) ? filters : undefined
+                $match: (filter.user || filter.offer) ? filters : {}
 
             },
 
