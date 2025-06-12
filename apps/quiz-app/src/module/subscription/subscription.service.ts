@@ -127,7 +127,7 @@ export class SubscriptionService {
                     populate: 'domain levels'
                 }
             )
-            .sort({ 'createdAt': -1 });
+            // .sort({ 'createdAt': -1 });
 
         return await generate(subscriptions);
     }
