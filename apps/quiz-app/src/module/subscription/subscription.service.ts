@@ -98,6 +98,27 @@ export class SubscriptionService {
         @InjectModel(Subscription.name) private readonly subscriptionModel: Model<Subscription>,
     ) { }
 
+    async getSubscriptionForCheck(userId: Types.ObjectId) {
+        const subscription = await this.subscriptionModel.find({
+            user: userId,
+
+        }).populate([
+            {
+                path: 'offer',
+                select: 'title price endDate levels domain',
+                populate: "domain levels"
+            },
+            {
+                path : 'user',
+                select: 'name email'
+            }
+        ])
+
+
+
+        return subscription;
+    }
+
     async getSubscriptions(
         filter: {
             user?: Types.ObjectId;

@@ -42,10 +42,10 @@ export class LevelsService {
     }
 
     getCourses = async (major?: Major, userId?: Types.ObjectId) => {
-        const subs = (await this.subscriptionService.getSubscriptions({ user: userId }, {}))
+        const subs = (await this.subscriptionService.getSubscriptionForCheck(userId)) || [];
 
 
-        const levels = subs.data.map((sub) => sub.offer.levels)
+        const levels = subs.map((sub) => sub.offer.levels)
             .flatMap((level) => level.map((l) => l._id))
 
         const matchStage = major ? { major: new Types.ObjectId(major._id) } : {};
@@ -56,44 +56,44 @@ export class LevelsService {
 
             // Join with Major
             {
-            $lookup: {
-                from: 'majors',
-                localField: 'major',
-                foreignField: '_id',
-                as: 'major',
-            }
+                $lookup: {
+                    from: 'majors',
+                    localField: 'major',
+                    foreignField: '_id',
+                    as: 'major',
+                }
             },
             { $unwind: '$major' },
 
             // Join with Level
             {
-            $lookup: {
-                from: 'levels',
-                localField: 'major.level',
-                foreignField: '_id',
-                as: 'major.level',
-            }
+                $lookup: {
+                    from: 'levels',
+                    localField: 'major.level',
+                    foreignField: '_id',
+                    as: 'major.level',
+                }
             },
             { $unwind: '$major.level' },
 
             // Add isLevelMatched field
             {
-            $addFields: {
-                isLevelMatched: { $in: ['$major.level._id', levels] }
-            }
+                $addFields: {
+                    isLevelMatched: { $in: ['$major.level._id', levels] }
+                }
             },
 
             // Conditionally override isOpen
             {
-            $addFields: {
-                isOpen: {
-                $cond: {
-                    if: '$isLevelMatched',
-                    then: true,
-                    else: '$isOpen'
+                $addFields: {
+                    isOpen: {
+                        $cond: {
+                            if: '$isLevelMatched',
+                            then: true,
+                            else: '$isOpen'
+                        }
+                    }
                 }
-                }
-            }
             },
 
             // Remove helper field
