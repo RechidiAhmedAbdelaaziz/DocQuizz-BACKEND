@@ -31,8 +31,8 @@ export class ExamService {
         const filter: FilterQuery<Exam> = {};
 
 
-        const subs = (await this.subscriptionService.getSubscriptions({ user: userId }, {}))
-        const levels = subs.data
+        const subs = (await this.subscriptionService.getSubscriptionForCheck(userId))
+        const levels = subs
             .map((sub) => sub.offer.levels)
             .flatMap((level) => level.map((l) => l._id));
 
