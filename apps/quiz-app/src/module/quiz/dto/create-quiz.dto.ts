@@ -1,4 +1,4 @@
-import { IsString, IsEnum, IsOptional, ArrayNotEmpty, IsBoolean, ArrayMaxSize, IsNumber, IsMongoId } from "class-validator";
+import { IsString, IsEnum, IsOptional, ArrayNotEmpty, IsBoolean, ArrayMaxSize, IsNumber, IsMongoId, IsNumberString } from "class-validator";
 import { Types } from "mongoose";
 
 
@@ -41,6 +41,10 @@ export class CreateQuizBody {
     @IsOptional()
     @IsNumber()
     year?: number
+
+    @IsOptional()
+    @IsNumber({}, { each: true })
+    years?: number[];
 
 
 }

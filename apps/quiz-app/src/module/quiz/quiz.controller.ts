@@ -29,7 +29,7 @@ export class QuizController {
     @CurrentUser() userId: Types.ObjectId,
     @Body() body: CreateQuizBody,
   ) {
-    const { title, courses, difficulties, types, sources, year, alreadyAnsweredFalse, withExplanation, withNotes } = body
+    const { title, courses, difficulties, types, sources, year, alreadyAnsweredFalse, withExplanation, withNotes,years } = body
 
     let ids: Types.ObjectId[][];
 
@@ -51,7 +51,7 @@ export class QuizController {
 
     }
 
-    const questionFilter = this.questionService.generateFilterQuery({ courses, difficulties, types, withExplanation, ids, sources, year })
+    const questionFilter = this.questionService.generateFilterQuery({ courses, difficulties, types, withExplanation, ids, sources, years, year })
 
 
     const { data: questions } = await this.questionService.getQuestions(questionFilter, { limit: 500, min: 1 })
