@@ -20,84 +20,98 @@ export class QuestionService {
         pagination: { page?: number, limit?: number, min?: number, keywords?: string },
     ) => {
         const { generate, limit, page } = new Pagination(this.questionModel, { filter, ...pagination }).getOptions();
-
         const questions = await this.questionModel.aggregate([
             { $match: filter },
             {
-                $addFields: {
-                    isCasClinique: {
-                        $cond: { if: { $eq: ['$type', QuestionType.CAS_CLINIQUE] }, then: 1, else: 0 },
-                    },
+            $addFields: {
+                isCasClinique: {
+                $cond: { if: { $eq: ['$type', QuestionType.CAS_CLINIQUE] }, then: 1, else: 0 },
                 },
             },
-            {
-                $lookup: {
-                    from: 'sources',
-                    localField: 'sources.source',
-                    foreignField: '_id',
-                    as: 'populatedSources',
-                },
             },
             {
-                $addFields: {
-                    sources: {
-                        $map: {
-                            input: '$sources',
-                            as: 'src',
-                            in: {
-                                source: {
-                                    $arrayElemAt: [
-                                        {
-                                            $filter: {
-                                                input: '$populatedSources',
-                                                as: 'popSrc',
-                                                cond: { $eq: ['$$popSrc._id', '$$src.source'] }
-                                            }
-                                        },
-                                        0
-                                    ]
-                                },
-                                year: '$$src.year'
+            $lookup: {
+                from: 'sources',
+                localField: 'sources.source',
+                foreignField: '_id',
+                as: 'populatedSources',
+            },
+            },
+            {
+            $addFields: {
+                sources: {
+                $map: {
+                    input: '$sources',
+                    as: 'src',
+                    in: {
+                    source: {
+                        $arrayElemAt: [
+                        {
+                            $filter: {
+                            input: '$populatedSources',
+                            as: 'popSrc',
+                            cond: { $eq: ['$$popSrc._id', '$$src.source'] }
                             }
-                        }
+                        },
+                        0
+                        ]
+                    },
+                    year: '$$src.year'
                     }
                 }
-            },
-            {
-                $project: {
-                    populatedSources: 0
                 }
+            }
             },
             {
-                $lookup: {
-                    from: 'courses',
-                    localField: 'course',
-                    foreignField: '_id',
-                    as: 'course',
-                },
+            $project: {
+                populatedSources: 0
+            }
             },
             {
-                $addFields: {
-                    course: { $arrayElemAt: ['$course', 0] },
-                },
+            $lookup: {
+                from: 'courses',
+                localField: 'course',
+                foreignField: '_id',
+                as: 'course',
+            },
             },
             {
-                $lookup: {
-                    from: 'exams',
-                    localField: 'exams',
-                    foreignField: '_id',
-                    as: 'exams',
-                },
+            $addFields: {
+                course: { $arrayElemAt: ['$course', 0] },
+            },
+            },
+            {
+            $lookup: {
+                from: 'exams',
+                localField: 'exams',
+                foreignField: '_id',
+                as: 'exams',
+            },
             },
             // Remove course.major and exams.major
             {
-                $project: {
-                    'course.major': 0,
-                    'exams.major': 0,
-                    'exams.domain': 0,
-                }
+            $project: {
+                'course.major': 0,
+                'exams.major': 0,
+                'exams.domain': 0,
+                
+
+            }
             },
-            { $sort: { isCasClinique: 1, sortField: 1 } },
+            {
+            $addFields: {
+                maxSourceYear: {
+                $max: '$sources.year'
+                }
+            }
+            },
+            {
+            $sort: {
+                isCasClinique: 1,
+                maxSourceYear: -1, // Descending: latest year first
+                sortField: 1       // Or your original sortField
+            }
+            },
             { $skip: (page - 1) * limit },
             { $limit: limit },
         ]);
@@ -128,6 +142,7 @@ export class QuestionService {
         const filter: FilterQuery<Question> = { exams: { $in: [new Types.ObjectId(exam._id)] } };
 
         const { generate, limit, page } = new Pagination(this.questionModel, { filter, ...options }).getOptions();
+
         const questions = await this.questionModel.aggregate([
             { $match: filter },
             {
@@ -303,7 +318,6 @@ export class QuestionService {
 
 
 
-        console.log("THE FILTER", filter);
 
 
         return filter;
