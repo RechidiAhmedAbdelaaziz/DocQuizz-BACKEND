@@ -80,6 +80,8 @@ export class QuizController {
 
     const { courses, difficulties, types, sources, year: yearString, alreadyAnsweredFalse, withExplanation, withNotes, years: yearsString } = queries
 
+    console.log("YEARS STRING", yearsString)
+
     const year = yearString ? parseInt(yearString) : undefined
     const years = yearString ? yearsString.map(year => parseInt(year)) : undefined;
 
