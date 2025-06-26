@@ -83,7 +83,7 @@ export class QuizController {
 
 
     const year = yearString ? parseInt(yearString) : undefined
-    const years = yearString ? yearsString.map(year => parseInt(year)) : undefined;
+    const years = yearsString ? yearsString.map(year => parseInt(year))  : undefined
 
     console.log("YEARS >>", years)
 
