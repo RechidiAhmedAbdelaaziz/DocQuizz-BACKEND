@@ -38,6 +38,10 @@ export class QuestionsNumberQuery {
     @IsNumberString()
     year?: string
 
+    @IsOptional()
+    @IsNumberString({}, { each: true })
+    years?: string[];
+
 
 }
 

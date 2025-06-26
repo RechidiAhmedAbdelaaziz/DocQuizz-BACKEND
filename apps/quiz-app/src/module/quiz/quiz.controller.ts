@@ -78,9 +78,10 @@ export class QuizController {
 
 
 
-    const { courses, difficulties, types, sources, year: yearString, alreadyAnsweredFalse, withExplanation, withNotes } = queries
+    const { courses, difficulties, types, sources, year: yearString, alreadyAnsweredFalse, withExplanation, withNotes, years: yearsString } = queries
 
     const year = yearString ? parseInt(yearString) : undefined
+    const years = yearString ? yearsString.map(year => parseInt(year)) : undefined;
 
 
     let ids: Types.ObjectId[][];
@@ -104,7 +105,7 @@ export class QuizController {
     }
 
     const questionFilter = this.questionService.generateFilterQuery({
-      courses, difficulties, types, withExplanation, ids, sources, year
+      courses, difficulties, types, withExplanation, ids, sources, years
     })
 
     const questions = await this.questionService.getQuestionsNumber(questionFilter);
