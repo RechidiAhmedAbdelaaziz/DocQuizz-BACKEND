@@ -29,7 +29,7 @@ export class QuizController {
     @CurrentUser() userId: Types.ObjectId,
     @Body() body: CreateQuizBody,
   ) {
-    const { title, courses, difficulties, types, sources, year, alreadyAnsweredFalse, withExplanation, withNotes,years } = body
+    const { title, courses, difficulties, types, sources, year, alreadyAnsweredFalse, withExplanation, withNotes, years } = body
 
     let ids: Types.ObjectId[][];
 
@@ -80,11 +80,12 @@ export class QuizController {
 
     const { courses, difficulties, types, sources, year: yearString, alreadyAnsweredFalse, withExplanation, withNotes, years: yearsString } = queries
 
-    console.log("YEARS STRING", yearsString)
+
 
     const year = yearString ? parseInt(yearString) : undefined
     const years = yearString ? yearsString.map(year => parseInt(year)) : undefined;
 
+    console.log("YEARS >>", years)
 
     let ids: Types.ObjectId[][];
 
