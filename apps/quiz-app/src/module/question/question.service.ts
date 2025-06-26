@@ -301,6 +301,11 @@ export class QuestionService {
             delete filter.$or;
         }
 
+
+
+        console.log("THE FILTER", filter);
+
+
         return filter;
     }
 
