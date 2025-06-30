@@ -11,4 +11,14 @@ export class UpdatesController {
   async getUpdates() {
     return await this.updatesService.getUpdates()
   }
+
+
+
+  @UseGuards(HttpAuthGuard)
+  @Get('last') //* UPDATES | Get last update date ~ {{host}}/updates/last
+  async getLastUpdateDate() {
+    return {
+      data: { 'date': await this.updatesService.getLastUpdateDate() }
+    }
+  }
 }

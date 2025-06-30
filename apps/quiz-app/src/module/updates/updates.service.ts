@@ -10,9 +10,14 @@ export class UpdatesService {
     ) { }
 
     async getUpdates() {
-        return await this.updatesModel.find()
+        return await this.updatesModel.find().limit(10).sort({ date: -1 });
     }
 
+
+    async getLastUpdateDate() {
+        const lastUpdate = await this.updatesModel.findOne().sort({ date: -1 });
+        return lastUpdate ? lastUpdate.date : undefined;
+    }
 
 
 
