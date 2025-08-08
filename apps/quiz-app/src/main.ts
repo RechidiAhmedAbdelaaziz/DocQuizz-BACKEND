@@ -17,6 +17,7 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       /https?:\/\/(.+\.)?docquizz\.top$/, // Allow all subdomains of docquizz.top
+       /https?:\/\/(.+\.)?fenneqcm\.top$/, // Allow all subdomains of fenneqcm.top
       /^http?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/ // Allow all localhost and 127.0.0.1 with any port
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
